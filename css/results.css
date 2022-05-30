@@ -1,0 +1,40 @@
+﻿#results h3 {
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+#results > table {
+    width: 100%;
+}
+
+#results table > thead > tr > td {
+    height: 35px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #000;
+    margin: 10px;
+    border-bottom: 2px solid #000;
+}
+
+#results td {
+    height: 25px;
+    font-size: 11px;
+    padding-left: 5px;
+}
+
+    #results td > a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+#results table > tr:hover {
+    background-color: #f8b195;
+}
+
+#results table > tr {
+    border-bottom: 1px solid #aaa;
+}
+
+    #results table > tr.equipped {
+        background-color: #1861ac;
+    }
