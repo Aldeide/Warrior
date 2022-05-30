@@ -1,0 +1,309 @@
+﻿@inject Simulation simulation;
+
+@page "/results"
+<EditForm EditContext="@editContext">
+<div class="sidebar summary" style="min-width: 300px; background-color: #eee; background-image: none;">
+	<Warrior.Shared.Component.Summary editContext=@editContext />
+</div>
+<div class="main" style="width: 100%;">
+	<div class="content px-4">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-10">
+					<section id="results">
+
+						<h3>Results</h3>
+
+						DPS:
+						@if (simulation.simulationResults.combatDuration > 0)
+						{
+							@(simulation.simulationResults.totalDamage / (simulation.simulationResults.combatDuration * simulation.simulationResults.numIterations))
+						}
+						Num Steps: @simulation.simulationResults.numSteps
+						<br />
+						<h3>Melee Attacks</h3>
+						<table>
+							<thead>
+								<tr>
+									<td>
+									</td>
+									<td>
+										DPS
+									</td>
+									<td>
+										Damage
+									</td>
+									<td>
+										Casts
+									</td>
+									<td>
+										Hit
+									</td>
+									<td>
+										Crit
+									</td>
+									<td>
+										Glance
+									</td>
+									<td>
+										Miss
+									</td>
+									<td>
+										Dodge
+									</td>
+								</tr>
+							</thead>
+							<tr>
+								<td>
+									Melee (Main Hand)
+								</td>
+								<td>
+									@(simulation.simulationResults.mainHand.totalDamage / (float)simulation.simulationResults.numIterations / (float)simulation.settings.combatLength)
+								</td>
+								<td>@(simulation.simulationResults.mainHand.totalDamage / (float)simulation.simulationResults.numIterations)</td>
+								<td>
+									@(simulation.simulationResults.mainHand.numCasts / (float)simulation.simulationResults.numIterations)
+								</td>
+								<td>
+									@(simulation.simulationResults.mainHand.numHit / (float)simulation.simulationResults.numIterations)
+									(@(Math.Round(simulation.simulationResults.mainHand.numHit / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
+								</td>
+								<td>
+									@(simulation.simulationResults.mainHand.numCrit / (float)simulation.simulationResults.numIterations)
+									(@(Math.Round(simulation.simulationResults.mainHand.numCrit / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
+								</td>
+								<td>
+									@(simulation.simulationResults.mainHand.numGlancing / (float)simulation.simulationResults.numIterations)
+									(@(Math.Round(simulation.simulationResults.mainHand.numGlancing / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
+								</td>
+								<td>
+									@(simulation.simulationResults.mainHand.numMiss / (float)simulation.simulationResults.numIterations)
+									(@(Math.Round(simulation.simulationResults.mainHand.numMiss / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
+								</td>
+								<td>
+									@(simulation.simulationResults.mainHand.numDodge / (float)simulation.simulationResults.numIterations)
+									(@(Math.Round(simulation.simulationResults.mainHand.numDodge / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Melee (Off Hand)
+								</td>
+								<td>
+									@(simulation.simulationResults.offHand.totalDamage / (float)simulation.simulationResults.numIterations / (float)simulation.settings.combatLength)
+								</td>
+								<td>@(simulation.simulationResults.offHand.totalDamage / (float)simulation.simulationResults.numIterations)</td>
+								<td>
+									@(simulation.simulationResults.offHand.numCasts / (float)simulation.simulationResults.numIterations)
+								</td>
+								<td>
+									@(simulation.simulationResults.offHand.numHit / (float)simulation.simulationResults.numIterations)
+									(@(Math.Round(simulation.simulationResults.offHand.numHit / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
+								</td>
+								<td>
+									@(simulation.simulationResults.offHand.numCrit / (float)simulation.simulationResults.numIterations)
+									(@(Math.Round(simulation.simulationResults.offHand.numCrit / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
+								</td>
+								<td>
+									@(simulation.simulationResults.offHand.numGlancing / (float)simulation.simulationResults.numIterations)
+									(@(Math.Round(simulation.simulationResults.offHand.numGlancing / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
+								</td>
+								<td>
+									@(simulation.simulationResults.offHand.numMiss / (float)simulation.simulationResults.numIterations)
+									(@(Math.Round(simulation.simulationResults.offHand.numMiss / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
+								</td>
+								<td>
+									@(simulation.simulationResults.offHand.numDodge / (float)simulation.simulationResults.numIterations)
+									(@(Math.Round(simulation.simulationResults.offHand.numDodge / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
+								</td>
+							</tr>
+
+						</table>
+
+						<h3>Abilities</h3>
+
+
+						<table>
+							<thead>
+								<tr>
+									<td>
+									</td>
+									<td>
+										DPS (Avg)
+									</td>
+									<td>
+										Damage (Avg)
+									</td>
+									<td>
+										Casts (Avg)
+									</td>
+									<td>
+										Hit (Avg)
+									</td>
+									<td>
+										Crit (Avg)
+									</td>
+									<td>
+										Miss (Avg)
+									</td>
+									<td>
+										Dodge (Avg)
+									</td>
+								</tr>
+							</thead>
+							@foreach (var abilitySummary in simulation.simulationResults.abilitySummaries)
+							{
+								<tr>
+									<td>
+										@abilitySummary.name
+									</td>
+									<td>
+										@(abilitySummary.totalDamage / (float)simulation.simulationResults.numIterations / (float)simulation.settings.combatLength )
+									</td>
+									<td>
+										@(abilitySummary.totalDamage / (float)simulation.simulationResults.numIterations )
+									</td>
+									<td>
+										@(abilitySummary.numCasts / (float)simulation.simulationResults.numIterations )
+									</td>
+									<td>
+										@(abilitySummary.numHit / (float)simulation.simulationResults.numIterations )
+									</td>
+									<td>
+										@(abilitySummary.numCrit / (float)simulation.simulationResults.numIterations )
+									</td>
+									<td>
+										@(abilitySummary.numMiss / (float)simulation.simulationResults.numIterations )
+									</td>
+									<td>
+										@(abilitySummary.numDodge / (float)simulation.simulationResults.numIterations )
+									</td>
+								</tr>
+							}
+						</table>
+
+						<h3>Auras</h3>
+						<table>
+							<thead>
+								<tr>
+									<td>
+									</td>
+									<td>
+										Uptime
+									</td>
+									<td>
+										Procs
+									</td>
+									<td>
+										Refreshes
+									</td>
+								</tr>
+							</thead>
+							@foreach (var auraSummary in simulation.simulationResults.auraSummaries)
+							{
+								<tr>
+									<td>
+										@auraSummary.name /// @(auraSummary.totalDamage / (double)simulation.simulationResults.numIterations) /// @(auraSummary.ticks / (double)simulation.simulationResults.numIterations)
+									</td>
+									<td>
+										@(auraSummary.uptime / (double)simulation.simulationResults.numIterations / (double)Constants.kStepsPerSecond) (@(Math.Round(auraSummary.uptime / (double)simulation.simulationResults.numIterations / (double)Constants.kStepsPerSecond / (double)simulation.settings.combatLength * 100, 2))) %)
+									</td>
+									<td>
+										@(auraSummary.procs / (float)simulation.simulationResults.numIterations )
+									</td>
+									<td>
+										@(auraSummary.refreshes / (float)simulation.simulationResults.numIterations )
+									</td>
+								</tr>
+							}
+						</table>
+
+						<h3>Damage over Time</h3>
+						<table>
+							<thead>
+								<tr>
+									<td>
+									</td>
+									<td>
+										DPS
+									</td>
+									<td>
+										Damage
+									</td>
+									<td>
+										Uptime (s)
+									</td>
+									<td>
+										Ticks
+									</td>
+									<td>
+										Average Tick
+									</td>
+									<td>
+										Applications
+									</td>
+									<td>
+										Refreshes
+									</td>
+								</tr>
+							</thead>
+							@foreach (var summary in simulation.simulationResults.dotSummaries)
+							{
+								<tr>
+									<td>
+										@summary.name
+									</td>
+									<td>
+										@(Math.Round((double)(summary.totalDamage / (float)simulation.simulationResults.numIterations / (double)simulation.settings.combatLength), 2))
+									</td>
+									<td>
+										@(summary.totalDamage / (float)simulation.simulationResults.numIterations )
+									</td>
+									<td>
+										@summary.uptime
+									</td>
+									<td>
+										@summary.ticks
+									</td>
+									<td>
+										@(summary.totalDamage / (float)simulation.simulationResults.numIterations / summary.ticks)
+									</td>
+									<td>
+										@(summary.applications / (float)simulation.simulationResults.numIterations)
+									</td>
+									<td>
+										@(summary.refreshes / (float)simulation.simulationResults.numIterations)
+									</td>
+								</tr>
+							}
+						</table>
+
+						@foreach (var auraSummary in simulation.simulationResults.auraSummaries)
+						{
+							 
+							<br />
+						}
+						<h3>Rage Management</h3>
+
+						Generated Rage (Average): @(simulation.simulationResults.rageSummary.rageGenerated / (float)simulation.simulationResults.numIterations) <br />
+						Wasted Rage (Average): @(simulation.simulationResults.rageSummary.wastedRage / (float)simulation.simulationResults.numIterations)
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</EditForm>
+
+@code {
+	public EditContext editContext;
+	protected override void OnInitialized()
+	{
+		editContext = new EditContext(simulation);
+		editContext.OnFieldChanged += (sender, eventArgs) =>
+		{
+			Console.WriteLine("OnFieldChanged for FieldName = " + eventArgs.FieldIdentifier.FieldName + " " + sender.ToString());
+		};
+		base.OnInitialized();
+	}
+}

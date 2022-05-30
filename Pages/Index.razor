@@ -1,0 +1,95 @@
+﻿@page "/"
+@using Microsoft.Extensions.Logging
+@using Blazored.LocalStorage;
+@using System.ComponentModel;
+
+@inject ILogger<Settings> Logger
+@inject Blazored.LocalStorage.ILocalStorageService localStore
+@inject Simulation simulation;
+@inject HttpClient Http
+
+	<EditForm EditContext="@editContext">
+<div class="sidebar summary" style="min-width: 300px; background-color: #eee; background-image: none;">
+	<Warrior.Shared.Component.Summary editContext=@editContext />
+</div>
+<section id="items">
+		<div class="main" style="width: 100%;">
+		<div class="content px-4">
+			<div class="container-fluid">
+				<div class="d-flex align-items-start">
+			<div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+				@foreach (ItemSlot slot in Enum.GetValues(typeof(ItemSlot)))
+				{
+					<button class="nav-link @(slot == ItemSlot.MainHand ? "active" : "")" id="v-pills-@(slot)-tab" data-bs-toggle="pill" data-bs-target="#v-pills-@slot" type="button" role="tab" aria-controls="v-pills-mainhand" aria-selected="true">@slot</button>
+				}
+			</div>
+			<div class="tab-content" id="v-pills-tabContent">
+
+				@foreach (ItemSlot slot in Enum.GetValues(typeof(ItemSlot)))
+				{
+
+					<div class="tab-pane fade show @(slot == ItemSlot.MainHand ? "active" : "")" id="v-pills-@slot" role="tabpanel" aria-labelledby="v-pills-@(slot)-tab">
+						<table>
+							<thead>
+							<td>Name</td>
+							<td>Strength</td>
+							<td>Agility</td>
+							<td>Stamina</td>
+							<td>Attack Power</td>
+							</thead>
+							@foreach (Item item in simulation.itemDatabase.items)
+							{
+								if (item.itemSlot == slot || item.itemSlot == ItemSlot.MainHand && slot == ItemSlot.OffHand)
+								{
+									<tr class="@(item.id == simulation.character.equipment.GetSlotId(slot) ? "equipped" : "")" @onclick="() => RowClicked(item.id, slot)">
+										<td><a href="#" rel="item=@item.id" class="rowlink">@item.name</a></td>
+										<td>@item.strength</td>
+										<td>@item.agility</td>
+										<td>@item.stamina</td>
+										<td>@item.attackPower</td>
+									</tr>
+								}
+							}
+						</table>
+					</div>
+				}
+
+			</div>
+		</div>
+										</div>
+									</div>
+								</div>
+							
+
+
+		
+</section>
+</EditForm>
+
+@code {
+	public EditContext editContext;
+	public ItemSlot currentTab { get; set; } = ItemSlot.MainHand;
+	protected override void OnInitialized()
+	{
+		editContext = new EditContext(simulation);
+		editContext.OnFieldChanged += (sender, eventArgs) =>
+		{
+			Console.WriteLine("OnFieldChanged for FieldName = " + eventArgs.FieldIdentifier.FieldName + " " + sender.ToString());
+		};
+		base.OnInitialized();
+	}
+
+	private Item[]? items;
+
+	public void RowClicked(int id, ItemSlot slot)
+	{
+		simulation.character.equipment.EquipItem(slot, id);
+	}
+}
+
+
+
+
+
+

@@ -1,0 +1,38 @@
+﻿@inherits LayoutComponentBase
+@inject Simulation simulation
+@inject HttpClient Http
+
+<div class="page">
+    <div class="sidebar" style="width: 80px">
+        <NavMenu />
+    </div>
+@Body
+</div>
+
+
+@code {
+    private bool isInitComplete = false;
+    private EditContext editContext;
+    private Item[]? items;
+    /*
+    protected override async Task OnInitializedAsync()
+    {
+        simulation = new Simulation();
+
+        System.Text.Json.JsonSerializerOptions options = new System.Text.Json.JsonSerializerOptions
+            {
+                Converters =
+            {
+                new System.Text.Json.Serialization.JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.CamelCase)
+            }
+            };
+        items = await Http.GetFromJsonAsync<Item[]>("data/items.json", options);
+        simulation.itemDatabase.items = items.ToList<Item>();
+        editContext = new EditContext(simulation);
+        // Look at authentication step.
+        isInitComplete = true;
+    }
+    */
+
+}
+

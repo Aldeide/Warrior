@@ -1,0 +1,194 @@
+﻿@inject Simulation simulation;
+
+
+<p style="text-align: center">
+	@simulation.settings.race Warrior
+</p>
+<div>
+	<div class="align-left">
+		Strength
+	</div>
+	<div class="align-right">
+		@simulation.character.GetStrength()
+	</div>
+</div>
+<div style="clear:both"></div>
+<div>
+	<div class="align-left">
+		Agility
+	</div>
+	<div class="align-right">
+		@simulation.character.GetAgility()
+	</div>
+</div>
+<div style="clear:both"></div>
+<div>
+	<div class="align-left">
+		Stamina
+	</div>
+	<div class="align-right">
+		@simulation.character.GetStamina()
+	</div>
+</div>
+<div style="clear:both"></div>
+<div>
+	<div class="align-left">
+		Health
+	</div>
+	<div class="align-right">
+		@simulation.character.GetHealth()
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Armor
+	</div>
+	<div class="align-right">
+		@simulation.character.GetArmor()
+	</div>
+</div>
+<div style="clear:both"></div>
+<div>
+	<div class="align-left">
+		Attack Power
+	</div>
+	<div class="align-right">
+		@simulation.character.GetAttackPower()
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Armor Penetration Rating
+	</div>
+	<div class="align-right">
+		@simulation.character.GetArmorPenetrationRating()
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Haste Rating
+	</div>
+	<div class="align-right">
+		@simulation.character.GetHasteRating()
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Crit Rating
+	</div>
+	<div class="align-right">
+		@simulation.character.GetCriticalStrikeRating()
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Melee Critical Chance (%)
+	</div>
+	<div class="align-right">
+		@simulation.character.GetMeleeCritChancePercent()
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Melee Haste
+	</div>
+	<div class="align-right">
+		@simulation.character.GetMeleeHasteFactor()
+	</div>
+</div>
+<div style="clear:both"></div>
+<br /><br />
+Debug
+<br /><br />
+<div>
+	<div class="align-left">
+		Glancing Chance
+	</div>
+	<div class="align-right">
+		@AttackTableUtils.ComputeGlancingChance(simulation.settings.targetLevel)
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Miss Chance (MH)
+	</div>
+	<div class="align-right">
+		@AttackTableUtils.ComputeMissChance(simulation)
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Dodge Chance
+	</div>
+	<div class="align-right">
+		@AttackTableUtils.ComputeDodgeChance(simulation)
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Extra Hit
+	</div>
+	<div class="align-right">
+		@simulation.character.GetMeleeHitChance()
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Enemy Effective Armor
+	</div>
+	<div class="align-right">
+		@ArmorUtils.ComputeEffectiveTargetArmor(simulation)
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Enemy Armor reduction
+	</div>
+	<div class="align-right">
+		@ArmorUtils.ComputeEffectiveArmorDamageReductionMultiplier(simulation)
+	</div>
+</div>
+<div style="clear:both"></div>
+
+
+<br /><br />
+<EditForm EditContext="@editContext" OnValidSubmit="@Simulate">
+	@simulation.simulationResults.dps
+	<button type="submit" class="btn btn-primary" value="Save">Simulate</button>
+</EditForm>
+
+@code {
+	[Parameter]
+	public EditContext editContext { get; set; }
+	protected override void OnInitialized()
+	{
+		//editContext = new EditContext(simulation);
+		base.OnInitialized();
+	}
+
+	private void Simulate() {
+		simulation.Simulate();
+	}
+}
