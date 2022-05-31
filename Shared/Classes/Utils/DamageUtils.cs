@@ -33,7 +33,7 @@
             // Base weapon damage.
             float damage = iteration.random.Next(weapon.minDamage, weapon.maxDamage) + bonus;
             // Attack power contribution. Speed value?
-            damage += iteration.statsManager.GetEffectiveAttackPower() / 14.0f * (float)weapon.baseSpeed / 1000;
+            damage += iteration.statsManager.GetEffectiveAttackPower() / 14.0f * weapon.baseSpeed / Constants.kStepsPerSecond;
 
             Console.WriteLine("AP: " + iteration.statsManager.GetEffectiveAttackPower().ToString());
             Console.WriteLine("Weapon damage after AP: " + damage.ToString());

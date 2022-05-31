@@ -260,13 +260,13 @@
 										@(summary.totalDamage / (float)simulation.simulationResults.numIterations )
 									</td>
 									<td>
-										@summary.uptime
+										@(summary.uptime / (float)simulation.simulationResults.numIterations / Constants.kStepsPerSecond)  (@(Math.Round((double)(summary.uptime / (float)simulation.simulationResults.numIterations / Constants.kStepsPerSecond / (double)simulation.settings.combatLength * 100), 2)) %)
 									</td>
 									<td>
-										@summary.ticks
+										@(summary.ticks / (float)simulation.simulationResults.numIterations)
 									</td>
 									<td>
-										@(summary.totalDamage / (float)simulation.simulationResults.numIterations / summary.ticks)
+										@(Math.Round((double)(summary.totalDamage / (float)simulation.simulationResults.numIterations / ((summary.ticks / (float)simulation.simulationResults.numIterations))), 2))
 									</td>
 									<td>
 										@(summary.applications / (float)simulation.simulationResults.numIterations)

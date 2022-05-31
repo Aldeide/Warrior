@@ -11,16 +11,14 @@
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
-
-            if (TalentUtils.HasFlurry(iteration.simulation.character.talents)) auras.Add(new Flurry(this));
-            if (TalentUtils.HasDeepWounds(iteration.simulation.character.talents)) auras.Add(new DeepWounds(this));
             if (TalentUtils.HasFlurry(iteration.simulation.character.talents)) flurry = new Flurry(this);
             if (TalentUtils.HasDeepWounds(iteration.simulation.character.talents)) deepWounds = new DeepWounds(this);
 
         }
         public void Reset()
         {
-            auras.ForEach(a => a.Reset());
+            deepWounds?.Reset();
+            flurry?.Reset();
         }
         public void MeleeCriticalTrigger()
         {

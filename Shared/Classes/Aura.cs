@@ -6,6 +6,7 @@ namespace Warrior
     {
         public AuraManager manager;
         public AuraSummary auraSummary = new AuraSummary();
+        public DotDamageSummary dotSummary { get; private set; } = new DotDamageSummary();
         public Aura(AuraManager manager)
         {
             this.manager = manager;
@@ -33,6 +34,8 @@ namespace Warrior
             stacks = 0;
             active = false;
             start = 0;
+            tickSize = 0;
+            dotSummary.Reset();
             auraSummary.uptime = 0;
         }
 
@@ -111,7 +114,7 @@ namespace Warrior
 
     public class DeepWounds : Aura
     {
-        public DotDamageSummary dotSummary { get; private set; } = new DotDamageSummary();
+        
         public DeepWounds(AuraManager arg) : base(arg)
         {
             name = "Deep Wounds";
@@ -140,7 +143,7 @@ namespace Warrior
                 tickSize = (int)(damage * tickInterval / (float)duration);
                 dotSummary.refreshes += 1;
             }
-            dotSummary.uptime += 1 * Constants.kStepsPerSecond;
+            
             next = manager.iteration.currentStep + 1 * Constants.kStepsPerSecond;
             currentDuration = duration;
         }
@@ -150,7 +153,12 @@ namespace Warrior
             {
                 return;
             }
+            if (manager.iteration.currentStep != next)
+            {
+                return;
+            }
             Console.WriteLine("[ " + manager.iteration.currentStep + " ] Deep Wounds Tick: " + tickSize);
+            Console.WriteLine("[ " + manager.iteration.currentStep + " ] Total Ticks: " + dotSummary.ticks);
             damage -= tickSize;
             Console.WriteLine("[ " + manager.iteration.currentStep + " ] Deep Wounds Damage Remaining: " + damage);
             currentDuration -= 1 * Constants.kStepsPerSecond;
@@ -161,6 +169,7 @@ namespace Warrior
                 active = false;
                 next = int.MaxValue;
             }
+            dotSummary.uptime += 1 * Constants.kStepsPerSecond;
             dotSummary.totalDamage += tickSize;
             dotSummary.ticks += 1;
         }
