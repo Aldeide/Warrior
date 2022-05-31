@@ -1,6 +1,5 @@
 ﻿@inject Simulation simulation;
 
-
 <p style="text-align: center">
 	@simulation.settings.race Warrior
 </p>
@@ -175,16 +174,14 @@ Debug
 
 <br /><br />
 <EditForm EditContext="@editContext" OnValidSubmit="@Simulate">
-	@simulation.simulationResults.dps
 	<button type="submit" class="btn btn-primary" value="Save">Simulate</button>
 </EditForm>
 
 @code {
 	[Parameter]
-	public EditContext editContext { get; set; }
+	public EditContext? editContext { get; set; }
 	protected override void OnInitialized()
 	{
-		//editContext = new EditContext(simulation);
 		base.OnInitialized();
 	}
 
