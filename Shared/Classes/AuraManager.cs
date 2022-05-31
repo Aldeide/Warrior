@@ -23,26 +23,16 @@
         public void MeleeCriticalTrigger()
         {
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
-            
-            /*
-            auras.Where(
-                s => s.trigger.Contains(AuraTrigger.AllMeleeCritical)
-            ).ToList().ForEach(
-                s => s.Trigger(AuraTrigger.AllMeleeCritical)
-            );
-            */
         }
         public void MeleeNonCriticalTrigger()
         {
             flurry?.Trigger(AuraTrigger.AllMeleeNonCritical);
-            /*
-            auras.Where(
-                s => s.trigger.Contains(AuraTrigger.AllMeleeNonCritical)
-            ).ToList().ForEach(
-                s => s.Trigger(AuraTrigger.AllMeleeNonCritical)
-            );
-            */
         }
+        public void MeleeNonCriticalSwing()
+        {
+            flurry?.Trigger(AuraTrigger.AllMeleeNonCritical);
+        }
+
         public void MainHandCriticalTtrigger()
         {
             deepWounds?.Trigger(AuraTrigger.MainHandCritical);
@@ -59,6 +49,10 @@
                 s => s.Trigger(AuraTrigger.Bloodthirst)
             );
         }
+        public void BloodthirstCriticalTrigger()
+        {
+            flurry?.Trigger(AuraTrigger.AllMeleeCritical);
+        }
         public void WhirlwindTrigger()
         {
             auras.Where(
@@ -67,6 +61,10 @@
                 s => s.Trigger(AuraTrigger.Whirlwind)
             );
         }
+        public void WhirlwindCriticalTrigger()
+        {
+            flurry?.Trigger(AuraTrigger.AllMeleeCritical);
+        }
         public void HeroicStrikeTrigger()
         {
             auras.Where(
@@ -74,6 +72,10 @@
             ).ToList().ForEach(
                 s => s.Trigger(AuraTrigger.HeroicStrike)
             );
+        }
+        public void HeroicStrikeCriticalTrigger()
+        {
+            flurry?.Trigger(AuraTrigger.AllMeleeCritical);
         }
         public void ApplyTime(int d)
         {

@@ -55,6 +55,7 @@
                 {
                     iteration.abilityManager.UseAbility("Heroic Strike");
                     swingTimer = effectiveSpeed;
+                    iteration.nextStep.mainHand = iteration.currentStep + swingTimer;
                     return;
                 }
             }
@@ -66,12 +67,14 @@
             {
                 Console.WriteLine("[ " + iteration.currentStep + " ] Melee Miss (" + weapon + ")");
                 damageSummary.numMiss += 1;
+                iteration.auraManager.MeleeNonCriticalTrigger();
                 return;
             }
             if (result == AttackResult.Dodge)
             {
                 Console.WriteLine("[ " + iteration.currentStep + " ] Melee Dodge (" + weapon + ")");
                 damageSummary.numDodge += 1;
+                iteration.auraManager.MeleeNonCriticalTrigger();
                 return;
             }
             int damage = DamageUtils.WeaponDamage(result, this, iteration, /* bonus = */ 0);

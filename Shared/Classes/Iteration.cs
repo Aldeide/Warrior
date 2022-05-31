@@ -84,14 +84,18 @@
                 iterationResults.numSteps += 1;
             }
 
+            // Fading all auras to update final uptime.
+            auraManager.flurry?.Fade();
+
             // Moving the results.
             iterationResults.mainHand = (DamageSummary)mainHand.damageSummary.Clone();
             iterationResults.offHand = (DamageSummary)offHand.damageSummary.Clone();
             auraManager.auras.ForEach(aura => iterationResults.auraSummaries.Add(aura.auraSummary));
             abilityManager.abilities.ForEach(ability => iterationResults.abilitySummaries.Add(ability.damageSummary));
 
-            if (auraManager.deepWounds != null) iterationResults.dotDamageSummaries.Add((DotDamageSummary)auraManager.deepWounds.dotSummary.Clone());
 
+            if (auraManager.deepWounds != null) iterationResults.dotDamageSummaries.Add((DotDamageSummary)auraManager.deepWounds.dotSummary.Clone());
+            if (auraManager.flurry != null) iterationResults.auraSummaries.Add((AuraSummary)auraManager.flurry.auraSummary.Clone());
             return iterationResults;
         }
 

@@ -36,7 +36,7 @@ namespace Warrior
             start = 0;
             tickSize = 0;
             dotSummary.Reset();
-            auraSummary.uptime = 0;
+            auraSummary.Reset();
         }
 
         public virtual void Update()
@@ -77,17 +77,12 @@ namespace Warrior
                 if (active)
                 {
                     auraSummary.refreshes += 1;
-                    auraSummary.uptime += (manager.iteration.currentStep - previousUpdate);
-                    previousUpdate = manager.iteration.currentStep;
                 } else
                 {
                     auraSummary.procs += 1;
+                    start = manager.iteration.currentStep;
                 }
                 stacks = 3;
-                if (!active) {
-                    start = manager.iteration.currentStep;
-                    previousUpdate = start;
-                 }
                 active = true;
                 Console.WriteLine("[ " + manager.iteration.currentStep + " ] Applied Flurry");
                 
@@ -96,9 +91,11 @@ namespace Warrior
             }
             if (trigger == AuraTrigger.AllMeleeNonCritical && stacks > 0)
             {
+                if (!active)
+                {
+                    return;
+                }
                 stacks -= 1;
-                auraSummary.uptime += (manager.iteration.currentStep - previousUpdate);
-                previousUpdate = manager.iteration.currentStep;
                 Console.WriteLine("Flurry current stacks: " + stacks);
                 if (stacks == 0)
                 {
@@ -109,6 +106,16 @@ namespace Warrior
                     
                 }
             }
+        }
+
+        public void Fade()
+        {
+            
+            if (active)
+            {
+                auraSummary.uptime += (manager.iteration.currentStep - start);
+            }
+            active = false;
         }
     }
 

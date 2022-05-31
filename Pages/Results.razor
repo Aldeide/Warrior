@@ -121,8 +121,6 @@
 						</table>
 
 						<h3>Abilities</h3>
-
-
 						<table>
 							<thead>
 								<tr>
@@ -203,10 +201,10 @@
 							{
 								<tr>
 									<td>
-										@auraSummary.name /// @(auraSummary.totalDamage / (double)simulation.simulationResults.numIterations) /// @(auraSummary.ticks / (double)simulation.simulationResults.numIterations)
+										@auraSummary.name
 									</td>
 									<td>
-										@(auraSummary.uptime / (double)simulation.simulationResults.numIterations / (double)Constants.kStepsPerSecond) (@(Math.Round(auraSummary.uptime / (double)simulation.simulationResults.numIterations / (double)Constants.kStepsPerSecond / (double)simulation.settings.combatLength * 100, 2))) %)
+										@(auraSummary.uptime / (double)simulation.simulationResults.numIterations / (double)Constants.kStepsPerSecond) (@(Math.Round(auraSummary.uptime / (double)simulation.simulationResults.numIterations / (double)Constants.kStepsPerSecond / (double)simulation.settings.combatLength * 100, 2)) %)
 									</td>
 									<td>
 										@(auraSummary.procs / (float)simulation.simulationResults.numIterations )

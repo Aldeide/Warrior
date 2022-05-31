@@ -74,8 +74,6 @@
                 return;
             }
 
-            // Bloodthirst has connected. Sending a notification.
-            
             int damage = ComputeBloodthirstDamage(result);
             damageSummary.totalDamage += damage;
             if (result == AttackResult.Hit)
@@ -109,8 +107,9 @@
             if (result == AttackResult.Critical)
             {
                 damage *= DamageUtils.EffectiveCritCoefficient(iteration.simulation.character.talents);
-                iteration.auraManager.MeleeCriticalTrigger();
+                iteration.auraManager.BloodthirstCriticalTrigger();
             }
+            iteration.auraManager.BloodthirstTrigger();
             return (int)damage;
         }
     }
@@ -191,7 +190,7 @@
                 damage *= DamageUtils.EffectiveCritCoefficient(iteration.simulation.character.talents);
                 damageSummary.critDamage += (int)damage;
                 damageSummary.numCrit += 1;
-                iteration.auraManager.MeleeCriticalTrigger();
+                iteration.auraManager.WhirlwindCriticalTrigger();
             } else
             {
                 damageSummary.hitDamage += (int)damage;
@@ -254,10 +253,12 @@
                 {
                     damageSummary.numCrit += 1;
                     damageSummary.critDamage += damage;
+                    iteration.auraManager.HeroicStrikeCriticalTrigger();
                 } else
                 {
                     damageSummary.numHit += 1;
                     damageSummary.hitDamage += damage;
+                    iteration.auraManager.HeroicStrikeTrigger();
                 }
             }
             isQueued = false;

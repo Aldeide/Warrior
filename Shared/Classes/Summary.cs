@@ -58,6 +58,15 @@
             };
             return item;
         }
+
+        public void Reset()
+        {
+            uptime = 0;
+            procs = 0;
+            refreshes = 0;
+            totalDamage = 0;
+            ticks = 0;
+        }
     }
     public class RageSummary
     {
