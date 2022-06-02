@@ -12,10 +12,11 @@
             
             items[ItemSlot.MainHand] = simulation.itemDatabase.GetItemById(50730);
             items[ItemSlot.OffHand] = simulation.itemDatabase.GetItemById(50730);
-            items[ItemSlot.Head] = simulation.itemDatabase.GetItemById(37849);
+            items[ItemSlot.Head] = simulation.itemDatabase.GetItemById(51227);
             items[ItemSlot.Neck] = simulation.itemDatabase.GetItemById(54581);
+            items[ItemSlot.Shoulders] = simulation.itemDatabase.GetItemById(51229);
             items[ItemSlot.Back] = simulation.itemDatabase.GetItemById(50677);
-            items[ItemSlot.Chest] = simulation.itemDatabase.GetItemById(50606);
+            items[ItemSlot.Chest] = simulation.itemDatabase.GetItemById(51225);
             items[ItemSlot.Wrist] = simulation.itemDatabase.GetItemById(50659);
             items[ItemSlot.Waist] = simulation.itemDatabase.GetItemById(50620);
             items[ItemSlot.Legs] = simulation.itemDatabase.GetItemById(51228);
@@ -24,7 +25,7 @@
             items[ItemSlot.Trinket1] = simulation.itemDatabase.GetItemById(54590);
             items[ItemSlot.Trinket2] = simulation.itemDatabase.GetItemById(50363);
             items[ItemSlot.Ranged] = simulation.itemDatabase.GetItemById(50733);
-            items[ItemSlot.Gloves] = simulation.itemDatabase.GetItemById(50690);
+            items[ItemSlot.Gloves] = simulation.itemDatabase.GetItemById(51226);
             items[ItemSlot.Boots] = simulation.itemDatabase.GetItemById(54578);
             UpdateEquipmentStats();
         }

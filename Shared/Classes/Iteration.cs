@@ -67,6 +67,7 @@
 
                 // Auras
                 auraManager.deepWounds?.Update();
+                auraManager.bloodsurge?.Update();
                 auraManager.GetNext();
 
                 int next = nextStep.GetNextStep();
@@ -96,6 +97,7 @@
 
             if (auraManager.deepWounds != null) iterationResults.dotDamageSummaries.Add((DotDamageSummary)auraManager.deepWounds.dotSummary.Clone());
             if (auraManager.flurry != null) iterationResults.auraSummaries.Add((AuraSummary)auraManager.flurry.auraSummary.Clone());
+            if (auraManager.bloodsurge != null) iterationResults.auraSummaries.Add((AuraSummary)auraManager.bloodsurge.auraSummary.Clone());
             return iterationResults;
         }
 
@@ -129,7 +131,7 @@
         public void Abilities()
         {
             // Bloodthirst.
-            if (TalentUtils.HasBloodthirst(simulation.character.talents)) {
+            if (simulation.computedConstants.hasBloodthirst) {
                 abilityManager.UseAbility("Bloodthirst");
             }
             abilityManager.UseAbility("Whirlwind");

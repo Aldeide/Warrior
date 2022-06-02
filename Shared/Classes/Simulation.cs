@@ -193,11 +193,15 @@ namespace Warrior
             computedConstants.bleedDamageMultiplier = character.debuffSettings.GetMultiplicativeStat(EffectStat.BleedDamage);
             computedConstants.deepWoundsDamageMultiplier = TalentUtils.GetDeepWoundsMultiplier(character.talents) * computedConstants.bleedDamageMultiplier;
             computedConstants.meleeDamageMultiplier = TalentUtils.GetTwoHandedWeaponSpecializationDamageMultiplier(character.talents);
-            computedConstants.criticalDamageMultiplier = 1.0f * (1.0f + character.talents.Impale.rank * 0.1f);
+            computedConstants.criticalDamageMultiplier = 1.0f + (1.0f + character.talents.Impale.rank * 0.1f);
             computedConstants.titansGripDamageMultiplier = TalentUtils.GetTitansDamageReductionMultiplier(character.talents, character.equipment);
             computedConstants.offHandDamageMultiplier = 0.5f * (1 + character.talents.DualWieldSpecialization.rank * 0.05f);
 
             computedConstants.HasAngerManagement = character.talents.AngerManagement.rank > 0;
+            computedConstants.hasBloodsurge = character.talents.Bloodsurge.rank > 0;
+            computedConstants.hasBloodthirst = character.talents.Bloodthirst.rank > 0;
+            computedConstants.bloodsurgeChance = TalentUtils.GetBloodSurgeChance(character.talents);
+            computedConstants.focusedRageRageReduction = character.talents.FocusedRage.rank;
         }
 
         public float ComputeDodgeChance()

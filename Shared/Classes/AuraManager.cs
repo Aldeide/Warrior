@@ -7,12 +7,14 @@
 
         public Flurry? flurry;
         public DeepWounds? deepWounds;
+        public Bloodsurge? bloodsurge;
 
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
             if (TalentUtils.HasFlurry(iteration.simulation.character.talents)) flurry = new Flurry(this);
             if (TalentUtils.HasDeepWounds(iteration.simulation.character.talents)) deepWounds = new DeepWounds(this);
+            if (iteration.simulation.computedConstants.hasBloodsurge) bloodsurge = new Bloodsurge(this);
 
         }
         public void Reset()
@@ -32,7 +34,6 @@
         {
             flurry?.Trigger(AuraTrigger.AllMeleeNonCritical);
         }
-
         public void MainHandCriticalTtrigger()
         {
             deepWounds?.Trigger(AuraTrigger.MainHandCritical);
@@ -43,38 +44,30 @@
         }
         public void BloodthirstTrigger()
         {
-            auras.Where(
-                s => s.trigger.Contains(AuraTrigger.Bloodthirst)
-            ).ToList().ForEach(
-                s => s.Trigger(AuraTrigger.Bloodthirst)
-            );
+            bloodsurge?.Trigger(AuraTrigger.Bloodthirst);
         }
         public void BloodthirstCriticalTrigger()
         {
+            bloodsurge?.Trigger(AuraTrigger.Bloodthirst);
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
         }
         public void WhirlwindTrigger()
         {
-            auras.Where(
-                s => s.trigger.Contains(AuraTrigger.Whirlwind)
-            ).ToList().ForEach(
-                s => s.Trigger(AuraTrigger.Whirlwind)
-            );
+            bloodsurge?.Trigger(AuraTrigger.Whirlwind);
         }
         public void WhirlwindCriticalTrigger()
         {
+            bloodsurge?.Trigger(AuraTrigger.Whirlwind);
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
         }
         public void HeroicStrikeTrigger()
         {
-            auras.Where(
-                s => s.trigger.Contains(AuraTrigger.HeroicStrike)
-            ).ToList().ForEach(
-                s => s.Trigger(AuraTrigger.HeroicStrike)
-            );
+            bloodsurge?.Trigger(AuraTrigger.HeroicStrike);
+            flurry?.Trigger(AuraTrigger.AllMeleeNonCritical);
         }
         public void HeroicStrikeCriticalTrigger()
         {
+            bloodsurge?.Trigger(AuraTrigger.HeroicStrike);
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
         }
         public void ApplyTime(int d)
@@ -85,6 +78,7 @@
         {
             int next = int.MaxValue;
             if (deepWounds != null && deepWounds.next < next && deepWounds.active) next = deepWounds.next;
+            if (bloodsurge != null && bloodsurge.next < next && bloodsurge.active) next = bloodsurge.next;
             iteration.nextStep.auras = next;
         }
     }

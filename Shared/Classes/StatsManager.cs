@@ -31,6 +31,7 @@
             tempMultiplicativeCharacterStats.hasteFactor = 1;
             tempMultiplicativeCharacterStats.attackPower = 1;
             tempMultiplicativeCharacterStats.hasteRating = 1;
+            tempMultiplicativeCharacterStats.expertiseRating = 1;
         }
 
         public void OnStanceChanged(object sender, EventArgs e)

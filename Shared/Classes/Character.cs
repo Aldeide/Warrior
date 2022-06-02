@@ -55,11 +55,11 @@
         // Stats update methods.
         public void UpdateAdditiveCharacterStats()
         {
-            additiveCharacterStats.agility = (int)(189 + bonusStatsPerRace["Agility"][race] + equipment.equipmentStats.agility + auraSettings.GetAdditiveStat(EffectStat.Agility) + auraSettings.GetAdditiveStat(EffectStat.AllBase));
-            additiveCharacterStats.intellect = (int)(151 + bonusStatsPerRace["Intellect"][race] + equipment.equipmentStats.intellect + auraSettings.GetAdditiveStat(EffectStat.Intellect) + auraSettings.GetAdditiveStat(EffectStat.AllBase));
-            additiveCharacterStats.stamina = (int)(189 + bonusStatsPerRace["Stamina"][race] + equipment.equipmentStats.stamina + auraSettings.GetAdditiveStat(EffectStat.Stamina) + auraSettings.GetAdditiveStat(EffectStat.AllBase));
-            additiveCharacterStats.spirit = (int)(144 + bonusStatsPerRace["Spirit"][race] + equipment.equipmentStats.spirit + auraSettings.GetAdditiveStat(EffectStat.Spirit) + auraSettings.GetAdditiveStat(EffectStat.AllBase));
-            additiveCharacterStats.strength = (int)(309 + bonusStatsPerRace["Strength"][race] + equipment.equipmentStats.strength + auraSettings.GetAdditiveStat(EffectStat.Strength) + auraSettings.GetAdditiveStat(EffectStat.AllBase));
+            additiveCharacterStats.agility = (int)(113 + bonusStatsPerRace["Agility"][race] + equipment.equipmentStats.agility + auraSettings.GetAdditiveStat(EffectStat.Agility) + auraSettings.GetAdditiveStat(EffectStat.AllBase));
+            additiveCharacterStats.intellect = (int)(36 + bonusStatsPerRace["Intellect"][race] + equipment.equipmentStats.intellect + auraSettings.GetAdditiveStat(EffectStat.Intellect) + auraSettings.GetAdditiveStat(EffectStat.AllBase));
+            additiveCharacterStats.stamina = (int)(160 + bonusStatsPerRace["Stamina"][race] + equipment.equipmentStats.stamina + auraSettings.GetAdditiveStat(EffectStat.Stamina) + auraSettings.GetAdditiveStat(EffectStat.AllBase));
+            additiveCharacterStats.spirit = (int)(59 + bonusStatsPerRace["Spirit"][race] + equipment.equipmentStats.spirit + auraSettings.GetAdditiveStat(EffectStat.Spirit) + auraSettings.GetAdditiveStat(EffectStat.AllBase));
+            additiveCharacterStats.strength = (int)(174 + bonusStatsPerRace["Strength"][race] + equipment.equipmentStats.strength + auraSettings.GetAdditiveStat(EffectStat.Strength) + auraSettings.GetAdditiveStat(EffectStat.AllBase));
             additiveCharacterStats.armor = (int)(equipment.equipmentStats.armor + auraSettings.GetAdditiveStat(EffectStat.Armor));
             additiveCharacterStats.hitRating = (int)(equipment.equipmentStats.hitRating + auraSettings.GetAdditiveStat(EffectStat.HitRating));
             additiveCharacterStats.criticalStrikeRating = (int)(equipment.equipmentStats.criticalStrikeRating + auraSettings.GetAdditiveStat(EffectStat.CriticalRating));
@@ -126,6 +126,11 @@
             return (int)(additiveCharacterStats.criticalStrikeRating * multiplicativeCharacterStats.criticalStrikeRating);
         }
 
+        public int GetExpertiseRating()
+        {
+            return (int)(additiveCharacterStats.expertiseRating * multiplicativeCharacterStats.expertiseRating);
+        }
+
         // Derived Stats without temporary buffs.
         public float GetHealth()
         {
@@ -134,7 +139,7 @@
         }
         public int GetArmor()
         {
-            return (int)(additiveCharacterStats.armor * multiplicativeCharacterStats.armor);
+            return (int)((69 + GetAgility() * 2 + additiveCharacterStats.armor) * multiplicativeCharacterStats.armor);
         }
         public int GetAttackPower()
         {

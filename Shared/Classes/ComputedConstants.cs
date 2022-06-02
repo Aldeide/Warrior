@@ -13,12 +13,16 @@
         public float rendDamageMultiplier { get; set; } = 0;
 
 
-        public bool HasBloodthirst { get; set; } = false;
-        public bool HasMortalStrike { get; set; } = false;
+        public bool hasBloodthirst { get; set; } = false;
+        public bool hasMortalStrike { get; set; } = false;
 
-        public bool HasDeepWounds { get; set; } = false;
-        public bool HasBloodsurge { get; set; } = false;
+        public bool hasDeepWounds { get; set; } = false;
+        public bool hasBloodsurge { get; set; } = false;
+        public float bloodsurgeChance { get; set; } = 0;
+
         public bool HasAngerManagement { get; set; } = false;
+
+        public int focusedRageRageReduction { get; set; } = 0;
 
 
     }

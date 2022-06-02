@@ -46,19 +46,21 @@
         }
         public static float ComputeDodgeChance(Simulation simulation)
         {
+            int expertiseRating = simulation.character.GetExpertiseRating();
+            float reductionChance = expertiseRating / Constants.kExpertisePerPoint / 4;
             if (simulation.settings.targetLevel == 83)
             {
-                return 6.5f;
+                return Math.Max(0, 6.5f - reductionChance);
             }
             if (simulation.settings.targetLevel == 82)
             {
-                return 5.4f;
+                return Math.Max(0, 5.4f - reductionChance);
             }
             if (simulation.settings.targetLevel == 81)
             {
-                return 5.2f;
+                return Math.Max(0, 5.2f - reductionChance);
             }
-            return 5;
+            return Math.Max(0, 5f - reductionChance); ;
         }
         public static float ComputeCritChanceReduction(int targetLevel)
         {

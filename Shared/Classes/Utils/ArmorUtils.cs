@@ -13,10 +13,11 @@
             armor *= simulation.character.debuffSettings.GetMultiplicativeStat(EffectStat.Armor);
             float armorConstant = 400 + 85 * simulation.settings.targetLevel + 4.5f * 85 * (simulation.settings.targetLevel - 59);
             float armorPenetrationCap = (armor + armorConstant) / 3;
+            Console.WriteLine("ArmorPenCap: " + armorPenetrationCap);
             float armorPenetrationPercent = simulation.character.GetArmorPenetrationRating() / 13.99f;
 
             float armorReduction = Math.Min(simulation.settings.targetArmor, armorPenetrationCap) * armorPenetrationPercent / 100;
-
+            Console.WriteLine("ArmorReduction: " + armorReduction);
             //TODO(replace targetArmor by armor after debuffs)
             float effectiveArmor = armor - armorReduction;
             return effectiveArmor;

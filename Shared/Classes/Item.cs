@@ -6,6 +6,7 @@
         OffHand,
         Head,
         Neck,
+        Shoulders,
         Back,
         Chest,
         Wrist,

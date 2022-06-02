@@ -26,7 +26,7 @@
         }
         public static float EffectiveCritCoefficient(Talents talents)
         {
-            return 2.0f * TalentUtils.GetCritBonusImpaleMultiplier(talents);
+            return 1.0f + 1.0f * TalentUtils.GetCritBonusImpaleMultiplier(talents);
         }
         public static int WeaponDamage(AttackResult result, Weapon weapon, Iteration iteration, int bonus)
         {
@@ -34,9 +34,7 @@
             float damage = iteration.random.Next(weapon.minDamage, weapon.maxDamage) + bonus;
             // Attack power contribution. Speed value?
             damage += iteration.statsManager.GetEffectiveAttackPower() / 14.0f * weapon.baseSpeed / Constants.kStepsPerSecond;
-
-            Console.WriteLine("AP: " + iteration.statsManager.GetEffectiveAttackPower().ToString());
-            Console.WriteLine("Weapon damage after AP: " + damage.ToString());
+            
 
             // Two-Handed Specialization talent.
             if (weapon.item.weaponType == WeaponType.TwoHand)
@@ -63,6 +61,7 @@
             // Critical bonus.
             if (result == AttackResult.Critical)
             {
+                
                 damage *= iteration.simulation.computedConstants.criticalDamageMultiplier;
             }
             return (int)damage;

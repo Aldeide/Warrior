@@ -102,14 +102,16 @@
             damage = 0.50f 
                 * iteration.statsManager.GetEffectiveAttackPower() 
                 * TalentUtils.GetUnendingFuryDamageMultiplier(iteration.simulation.character.talents) 
-                * DamageUtils.EffectiveDamageCoefficient(iteration);
+                * DamageUtils.EffectiveDamageCoefficient(iteration) * 1.06f;
 
             if (result == AttackResult.Critical)
             {
                 damage *= DamageUtils.EffectiveCritCoefficient(iteration.simulation.character.talents);
                 iteration.auraManager.BloodthirstCriticalTrigger();
+            } else
+            {
+                iteration.auraManager.BloodthirstTrigger();
             }
-            iteration.auraManager.BloodthirstTrigger();
             return (int)damage;
         }
     }
@@ -195,6 +197,7 @@
             {
                 damageSummary.hitDamage += (int)damage;
                 damageSummary.numHit += 1;
+                iteration.auraManager.WhirlwindTrigger();
             }
             return (int)damage;
         }
@@ -210,8 +213,6 @@
                 - TalentUtils.GetImprovedHeroicStrikeReduction(iteration.simulation.character.talents)
                 - TalentUtils.GetFocusedRageReduction(iteration.simulation.character.talents);
             cooldown = 0;
-            globalCooldown = 0;
-            currentCooldown = 0;
         }
 
         public bool CanUse()
@@ -272,6 +273,17 @@
                 damageSummary.numCrit += 1;
                 damageSummary.critDamage += damage;
             }
+        }
+    }
+
+    public class Slam : Ability
+    {
+        public Slam(Iteration iteration) : base(iteration)
+        {
+            name = "Slam";
+            damageSummary.name = name;
+            rageCost = 15;
+            globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
         }
     }
 }

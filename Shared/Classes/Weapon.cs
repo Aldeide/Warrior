@@ -114,7 +114,7 @@
         public void UpdateWeaponSpeed()
         {
             effectiveSpeed = (int)(baseSpeed / iteration.statsManager.GetEffectiveHasteMultiplier());
-            Console.WriteLine("Haste Multiplier: " + iteration.statsManager.GetEffectiveHasteMultiplier());
+            //Console.WriteLine("Haste Multiplier: " + iteration.statsManager.GetEffectiveHasteMultiplier());
             if (effectiveSpeed != formerSpeed)
             {
                 swingTimer = (int)(effectiveSpeed * (float)swingTimer / baseSpeed);
@@ -128,6 +128,7 @@
             {
                 iteration.nextStep.offHand = iteration.currentStep + swingTimer;
             }
+            Console.WriteLine("[ " + iteration.currentStep + " ] Effective swing timer: " + effectiveSpeed);
             formerSpeed = effectiveSpeed;
         }
         public void ApplyTime(int delta)  

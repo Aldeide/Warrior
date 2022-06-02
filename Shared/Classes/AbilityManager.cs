@@ -23,10 +23,7 @@
         public AbilityManager(Iteration iteration)
         {
             this.iteration = iteration;
-            if (TalentUtils.HasBloodthirst(iteration.simulation.character.talents))
-            {
-                abilities.Add(new Bloodthirst(iteration));
-            }
+            if (iteration.simulation.computedConstants.hasBloodthirst) abilities.Add(new Bloodthirst(iteration));
             abilities.Add(new Whirlwind(iteration));
             abilities.Add(new HeroicStrike(iteration));
         }

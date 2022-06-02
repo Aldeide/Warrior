@@ -84,8 +84,8 @@ namespace Warrior
                 }
                 stacks = 3;
                 active = true;
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Applied Flurry");
-                
+                //Console.WriteLine("[ " + manager.iteration.currentStep + " ] Applied Flurry");
+
                 manager.iteration.statsManager.UpdateTemporaryHasteMultiplier();
                 return;
             }
@@ -96,7 +96,7 @@ namespace Warrior
                     return;
                 }
                 stacks -= 1;
-                Console.WriteLine("Flurry current stacks: " + stacks);
+                //Console.WriteLine("Flurry current stacks: " + stacks);
                 if (stacks == 0)
                 {
                     Console.WriteLine("Flurry Faded.");
@@ -216,19 +216,37 @@ namespace Warrior
         public override void Trigger(AuraTrigger trigger)
         {
             int roll = manager.iteration.random.Next(1, 10000);
-            if (roll > (int)(TalentUtils.GetBloodSurgeChance(manager.iteration.simulation.character.talents) * 100))
+            if (roll > manager.iteration.simulation.computedConstants.bloodsurgeChance * 100)
             {
                 return;
             }
             if (!active)
             {
+                //Console.WriteLine("Bloodsurge Proc");
+                auraSummary.procs += 1;
                 active = true;
-                fade = manager.iteration.currentStep + 5 * Constants.kStepsPerSecond;
+                next = manager.iteration.currentStep + duration;
+                fade = next;
+                start = manager.iteration.currentStep;
                 return;
             }
             if (active)
             {
-                fade = manager.iteration.currentStep + 5 * Constants.kStepsPerSecond;
+                auraSummary.refreshes += 1;
+                next = manager.iteration.currentStep + duration;
+                fade = next;
+            }
+        }
+
+        public override void Update()
+        {
+            if (!active) return;
+            if (manager.iteration.currentStep >= fade)
+            {
+                //Console.WriteLine("Bloodsurge Fade");
+                active = false;
+                auraSummary.uptime += fade - start;
+                next = int.MaxValue;
             }
         }
     }
