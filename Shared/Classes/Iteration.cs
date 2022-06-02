@@ -94,7 +94,10 @@
             auraManager.auras.ForEach(aura => iterationResults.auraSummaries.Add(aura.auraSummary));
             abilityManager.abilities.ForEach(ability => iterationResults.abilitySummaries.Add(ability.damageSummary));
 
-
+            if (abilityManager.bloodthirst != null) iterationResults.abilitySummaries.Add(abilityManager.bloodthirst.damageSummary);
+            iterationResults.abilitySummaries.Add(abilityManager.whirlwind.damageSummary);
+            iterationResults.abilitySummaries.Add(abilityManager.heroicStrike.damageSummary);
+            iterationResults.abilitySummaries.Add(abilityManager.slam.damageSummary);
             if (auraManager.deepWounds != null) iterationResults.dotDamageSummaries.Add((DotDamageSummary)auraManager.deepWounds.dotSummary.Clone());
             if (auraManager.flurry != null) iterationResults.auraSummaries.Add((AuraSummary)auraManager.flurry.auraSummary.Clone());
             if (auraManager.bloodsurge != null) iterationResults.auraSummaries.Add((AuraSummary)auraManager.bloodsurge.auraSummary.Clone());
@@ -131,14 +134,25 @@
         public void Abilities()
         {
             // Bloodthirst.
-            if (simulation.computedConstants.hasBloodthirst) {
-                abilityManager.UseAbility("Bloodthirst");
+            if (abilityManager.bloodthirst != null) {
+                abilityManager.bloodthirst.Use();
             }
-            abilityManager.UseAbility("Whirlwind");
-            if (rage >= 45 && !abilityManager.abilities.Single(a=>a.name == "Heroic Strike").isQueued)
+            // Whirlwind.
+            abilityManager.whirlwind.Use();
+
+            if (auraManager.bloodsurge != null && auraManager.bloodsurge.active)
+            {
+                if(abilityManager.bloodthirst.currentCooldown > 1.6f)
+                {
+                    abilityManager.slam.Use();
+                    auraManager.bloodsurge.active = false;
+                }
+            }
+
+            if (rage >= 45 && !abilityManager.heroicStrike.isQueued)
             {
                 Console.WriteLine("[ " + currentStep + " ] Iteration: Queueing Heroic Strike");
-                abilityManager.UseAbility("Heroic Strike");
+                abilityManager.heroicStrike.Use();
             }
             abilityManager.GetNext();
         }

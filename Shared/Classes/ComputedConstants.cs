@@ -2,17 +2,18 @@
 {
     public class ComputedConstants
     {
-        public float bleedDamageMultiplier { get; set; } = 0;
+        public float bleedDamageMultiplier { get; set; } = 1;
 
-        public float deepWoundsDamageMultiplier { get; set; } = 0;
-        public float allDamageMultiplier { get; set; } = 0;
-        public float meleeDamageMultiplier { get; set; } = 0;
-        public float offHandDamageMultiplier { get; set; } = 0;
-        public float criticalDamageMultiplier { get; set; } = 0;
-        public float titansGripDamageMultiplier { get; set; } = 0;
-        public float rendDamageMultiplier { get; set; } = 0;
+        public float deepWoundsDamageMultiplier { get; set; } = 1;
+        public float allDamageMultiplier { get; set; } = 1;
+        public float meleeDamageMultiplier { get; set; } = 1;
+        public float offHandDamageMultiplier { get; set; } = 1;
+        public float criticalDamageMultiplier { get; set; } = 1;
+        public float titansGripDamageMultiplier { get; set; } = 1;
+        public float rendDamageMultiplier { get; set; } = 1;
 
-
+        public float slamDamageMultiplier { get; set; } = 1;
+        public float unendingFuryDamageMultiplier { get; set; } = 1;
         public bool hasBloodthirst { get; set; } = false;
         public bool hasMortalStrike { get; set; } = false;
 

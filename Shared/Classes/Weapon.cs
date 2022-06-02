@@ -49,11 +49,11 @@
                 iteration.nextStep.offHand = iteration.currentStep + (int)(baseSpeed / iteration.statsManager.GetEffectiveHasteMultiplier());
             }
             
-            if (isMainHand && iteration.abilityManager.abilities.Single(a=>a.name == "Heroic Strike").isQueued)
+            if (isMainHand && iteration.abilityManager.heroicStrike.isQueued)
             {
-                if (iteration.abilityManager.abilities.Single(a => a.name == "Heroic Strike").CanUse())
+                if (iteration.abilityManager.heroicStrike.CanUse())
                 {
-                    iteration.abilityManager.UseAbility("Heroic Strike");
+                    iteration.abilityManager.heroicStrike.Use();
                     swingTimer = effectiveSpeed;
                     iteration.nextStep.mainHand = iteration.currentStep + swingTimer;
                     return;

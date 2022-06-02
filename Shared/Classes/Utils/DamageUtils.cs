@@ -94,7 +94,6 @@
             }
             return rage;
         }
-
         public static int AverageWeaponDamage(Weapon weapon, Iteration iteration, int bonus)
         {
             // Base weapon damage.

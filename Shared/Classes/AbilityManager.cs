@@ -20,20 +20,32 @@
 
         public Iteration iteration;
         public List<Ability> abilities = new List<Ability>();
+
+        public Bloodthirst? bloodthirst { get; set; }
+        public Whirlwind whirlwind { get; set; }
+        public HeroicStrike heroicStrike { get; set; }
+
+        public Slam slam { get; set; }
+
         public AbilityManager(Iteration iteration)
         {
             this.iteration = iteration;
-            if (iteration.simulation.computedConstants.hasBloodthirst) abilities.Add(new Bloodthirst(iteration));
-            abilities.Add(new Whirlwind(iteration));
-            abilities.Add(new HeroicStrike(iteration));
+            if (iteration.simulation.computedConstants.hasBloodthirst)
+            {
+                bloodthirst = new Bloodthirst(iteration);
+            }
+            whirlwind = new Whirlwind(iteration);
+            heroicStrike = new HeroicStrike(iteration);
+            slam = new Slam(iteration);
         }
         public void ApplyTime(int d)
         {
-            abilities.ForEach(a => a.ApplyTime(d));
+            bloodthirst?.ApplyTime(d);
+            whirlwind.ApplyTime(d);
+            heroicStrike.ApplyTime(d);
         }
         public void UseAbility(string name)
         {
-            abilities.Single(a => a.name == name).Use();
         }
         public void GetNext()
         {
@@ -45,14 +57,6 @@
             {
                 iteration.nextStep.abilities = iteration.currentStep + abilities.Where(a => a.currentCooldown > 0).Min(a => a.currentCooldown);
             }
-        }
-        public virtual void OnAbilityHit(Ability a, EventArgs e)
-        {
-            AbilityHit?.Invoke(a, e);
-        }
-        public virtual void OnAbilityCrit(Ability a, EventArgs e)
-        {
-            AbilityCrit?.Invoke(a, e);
         }
 
     }

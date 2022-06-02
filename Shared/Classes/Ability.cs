@@ -259,8 +259,8 @@
                     damageSummary.hitDamage += damage;
                     iteration.auraManager.HeroicStrikeTrigger();
                 }
+                isQueued = false;
             }
-            isQueued = false;
         }
 
         public void Consumed(AttackResult result, int damage)
@@ -303,17 +303,19 @@
                 base.Use();
                 return;
             }
-            int damage = DamageUtils.AverageWeaponDamage(iteration.mainHand, iteration, 250);
-            damageSummary.totalDamage += damage;
+            int damage = (int)(DamageUtils.AverageWeaponDamage(iteration.mainHand, iteration, 250) * iteration.simulation.computedConstants.slamDamageMultiplier);
+            
             if (result == AttackResult.Hit)
             {
                 damageSummary.numHit += 1;
                 damageSummary.hitDamage += damage;
+                damageSummary.totalDamage += damage;
             }
             if (result == AttackResult.Critical)
             {
                 damageSummary.numCrit += 1;
-                damageSummary.critDamage += damage;
+                damageSummary.critDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.simulation.character.talents));
+                damageSummary.totalDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.simulation.character.talents));
             }
             base.Use();
         }
