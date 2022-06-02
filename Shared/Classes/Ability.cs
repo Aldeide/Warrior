@@ -80,13 +80,11 @@
             {
                 damageSummary.numHit += 1;
                 damageSummary.hitDamage += damage;
-                iteration.abilityManager.OnAbilityHit(this, EventArgs.Empty);
             }
             if (result == AttackResult.Critical)
             {
                 damageSummary.numCrit += 1;
                 damageSummary.critDamage += damage;
-                iteration.abilityManager.OnAbilityCrit(this, EventArgs.Empty);
             }
             base.Use();
         }
@@ -284,6 +282,40 @@
             damageSummary.name = name;
             rageCost = 15;
             globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
+        }
+
+        public override void Use()
+        {
+            if (!CanUse()) return;
+            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Slam");
+            AttackResult result = AttackTableUtils.GetYellowHitResult(iteration.random, iteration.simulation);
+            
+            damageSummary.numCasts += 1;
+            if (result == AttackResult.Miss)
+            {
+                damageSummary.numMiss += 1;
+                base.Use();
+                return;
+            }
+            if (result == AttackResult.Dodge)
+            {
+                damageSummary.numDodge += 1;
+                base.Use();
+                return;
+            }
+            int damage = DamageUtils.AverageWeaponDamage(iteration.mainHand, iteration, 250);
+            damageSummary.totalDamage += damage;
+            if (result == AttackResult.Hit)
+            {
+                damageSummary.numHit += 1;
+                damageSummary.hitDamage += damage;
+            }
+            if (result == AttackResult.Critical)
+            {
+                damageSummary.numCrit += 1;
+                damageSummary.critDamage += damage;
+            }
+            base.Use();
         }
     }
 }
