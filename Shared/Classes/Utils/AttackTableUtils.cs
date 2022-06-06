@@ -44,19 +44,19 @@
             }
             return random.Next(91000, 99000) / 100000f;
         }
-        public static float ComputeDodgeChance(Simulation simulation)
+        public static float ComputeDodgeChance(Iteration iteration)
         {
-            int expertiseRating = simulation.character.GetExpertiseRating();
+            int expertiseRating = iteration.statsManager.GetEffectiveExpertiseRating();
             float reductionChance = expertiseRating / Constants.kExpertisePerPoint / 4;
-            if (simulation.settings.targetLevel == 83)
+            if (iteration.settings.simulationSettings.targetLevel == 83)
             {
                 return Math.Max(0, 6.5f - reductionChance);
             }
-            if (simulation.settings.targetLevel == 82)
+            if (iteration.settings.simulationSettings.targetLevel == 82)
             {
                 return Math.Max(0, 5.4f - reductionChance);
             }
-            if (simulation.settings.targetLevel == 81)
+            if (iteration.settings.simulationSettings.targetLevel == 81)
             {
                 return Math.Max(0, 5.2f - reductionChance);
             }
@@ -78,52 +78,53 @@
             }
             return 0;
         }
-        public static float ComputeEffectiveCritChance(Simulation simulation)
+        public static float ComputeEffectiveCritChance(Iteration iteration)
         {
-            return simulation.character.GetMeleeCritChancePercent() - ComputeCritChanceReduction(simulation.settings.targetLevel);
+            return iteration.statsManager.GetEffectiveCritChanceBeforeSuppression()
+                - ComputeCritChanceReduction(iteration.settings.simulationSettings.targetLevel);
         }
-        public static float ComputeMissChance(Simulation simulation)
+        public static float ComputeMissChance(Iteration iteration)
         {
             float missChance = 24;
-            if (simulation.settings.targetLevel == 83)
+            if (iteration.settings.simulationSettings.targetLevel == 83)
             {
                 missChance = 27;
             }
-            if (simulation.settings.targetLevel == 82)
+            if (iteration.settings.simulationSettings.targetLevel == 82)
             {
                 missChance = 25;
             }
-            if (simulation.settings.targetLevel == 81)
+            if (iteration.settings.simulationSettings.targetLevel == 81)
             {
                 missChance = 24.5f;
             }
-            return missChance - simulation.character.GetMeleeHitChance();
+            return missChance - iteration.statsManager.GetExtraHitChance();
         }
-        public static float ComputeYellowMissChance(Simulation simulation)
+        public static float ComputeYellowMissChance(Iteration iteration)
         {
             float missChance = 5;
-            if (simulation.settings.targetLevel == 83)
+            if (iteration.settings.simulationSettings.targetLevel == 83)
             {
                 missChance = 8;
             }
-            if (simulation.settings.targetLevel == 82)
+            if (iteration.settings.simulationSettings.targetLevel == 82)
             {
                 missChance = 6;
             }
-            if (simulation.settings.targetLevel == 81)
+            if (iteration.settings.simulationSettings.targetLevel == 81)
             {
                 missChance = 5.5f;
             }
-            float chance = missChance - simulation.character.GetMeleeHitChance();
+            float chance = missChance - iteration.statsManager.GetExtraHitChance();
             return chance <= 0 ? 0 : chance;
         }
-        public static AttackResult GetWhiteHitResult(Random random, Simulation simulation)
+        public static AttackResult GetWhiteHitResult(Iteration iteration)
         {
-            int roll = random.Next(0, 10000);
-            float missChance = ComputeMissChance(simulation) * 100;
-            float dodgeChance = ComputeDodgeChance(simulation) * 100;
-            float glancingChance = ComputeGlancingChance(simulation.settings.targetLevel) * 100;
-            float critChance = ComputeEffectiveCritChance(simulation) * 100;
+            int roll = iteration.random.Next(0, 10000);
+            float missChance = ComputeMissChance(iteration) * 100;
+            float dodgeChance = ComputeDodgeChance(iteration) * 100;
+            float glancingChance = ComputeGlancingChance(iteration.settings.simulationSettings.targetLevel) * 100;
+            float critChance = ComputeEffectiveCritChance(iteration) * 100;
 
             if (roll < missChance)
             {
@@ -143,12 +144,12 @@
             }
             return AttackResult.Hit;
         }
-        public static AttackResult GetYellowHitResult(Random random, Simulation simulation)
+        public static AttackResult GetYellowHitResult(Iteration iteration)
         {
-            int roll = random.Next(0, 10000);
-            float missChance = ComputeYellowMissChance(simulation) * 100;
-            float dodgeChance = ComputeDodgeChance(simulation) * 100;
-            float critChance = ComputeEffectiveCritChance(simulation) * 100;
+            int roll = iteration.random.Next(0, 10000);
+            float missChance = ComputeYellowMissChance(iteration) * 100;
+            float dodgeChance = ComputeDodgeChance(iteration) * 100;
+            float critChance = ComputeEffectiveCritChance(iteration) * 100;
 
             if (roll < missChance)
             {
@@ -159,7 +160,7 @@
                 return AttackResult.Dodge;
             }
 
-            int secondRoll = random.Next(0, 10000);
+            int secondRoll = iteration.random.Next(0, 10000);
 
             if (secondRoll < (int)((10000 - missChance - dodgeChance) * critChance / 10000))
             {

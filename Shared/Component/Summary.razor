@@ -1,14 +1,15 @@
-﻿@inject Simulation simulation;
+﻿@using Warrior.Stats
+@inject Simulation simulation;
 
 <p style="text-align: center">
-	@simulation.settings.race Warrior
+	@simulation.settings.characterSettings.race Warrior
 </p>
 <div>
 	<div class="align-left">
 		Strength
 	</div>
 	<div class="align-right">
-		@simulation.character.GetStrength()
+		@DisplayStats.DisplayStrength(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -17,7 +18,7 @@
 		Agility
 	</div>
 	<div class="align-right">
-		@simulation.character.GetAgility()
+		@DisplayStats.DisplayAgility(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -26,7 +27,7 @@
 		Stamina
 	</div>
 	<div class="align-right">
-		@simulation.character.GetStamina()
+		@DisplayStats.DisplayStamina(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -35,7 +36,7 @@
 		Health
 	</div>
 	<div class="align-right">
-		@simulation.character.GetHealth()
+		@DisplayStats.DisplayHealth(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -45,7 +46,7 @@
 		Armor
 	</div>
 	<div class="align-right">
-		@simulation.character.GetArmor()
+		@DisplayStats.DisplayArmor(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -54,7 +55,7 @@
 		Attack Power
 	</div>
 	<div class="align-right">
-		@simulation.character.GetAttackPower()
+		@DisplayStats.DisplayAttackPower(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -64,7 +65,7 @@
 		Armor Penetration Rating
 	</div>
 	<div class="align-right">
-		@simulation.character.GetArmorPenetrationRating()
+		@DisplayStats.DisplayArmorPenetrationRating(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -74,7 +75,7 @@
 		Haste Rating
 	</div>
 	<div class="align-right">
-		@simulation.character.GetHasteRating()
+		@DisplayStats.DisplayHasteRating(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -84,7 +85,7 @@
 		Crit Rating
 	</div>
 	<div class="align-right">
-		@simulation.character.GetCriticalStrikeRating()
+		@DisplayStats.DisplayCriticalStrikeRating(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -94,7 +95,17 @@
 		Expertise Rating
 	</div>
 	<div class="align-right">
-		@simulation.character.GetExpertiseRating()
+		@DisplayStats.DisplayExpertiseRating(simulation.settings)
+	</div>
+</div>
+<div style="clear:both"></div>
+
+<div>
+	<div class="align-left">
+		Armor Penetration (%)
+	</div>
+	<div class="align-right">
+		@DisplayStats.DisplayArmorPenetration(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -104,7 +115,7 @@
 		Melee Critical Chance (%)
 	</div>
 	<div class="align-right">
-		@simulation.character.GetMeleeCritChancePercent()
+		@DisplayStats.DisplayCriticalChance(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -114,7 +125,7 @@
 		Melee Haste
 	</div>
 	<div class="align-right">
-		@simulation.character.GetMeleeHasteFactor()
+		@DisplayStats.DisplayMeleeHaste(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -126,17 +137,17 @@ Debug
 		Glancing Chance
 	</div>
 	<div class="align-right">
-		@AttackTableUtils.ComputeGlancingChance(simulation.settings.targetLevel)
+		@AttackTableUtils.ComputeGlancingChance(simulation.settings.simulationSettings.targetLevel)
 	</div>
 </div>
 <div style="clear:both"></div>
 
 <div>
 	<div class="align-left">
-		Miss Chance (MH)
+		White Miss Chance
 	</div>
 	<div class="align-right">
-		@AttackTableUtils.ComputeMissChance(simulation)
+		@DisplayStats.DisplayWhiteMissChance(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -146,7 +157,7 @@ Debug
 		Dodge Chance
 	</div>
 	<div class="align-right">
-		@AttackTableUtils.ComputeDodgeChance(simulation)
+		@DisplayStats.DisplayDodgeChance(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -156,7 +167,7 @@ Debug
 		Extra Hit
 	</div>
 	<div class="align-right">
-		@simulation.character.GetMeleeHitChance()
+		@DisplayStats.DisplayExtraHitChance(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -166,7 +177,7 @@ Debug
 		Enemy Effective Armor
 	</div>
 	<div class="align-right">
-		@ArmorUtils.ComputeEffectiveTargetArmor(simulation)
+		@DisplayStats.DisplayEnemyEffectiveArmor(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -176,7 +187,7 @@ Debug
 		Enemy Armor reduction
 	</div>
 	<div class="align-right">
-		@ArmorUtils.ComputeEffectiveArmorDamageReductionMultiplier(simulation)
+		@DisplayStats.DisplayEnemyDamageMultiplier(simulation.settings)
 	</div>
 </div>
 <div style="clear:both"></div>

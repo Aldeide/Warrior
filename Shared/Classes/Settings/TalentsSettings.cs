@@ -1,65 +1,7 @@
-﻿namespace Warrior
+﻿namespace Warrior.Settings
 {
-    public enum TalentTree
+    public class TalentsSettings
     {
-        Arms,
-        Fury,
-        Protection
-    }
-    public class Talent
-    {
-        public string name { get; set; }
-        public TalentTree talentTree { get; set; }
-        public int maxRank { get; set; }
-        public int rank { get; set; }
-        public int xPosition { get; set; }
-        public int yPosition { get; set; }
-        public int[] spellIds { get; set; }
-        public int currentSpellId { get; set; }
-        public Talents talentManager { get; set; }
-
-        public Talent()
-        {
-        }
-        public void Increment()
-        {
-            if (rank < maxRank)
-            {
-                rank += 1;
-            }
-        }
-
-        public void Decrement()
-        {
-            if (rank > 0)
-            {
-                rank -= 1;
-            }
-        }
-
-        public void ProcessClick(long button)
-        {
-            if (button == 0)
-            {
-                Increment();
-            }
-            else if (button == 2)
-            {
-                Decrement();
-            }
-            if (rank == maxRank)
-            {
-                currentSpellId = spellIds[rank - 1];
-            } else
-            {
-                currentSpellId = spellIds[rank];
-            }
-        }
-    }
-    public class Talents
-    {
-        public Simulation simulation;
-
         #region Arms
         public Talent ImprovedHeroicStrike { get; set; }
         public Talent Deflection { get; set; }
@@ -95,7 +37,7 @@
         #endregion
 
         #region Fury
-        public Talent ArmoredToTheTeeth { get;set; }
+        public Talent ArmoredToTheTeeth { get; set; }
         public Talent BoomingVoice { get; set; }
         public Talent Cruelty { get; set; }
         public Talent ImprovedDemoralizingShout { get; set; }
@@ -153,9 +95,8 @@
         public Talent DamageShield { get; set; }
         public Talent Shockwave { get; set; }
         #endregion
-        public Talents(Simulation simulation)
+        public TalentsSettings()
         {
-            this.simulation = simulation;
             // Arms.
             #region Arms
             ImprovedHeroicStrike = new Talent() { name = "Improved Heroic Strike", talentTree = TalentTree.Arms, maxRank = 3, spellIds = new int[] { 12282, 12663, 12664 }, currentSpellId = 12664, rank = 3 };
@@ -195,20 +136,20 @@
             ArmoredToTheTeeth = new Talent() { name = "Armored to the Teeth", talentTree = TalentTree.Fury, maxRank = 3, spellIds = new int[] { 61216, 61221, 61222 }, currentSpellId = 61222, rank = 3 };
             BoomingVoice = new Talent() { name = "Booming Voice", talentTree = TalentTree.Fury, maxRank = 2, spellIds = new int[] { 12321, 12835 }, currentSpellId = 12835, rank = 2 };
             Cruelty = new Talent() { name = "Cruelty", talentTree = TalentTree.Fury, maxRank = 5, spellIds = new int[] { 12320, 12852, 12853, 12855, 12856 }, currentSpellId = 12856, rank = 5 };
-            ImprovedDemoralizingShout = new Talent() { name = "Improved Demoralizing Shout", talentTree = TalentTree.Fury, maxRank = 5, spellIds = new int[] { 12324, 12876, 12877, 12878, 12879  }, currentSpellId = 12324 };
-            UnbridledWrath = new Talent() { name = "Unbridled Wrath", talentTree = TalentTree.Fury, maxRank = 5, spellIds = new int[] { 12322, 12999, 13000, 13001, 13002  }, currentSpellId = 12322 };
+            ImprovedDemoralizingShout = new Talent() { name = "Improved Demoralizing Shout", talentTree = TalentTree.Fury, maxRank = 5, spellIds = new int[] { 12324, 12876, 12877, 12878, 12879 }, currentSpellId = 12324 };
+            UnbridledWrath = new Talent() { name = "Unbridled Wrath", talentTree = TalentTree.Fury, maxRank = 5, spellIds = new int[] { 12322, 12999, 13000, 13001, 13002 }, currentSpellId = 12322 };
             ImprovedCleave = new Talent() { name = "Improved Cleave", talentTree = TalentTree.Fury, maxRank = 3, spellIds = new int[] { 12329, 12950, 20496 }, currentSpellId = 20496, rank = 3 };
             PiercingHowl = new Talent() { name = "Piercing Howl", talentTree = TalentTree.Fury, maxRank = 1, spellIds = new int[] { 12323 }, currentSpellId = 12323 };
             BloodCraze = new Talent() { name = "Blood Craze", talentTree = TalentTree.Fury, maxRank = 3, spellIds = new int[] { 16487, 16489, 16492 }, currentSpellId = 16487 };
             CommandingPresence = new Talent() { name = "Commanding Presence", talentTree = TalentTree.Fury, maxRank = 5, spellIds = new int[] { 12318, 12857, 12858, 12860, 12861 }, currentSpellId = 12857, rank = 2 };
             DualWieldSpecialization = new Talent() { name = "Dual Wield Specialization", talentTree = TalentTree.Fury, maxRank = 5, spellIds = new int[] { 23584, 23585, 23586, 23587, 23588 }, currentSpellId = 23588, rank = 5 };
             ImprovedExecute = new Talent() { name = "Improved Execute", talentTree = TalentTree.Fury, maxRank = 2, spellIds = new int[] { 20502, 20503 }, currentSpellId = 20502 };
-            Enrage = new Talent() { name = "Enrage", talentTree = TalentTree.Fury, maxRank = 5, spellIds = new int[] { 12317, 13045, 13046, 13047, 13048  }, currentSpellId = 13046, rank = 3 };
+            Enrage = new Talent() { name = "Enrage", talentTree = TalentTree.Fury, maxRank = 5, spellIds = new int[] { 12317, 13045, 13046, 13047, 13048 }, currentSpellId = 13046, rank = 3 };
             Precision = new Talent() { name = "Precision", talentTree = TalentTree.Fury, maxRank = 3, spellIds = new int[] { 29590, 29591, 29592 }, currentSpellId = 29592, rank = 3 };
             DeathWish = new Talent() { name = "Death Wish", talentTree = TalentTree.Fury, maxRank = 1, spellIds = new int[] { 12292 }, currentSpellId = 12292, rank = 1 };
             ImprovedIntercept = new Talent() { name = "Improved Intercept", talentTree = TalentTree.Fury, maxRank = 2, spellIds = new int[] { 29888, 29889 }, currentSpellId = 29888 };
             ImprovedBerserkerRage = new Talent() { name = "Improved BerserkerRage", talentTree = TalentTree.Fury, maxRank = 2, spellIds = new int[] { 20500, 20501 }, currentSpellId = 20500 };
-            Flurry = new Talent() { name = "Flurry", talentTree = TalentTree.Fury, maxRank = 5, spellIds = new int[] { 12319, 12971, 12972, 12973, 12974  }, currentSpellId = 12974, rank = 5 };
+            Flurry = new Talent() { name = "Flurry", talentTree = TalentTree.Fury, maxRank = 5, spellIds = new int[] { 12319, 12971, 12972, 12973, 12974 }, currentSpellId = 12974, rank = 5 };
             IntensifyRage = new Talent() { name = "Intensify Rage", talentTree = TalentTree.Fury, maxRank = 3, spellIds = new int[] { 46908, 46909, 56924 }, currentSpellId = 56924, rank = 3 };
             Bloodthirst = new Talent() { name = "Bloodthirst", talentTree = TalentTree.Fury, maxRank = 1, spellIds = new int[] { 23881 }, currentSpellId = 23881, rank = 1 };
             ImprovedWhirlwind = new Talent() { name = "Improved Whirlwind", talentTree = TalentTree.Fury, maxRank = 2, spellIds = new int[] { 29721, 29776 }, currentSpellId = 29776, rank = 2 };
@@ -229,7 +170,7 @@
             LastStand = new Talent() { name = "LastStand", talentTree = TalentTree.Protection, maxRank = 1, spellIds = new int[] { 12975 }, currentSpellId = 12975 };
             ImprovedRevenge = new Talent() { name = "Improved Revenge", talentTree = TalentTree.Protection, maxRank = 2, spellIds = new int[] { 12797, 12799 }, currentSpellId = 12797 };
             ShieldMastery = new Talent() { name = "Shield Mastery", talentTree = TalentTree.Protection, maxRank = 2, spellIds = new int[] { 29598, 29599 }, currentSpellId = 29598 };
-            Toughness = new Talent() { name = "Toughness", talentTree = TalentTree.Protection, maxRank = 5, spellIds = new int[] { 12299, 12761, 12762, 12763, 12764  }, currentSpellId = 12299 };
+            Toughness = new Talent() { name = "Toughness", talentTree = TalentTree.Protection, maxRank = 5, spellIds = new int[] { 12299, 12761, 12762, 12763, 12764 }, currentSpellId = 12299 };
             ImprovedSpellReflection = new Talent() { name = "Improved Spell Reflection", talentTree = TalentTree.Protection, maxRank = 2, spellIds = new int[] { 59088, 59089 }, currentSpellId = 59088 };
             ImprovedDisarm = new Talent() { name = "Improved Disarm", talentTree = TalentTree.Protection, maxRank = 2, spellIds = new int[] { 12313, 12804 }, currentSpellId = 12313 };
             Puncture = new Talent() { name = "Puncture", talentTree = TalentTree.Protection, maxRank = 3, spellIds = new int[] { 12308, 12810, 12811 }, currentSpellId = 12308 };
@@ -248,11 +189,6 @@
             SwordAndBoard = new Talent() { name = "Sword and Board", talentTree = TalentTree.Protection, maxRank = 3, spellIds = new int[] { 46951, 46952, 46953 }, currentSpellId = 46951 };
             DamageShield = new Talent() { name = "Damage Shield", talentTree = TalentTree.Protection, maxRank = 2, spellIds = new int[] { 58872, 58874 }, currentSpellId = 58872 };
             Shockwave = new Talent() { name = "Shockwave", talentTree = TalentTree.Protection, maxRank = 1, spellIds = new int[] { 46968 }, currentSpellId = 46968 };
-        }
-
-        public void UpdateSimulation()
-        {
-
         }
     }
 }

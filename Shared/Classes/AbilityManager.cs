@@ -15,9 +15,6 @@
     }
     public class AbilityManager
     {
-        public event EventHandler AbilityHit;
-        public event EventHandler AbilityCrit;
-
         public Iteration iteration;
         public List<Ability> abilities = new List<Ability>();
 
@@ -30,7 +27,7 @@
         public AbilityManager(Iteration iteration)
         {
             this.iteration = iteration;
-            if (iteration.simulation.computedConstants.hasBloodthirst)
+            if (iteration.computedConstants.hasBloodthirst)
             {
                 bloodthirst = new Bloodthirst(iteration);
             }

@@ -17,6 +17,7 @@ var http = new HttpClient()
 
 builder.Services.AddScoped(sp => http);
 
+/*
 Item[]? items;
 System.Text.Json.JsonSerializerOptions options = new System.Text.Json.JsonSerializerOptions
 {
@@ -26,7 +27,8 @@ System.Text.Json.JsonSerializerOptions options = new System.Text.Json.JsonSerial
             }
 };
 items = await http.GetFromJsonAsync<Item[]>("data/items.json", options);
-
-builder.Services.AddScoped(s => new Simulation(items.ToList()));
+*/
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped(s => new Simulation());
 
 await builder.Build().RunAsync();

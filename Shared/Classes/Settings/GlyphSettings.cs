@@ -1,33 +1,16 @@
-﻿namespace Warrior
+﻿using Warrior.Entities;
+
+namespace Warrior.Settings
 {
-    public enum GlyphType
-    {
-        Major,
-        Minor
-    }
 
-    public class Glyph
-    {
-        public GlyphType glyphType { get; set; }
-        public string name { get; set; }
-        public int id { get; set; }
-
-        public Glyph(int id, string name, GlyphType glyphType)
-        {
-            this.id = id;
-            this.name = name;
-            this.glyphType = glyphType;
-        }
-    }
-
-    public class GlyphManager
+    public class GlyphSettings
     {
         public List<Glyph> glyphs { get; set; }
         public int majorOne { get; set; }
         public int majorTwo { get; set; }
         public int majorThree { get; set; }
 
-        public GlyphManager()
+        public GlyphSettings()
         {
             majorOne = 58403;
             majorTwo = 58390;

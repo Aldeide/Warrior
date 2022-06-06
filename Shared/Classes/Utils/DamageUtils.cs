@@ -1,4 +1,6 @@
-﻿namespace Warrior
+﻿using Warrior.Settings;
+
+namespace Warrior
 {
     public static class DamageUtils
     {
@@ -9,9 +11,11 @@
 
             // Talents and permanent buffs.
             coefficient *= iteration.statsManager.GetEffectiveDamageMultiplier();
-
+            Console.WriteLine("Computing damage coefficient before armor: " + coefficient);
             // Boss armor reduction.
-            coefficient *= ArmorUtils.ComputeEffectiveArmorDamageReductionMultiplier(iteration.simulation);
+            coefficient *= ArmorUtils.ComputeEffectiveArmorDamageReductionMultiplier(iteration);
+
+            Console.WriteLine("Computing damage coefficient: " + coefficient);
             return coefficient;
 
         }
@@ -24,45 +28,49 @@
             return coefficient;
 
         }
-        public static float EffectiveCritCoefficient(Talents talents)
+        public static float EffectiveCritCoefficient(TalentsSettings talents)
         {
+            Console.WriteLine("Computing crit coefficient: " + 1.0f + 1.0f * TalentUtils.GetCritBonusImpaleMultiplier(talents));
             return 1.0f + 1.0f * TalentUtils.GetCritBonusImpaleMultiplier(talents);
         }
         public static int WeaponDamage(AttackResult result, Weapon weapon, Iteration iteration, int bonus)
         {
             // Base weapon damage.
             float damage = iteration.random.Next(weapon.minDamage, weapon.maxDamage) + bonus;
+            Console.WriteLine("Base weapon damage: " + damage);
             // Attack power contribution. Speed value?
             damage += iteration.statsManager.GetEffectiveAttackPower() / 14.0f * weapon.baseSpeed / Constants.kStepsPerSecond;
-            
+            Console.WriteLine("After AP: " + damage);
 
             // Two-Handed Specialization talent.
             if (weapon.item.weaponType == WeaponType.TwoHand)
             {
-                damage *= TalentUtils.GetTwoHandedWeaponSpecializationDamageMultiplier(iteration.simulation.character.talents);
+                damage *= TalentUtils.GetTwoHandedWeaponSpecializationDamageMultiplier(iteration.settings.talentSettings);
             }
             // One-Handed Specialization talent.
             if (weapon.item.weaponType == WeaponType.OneHand)
             {
-                damage *= TalentUtils.GetOneHandedWeaponSpecializationDamageMultiplier(iteration.simulation.character.talents);
+                damage *= TalentUtils.GetOneHandedWeaponSpecializationDamageMultiplier(iteration.settings.talentSettings);
             }
+            Console.WriteLine("After talents: " + damage);
             // Other multipliers (raid buffs, titan's grip if applicable, boss armor reduction).
             damage *= EffectiveDamageCoefficient(iteration);
+            Console.WriteLine("After multipliers: " + damage);
             // Offhand damage penalty.
             if (!weapon.isMainHand)
             {
-                damage *= iteration.simulation.computedConstants.offHandDamageMultiplier;
+                damage *= iteration.computedConstants.offHandDamageMultiplier;
             }
             // Glancing penalty.
             if (result == AttackResult.Glancing)
             {
-                damage *= AttackTableUtils.ComputeGlancingMultiplier(iteration.simulation.settings.targetLevel, iteration.random);
+                damage *= AttackTableUtils.ComputeGlancingMultiplier(iteration.settings.simulationSettings.targetLevel, iteration.random);
             }
             // Critical bonus.
             if (result == AttackResult.Critical)
             {
                 
-                damage *= iteration.simulation.computedConstants.criticalDamageMultiplier;
+                damage *= iteration.computedConstants.criticalDamageMultiplier;
             }
             return (int)damage;
         }
@@ -83,9 +91,9 @@
             }
 
             int rage = (int)(15 * damage / (4 * 453.3f) + 0.5f * factor * (float)weapon.baseSpeed / Constants.kStepsPerSecond);
-            if (TalentUtils.GetUnbridledWrathPPM(iteration.simulation.character.talents) > 0)
+            if (TalentUtils.GetUnbridledWrathPPM(iteration.settings.talentSettings) > 0)
             {
-                float pph = weapon.baseSpeed * TalentUtils.GetUnbridledWrathPPM(iteration.simulation.character.talents) / 60 * 10;
+                float pph = weapon.baseSpeed * TalentUtils.GetUnbridledWrathPPM(iteration.settings.talentSettings) / 60 * 10;
                 int roll = iteration.random.Next(0, 10000);
                 if (pph < roll)
                 {
@@ -104,12 +112,12 @@
             // Two-Handed Specialization talent.
             if (weapon.item.weaponType == WeaponType.TwoHand)
             {
-                damage *= TalentUtils.GetTwoHandedWeaponSpecializationDamageMultiplier(iteration.simulation.character.talents);
+                damage *= TalentUtils.GetTwoHandedWeaponSpecializationDamageMultiplier(iteration.settings.talentSettings);
             }
             // One-Handed Specialization talent.
             if (weapon.item.weaponType == WeaponType.OneHand)
             {
-                damage *= TalentUtils.GetOneHandedWeaponSpecializationDamageMultiplier(iteration.simulation.character.talents);
+                damage *= TalentUtils.GetOneHandedWeaponSpecializationDamageMultiplier(iteration.settings.talentSettings);
             }
             // Other multipliers (raid buffs, titan's grip if applicable).
             damage *= EffectiveBleedDamageCoefficient(iteration);
@@ -117,7 +125,7 @@
             if (!weapon.isMainHand)
             {
                 damage *= 0.5f;
-                damage *= TalentUtils.GetDualWieldSpecializationMultiplier(iteration.simulation.character.talents);
+                damage *= TalentUtils.GetDualWieldSpecializationMultiplier(iteration.settings.talentSettings);
             }
             return (int)damage;
         }

@@ -1,6 +1,6 @@
 ﻿namespace Warrior
 {
-    public class DamageSummary : ICloneable
+    public class DamageResults : ICloneable
     {
         public string name { get; set; } = "";
         public int totalDamage { get; set; } = 0;
@@ -16,7 +16,7 @@
 
         public object Clone()
         {
-            var item = new DamageSummary()
+            var item = new DamageResults()
             {
                 name = name,
                 totalDamage = totalDamage,
@@ -34,7 +34,7 @@
         }
 
     }
-    public class AuraSummary : ICloneable
+    public class AuraResults : ICloneable
     {
         public string name { get; set; } = "";
         public int uptime { get; set; } = 0;
@@ -47,7 +47,7 @@
 
         public object Clone()
         {
-            var item = new AuraSummary()
+            var item = new AuraResults()
             {
                 name = name,
                 uptime = uptime,
@@ -68,14 +68,13 @@
             ticks = 0;
         }
     }
-    public class RageSummary
+    public class RageResults
     {
         public int wastedRage { get; set; } = 0;
         public int rageGenerated { get; set; } = 0;
         public int rageStarved { get; set; } = 0;
     }
-
-    public class DotDamageSummary : ICloneable
+    public class DotDamageResults : ICloneable
     {
         public string name { get; set; } = "";
         public int uptime { get; set; } = 0;
@@ -86,7 +85,7 @@
 
         public object Clone()
         {
-            var item = new DotDamageSummary()
+            var item = new DotDamageResults()
             {
                 name = name,
                 uptime = uptime,

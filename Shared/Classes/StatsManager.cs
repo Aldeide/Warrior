@@ -1,28 +1,18 @@
-﻿namespace Warrior
+﻿using Warrior.Entities;
+
+namespace Warrior
 {
     public class StatsManager
     {
-        Character character;
-        AuraManager auraManager;
         Iteration iteration;  
-        CharacterStats additiveCharacterStats;
-        CharacterStats multiplicativeCharacterStats;
-        CharacterStats tempAdditiveCharacterStats;
-        CharacterStats tempMultiplicativeCharacterStats;
-        public StatsManager(Character character, AuraManager manager, Iteration iteration)
+        CharacterStats additiveCharacterStats = new CharacterStats();
+        CharacterStats multiplicativeCharacterStats = new CharacterStats();
+        CharacterStats tempAdditiveCharacterStats = new CharacterStats();
+        CharacterStats tempMultiplicativeCharacterStats = new CharacterStats();
+        public StatsManager(Iteration iteration)
         {
-            this.character = character;
-            this.auraManager = manager;
             this.iteration = iteration;
-
-            // Subscribe to events to know when to update stats.
-            // When the stance has changed.
-            iteration.stanceManager.StanceChanged += OnStanceChanged;
-
-            additiveCharacterStats = character.additiveCharacterStats;
-            multiplicativeCharacterStats = character.multiplicativeCharacterStats;
-            tempAdditiveCharacterStats = new CharacterStats();
-            tempMultiplicativeCharacterStats = new CharacterStats();
+            InitialSetup();
             tempMultiplicativeCharacterStats.strength = 1;
             tempMultiplicativeCharacterStats.agility = 1;
             tempMultiplicativeCharacterStats.stamina = 1;
@@ -30,16 +20,68 @@
             tempMultiplicativeCharacterStats.hitRating = 1;
             tempMultiplicativeCharacterStats.hasteFactor = 1;
             tempMultiplicativeCharacterStats.attackPower = 1;
+            tempMultiplicativeCharacterStats.criticalStrikeRating = 1;
             tempMultiplicativeCharacterStats.hasteRating = 1;
             tempMultiplicativeCharacterStats.expertiseRating = 1;
+            tempMultiplicativeCharacterStats.offHandExpertiseRating = 1;
+            tempMultiplicativeCharacterStats.armorPenetrationRating = 1;
+            tempMultiplicativeCharacterStats.damageMultiplier = 1;
         }
 
-        public void OnStanceChanged(object sender, EventArgs e)
-        {
-            UpdateCriticalStrikeChance();
-            Console.WriteLine("[ " + iteration.currentStep + " ] Stance Has Changed");
-        }
+        public void InitialSetup()
+		{
+            additiveCharacterStats.strength = (int)(
+                174 
+                + Constants.bonusStatsPerRace["Strength"][iteration.settings.characterSettings.race]
+                + iteration.settings.equipmentSettings.ComputeGearStrength()
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.Strength)
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.AllBase)
+                );
+            multiplicativeCharacterStats.strength = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AllBase);
+            if (iteration.settings.stanceSettings.IsInBerserkerStance())
+			{
+                multiplicativeCharacterStats.strength *=
+                    TalentUtils.GetImprovedBerserkerStanceStrengthMultiplier(iteration.settings.talentSettings);
 
+            }
+            additiveCharacterStats.agility = (int)(113
+                + Constants.bonusStatsPerRace["Agility"][iteration.settings.characterSettings.race]
+                + iteration.settings.equipmentSettings.ComputeGearAgility()
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.Agility)
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.AllBase));
+            multiplicativeCharacterStats.agility = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AllBase);
+            additiveCharacterStats.armor = (int)(69 + (additiveCharacterStats.agility * multiplicativeCharacterStats.agility) * 2
+                + iteration.settings.equipmentSettings.ComputeGearArmor()
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.Armor));
+            multiplicativeCharacterStats.armor = 1.0f;
+            additiveCharacterStats.attackPower = (int)(additiveCharacterStats.strength * multiplicativeCharacterStats.strength * 2
+                + iteration.settings.equipmentSettings.ComputeGearAP()
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.AttackPower));
+            multiplicativeCharacterStats.attackPower = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AttackPower);
+            additiveCharacterStats.hasteRating = iteration.settings.equipmentSettings.ComputeGearHasteRating()
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.HasteRating);
+            multiplicativeCharacterStats.hasteRating = 1.0f;
+            additiveCharacterStats.hitRating = iteration.settings.equipmentSettings.ComputeGearHitRating()
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.HitRating);
+            multiplicativeCharacterStats.hitRating = 1.0f;
+            additiveCharacterStats.criticalStrikeRating = iteration.settings.equipmentSettings.ComputeGearCritRating()
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.CriticalRating);
+            multiplicativeCharacterStats.criticalStrikeRating = 1.0f;
+            additiveCharacterStats.expertiseRating = iteration.settings.equipmentSettings.ComputeGearExpertiseRating()
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.ExpertiseRating);
+            multiplicativeCharacterStats.expertiseRating = 1.0f;
+            additiveCharacterStats.offHandExpertiseRating = iteration.settings.equipmentSettings.ComputeGearExpertiseRating()
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.ExpertiseRating);
+            multiplicativeCharacterStats.offHandExpertiseRating = 1.0f;
+            additiveCharacterStats.armorPenetrationRating = iteration.settings.equipmentSettings.ComputeGearArmorPenetrationRating()
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.ArmorPenetrationRating);
+            multiplicativeCharacterStats.armorPenetrationRating = 1.0f;
+            multiplicativeCharacterStats.hasteFactor = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.Haste)
+                * iteration.settings.buffSettings.GetMultiplicativeStat(Stat.MeleeHaste);
+            multiplicativeCharacterStats.damageMultiplier = 1.0f
+                * TalentUtils.GetTitansDamageReductionMultiplier(iteration.settings.talentSettings, iteration.settings.equipmentSettings)
+                * iteration.settings.buffSettings.GetMultiplicativeStat(Stat.Damage);
+        }
 
         public int GetEffectiveAgility()
         {
@@ -74,20 +116,41 @@
                 ) * multiplicativeCharacterStats.expertiseRating
                 * tempMultiplicativeCharacterStats.expertiseRating);
         }
+        public int GetEffectiveArmorPenetrationRating()
+        {
+            Console.WriteLine("Armor Penetration Rating: " + (int)((additiveCharacterStats.armorPenetrationRating
+                + tempAdditiveCharacterStats.armorPenetrationRating
+                ) * multiplicativeCharacterStats.armorPenetrationRating
+                * tempMultiplicativeCharacterStats.armorPenetrationRating));
+            return (int)((additiveCharacterStats.armorPenetrationRating
+                + tempAdditiveCharacterStats.armorPenetrationRating
+                ) * multiplicativeCharacterStats.armorPenetrationRating
+                * tempMultiplicativeCharacterStats.armorPenetrationRating);
+        }
         public float GetEffectiveHasteMultiplier()
         {
             const float hasteRatingPerPercent = 25.21f;
             float hasteFromHasteRating = (1 + GetEffectiveHasteRating() / hasteRatingPerPercent / 100).RoundToSignificantDigits(4);
+            Console.WriteLine("Computed Haste Multiplier: " + hasteFromHasteRating * multiplicativeCharacterStats.hasteFactor * tempMultiplicativeCharacterStats.hasteFactor);
             return MathF.Round((hasteFromHasteRating * multiplicativeCharacterStats.hasteFactor * tempMultiplicativeCharacterStats.hasteFactor), 4);
         }
         public int GetEffectiveAttackPower()
         {
+            Console.WriteLine("Additive Attack Power: " + additiveCharacterStats.attackPower);
+            Console.WriteLine("Computed Attack Power: " + (int)((
+                additiveCharacterStats.attackPower
+                + tempAdditiveCharacterStats.attackPower
+                + tempAdditiveCharacterStats.strength * 2
+                + TalentUtils.GetArmoredToTheTeethAPBonus(iteration.settings.talentSettings) * GetEffectiveArmor() / 108.0f)
+                * multiplicativeCharacterStats.attackPower * tempMultiplicativeCharacterStats.attackPower
+                ));
+
             return (int)((
                 additiveCharacterStats.attackPower
                 + tempAdditiveCharacterStats.attackPower
                 + tempAdditiveCharacterStats.strength * 2
                 + tempAdditiveCharacterStats.armor
-                * TalentUtils.GetArmoredToTheTeethAPBonus(character.talents) * GetEffectiveArmor() / 108.0f)
+                * TalentUtils.GetArmoredToTheTeethAPBonus(iteration.settings.talentSettings) * GetEffectiveArmor() / 108.0f)
                 * multiplicativeCharacterStats.attackPower * tempMultiplicativeCharacterStats.attackPower
                 );
         }
@@ -103,22 +166,29 @@
         {
             return (float)Math.Round(5.0f
                 + (float)GetEffectiveAgility() / Constants.kAgilityPerCritPercent
-                + TalentUtils.GetCrueltyBonus(character.talents)
+                + TalentUtils.GetCrueltyBonus(iteration.settings.talentSettings)
                 + GetEffectiveCriticalStrikeRating() / Constants.kCritRatingPerPercent
-                + character.auraSettings.GetAdditiveStat(EffectStat.Critical), 2);
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.Critical)
+                + (iteration.settings.stanceSettings.IsInBerserkerStance() ? 3 : 0), 2);
         }
         public float GetEffectiveCritChanceAfterSuppression()
         {
             return GetEffectiveCritChanceBeforeSuppression()
-                - AttackTableUtils.ComputeCritChanceReduction(character.simulation.settings.targetLevel);
+                - AttackTableUtils.ComputeCritChanceReduction(iteration.settings.simulationSettings.targetLevel);
         }
+        public float GetExtraHitChance()
+		{
+            return GetEffectiveHitRating() / Constants.kHitRatingPerPercent
+                + (float)TalentUtils.GetPrecisionExtraHitChance(iteration.settings.talentSettings);
+        }
+
 
         public void UpdateTemporaryHasteMultiplier()
         {
             float value = 1.0f;
-            if (auraManager.flurry != null && auraManager.flurry.active)
+            if (iteration.auraManager.flurry != null && iteration.auraManager.flurry.active)
             {
-                value *= auraManager.flurry.effects[0].value;
+                value *= iteration.auraManager.flurry.effects[0].value;
             }
             
             tempMultiplicativeCharacterStats.hasteFactor = value;
@@ -130,6 +200,5 @@
         {
             return;
         }
-
     }
 }

@@ -10,11 +10,11 @@
         public int globalCooldown = 0;
 
         public bool isQueued { get; set; } = false;
-        public DamageSummary damageSummary { get; set; }
+        public DamageResults damageSummary { get; set; }
         public Ability(Iteration iteration)
         {
             this.iteration = iteration;
-            damageSummary = new DamageSummary();
+            damageSummary = new DamageResults();
             currentCooldown = 0;
         }
         public void Reset()
@@ -59,7 +59,7 @@
             if (!CanUse()) return;
 
             Console.WriteLine("[ " + iteration.currentStep + " ] Casting Bloodthirst");
-            AttackResult result = AttackTableUtils.GetYellowHitResult(iteration.random, iteration.simulation);
+            AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
             damageSummary.numCasts += 1;
             if (result == AttackResult.Miss)
             {
@@ -99,12 +99,12 @@
             // Unending Fury.
             damage = 0.50f 
                 * iteration.statsManager.GetEffectiveAttackPower() 
-                * TalentUtils.GetUnendingFuryDamageMultiplier(iteration.simulation.character.talents) 
+                * TalentUtils.GetUnendingFuryDamageMultiplier(iteration.settings.talentSettings) 
                 * DamageUtils.EffectiveDamageCoefficient(iteration) * 1.06f;
 
             if (result == AttackResult.Critical)
             {
-                damage *= DamageUtils.EffectiveCritCoefficient(iteration.simulation.character.talents);
+                damage *= DamageUtils.EffectiveCritCoefficient(iteration.settings.talentSettings);
                 iteration.auraManager.BloodthirstCriticalTrigger();
             } else
             {
@@ -121,7 +121,7 @@
             name = "Whirlwind";
             damageSummary.name = name;
             rageCost = 25;
-            cooldown = iteration.simulation.character.glyphManager.HasGlyphOfWhirlwind() ? 8 * Constants.kStepsPerSecond : 10 * Constants.kStepsPerSecond;
+            cooldown = iteration.settings.glyphSettings.HasGlyphOfWhirlwind() ? 8 * Constants.kStepsPerSecond : 10 * Constants.kStepsPerSecond;
             globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
             currentCooldown = 0;
         }
@@ -131,8 +131,8 @@
             if (!CanUse()) return;
             damageSummary.numCasts += 1;
             Console.WriteLine("[ " + iteration.currentStep + " ] Casting Whirlwind");
-            AttackResult mainHandResult = AttackTableUtils.GetYellowHitResult(iteration.random, iteration.simulation);
-            AttackResult offHandResult = AttackTableUtils.GetYellowHitResult(iteration.random, iteration.simulation);
+            AttackResult mainHandResult = AttackTableUtils.GetYellowHitResult(iteration);
+            AttackResult offHandResult = AttackTableUtils.GetYellowHitResult(iteration);
 
             if (mainHandResult == AttackResult.Miss)
             {
@@ -174,20 +174,20 @@
             // Unending Fury.
             // Improved Whirlwind
             damage = damage
-                * TalentUtils.GetUnendingFuryDamageMultiplier(iteration.simulation.character.talents)
-                * TalentUtils.GetImprovedWhirlwindDamageMultiplier(iteration.simulation.character.talents)
+                * TalentUtils.GetUnendingFuryDamageMultiplier(iteration.settings.talentSettings)
+                * TalentUtils.GetImprovedWhirlwindDamageMultiplier(iteration.settings.talentSettings)
                 * DamageUtils.EffectiveDamageCoefficient(iteration);
 
             // Offhand penalty
             if (!weapon.isMainHand)
             {
                 damage *= 0.5f;
-                damage *= TalentUtils.GetDualWieldSpecializationMultiplier(iteration.simulation.character.talents);
+                damage *= TalentUtils.GetDualWieldSpecializationMultiplier(iteration.settings.talentSettings);
             }
 
             if (result == AttackResult.Critical)
             {
-                damage *= DamageUtils.EffectiveCritCoefficient(iteration.simulation.character.talents);
+                damage *= DamageUtils.EffectiveCritCoefficient(iteration.settings.talentSettings);
                 damageSummary.critDamage += (int)damage;
                 damageSummary.numCrit += 1;
                 iteration.auraManager.WhirlwindCriticalTrigger();
@@ -208,8 +208,8 @@
             name = "Heroic Strike";
             damageSummary.name = name;
             rageCost = 15
-                - TalentUtils.GetImprovedHeroicStrikeReduction(iteration.simulation.character.talents)
-                - TalentUtils.GetFocusedRageReduction(iteration.simulation.character.talents);
+                - TalentUtils.GetImprovedHeroicStrikeReduction(iteration.settings.talentSettings)
+                - TalentUtils.GetFocusedRageReduction(iteration.settings.talentSettings);
             cooldown = 0;
         }
 
@@ -230,7 +230,7 @@
             {
                 Console.WriteLine("[ " + iteration.currentStep + " ] Casting Heroic Strike");
                 iteration.rage -= rageCost;
-                AttackResult result = AttackTableUtils.GetYellowHitResult(iteration.random, iteration.simulation);
+                AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
                 damageSummary.numCasts += 1;
 
                 if (result == AttackResult.Miss)
@@ -288,7 +288,7 @@
         {
             if (!CanUse()) return;
             Console.WriteLine("[ " + iteration.currentStep + " ] Casting Slam");
-            AttackResult result = AttackTableUtils.GetYellowHitResult(iteration.random, iteration.simulation);
+            AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
             
             damageSummary.numCasts += 1;
             if (result == AttackResult.Miss)
@@ -303,7 +303,7 @@
                 base.Use();
                 return;
             }
-            int damage = (int)(DamageUtils.AverageWeaponDamage(iteration.mainHand, iteration, 250) * iteration.simulation.computedConstants.slamDamageMultiplier);
+            int damage = (int)(DamageUtils.AverageWeaponDamage(iteration.mainHand, iteration, 250) * iteration.computedConstants.slamDamageMultiplier);
             
             if (result == AttackResult.Hit)
             {
@@ -314,8 +314,8 @@
             if (result == AttackResult.Critical)
             {
                 damageSummary.numCrit += 1;
-                damageSummary.critDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.simulation.character.talents));
-                damageSummary.totalDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.simulation.character.talents));
+                damageSummary.critDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.settings.talentSettings));
+                damageSummary.totalDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.settings.talentSettings));
             }
             base.Use();
         }

@@ -4,12 +4,12 @@
     {
         public int numSteps { get; set; } = 0;
         public int combatLength { get; set; } = 0;
-        public RageSummary rageSummary { get; set; } = new RageSummary();
-        public DamageSummary mainHand { get; set; } = new DamageSummary();
-        public DamageSummary offHand { get; set; } = new DamageSummary();
-        public List<AuraSummary> auraSummaries { get; set; } = new List<AuraSummary>();
-        public List<DamageSummary> abilitySummaries { get; set; } = new List<DamageSummary>();
-        public List<DotDamageSummary> dotDamageSummaries { get; set; } = new List<DotDamageSummary>();
+        public RageResults rageSummary { get; set; } = new RageResults();
+        public DamageResults mainHand { get; set; } = new DamageResults();
+        public DamageResults offHand { get; set; } = new DamageResults();
+        public List<AuraResults> auraSummaries { get; set; } = new List<AuraResults>();
+        public List<DamageResults> abilitySummaries { get; set; } = new List<DamageResults>();
+        public List<DotDamageResults> dotDamageSummaries { get; set; } = new List<DotDamageResults>();
 
     }
 }

@@ -1,12 +1,12 @@
-﻿using System.Diagnostics;
+﻿using Warrior.Entities;
+using System.Diagnostics;
 namespace Warrior
 {
-
     public abstract class Aura
     {
         public AuraManager manager;
-        public AuraSummary auraSummary = new AuraSummary();
-        public DotDamageSummary dotSummary { get; private set; } = new DotDamageSummary();
+        public AuraResults auraSummary = new AuraResults();
+        public DotDamageResults dotSummary { get; private set; } = new DotDamageResults();
         public Aura(AuraManager manager)
         {
             this.manager = manager;
@@ -46,7 +46,7 @@ namespace Warrior
 
         public virtual int NextTick()
         {
-            return (int)(manager.iteration.simulation.settings.combatLength * Constants.kStepsPerSecond);
+            return (int)(manager.iteration.settings.simulationSettings.combatLength * Constants.kStepsPerSecond);
         }
 
         public virtual int GetNext()
@@ -67,8 +67,8 @@ namespace Warrior
             effects.Add(
                 new Effect(
                     EffectType.Multiplicative,
-                    EffectStat.MeleeHaste,
-                    TalentUtils.GetFlurryHasteMultiplier(arg.iteration.simulation.character.talents)));
+                    Stat.MeleeHaste,
+                    TalentUtils.GetFlurryHasteMultiplier(arg.iteration.settings.talentSettings)));
         }
         public override void Trigger(AuraTrigger trigger)
         {
@@ -84,7 +84,7 @@ namespace Warrior
                 }
                 stacks = 3;
                 active = true;
-                //Console.WriteLine("[ " + manager.iteration.currentStep + " ] Applied Flurry");
+                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Applied Flurry");
 
                 manager.iteration.statsManager.UpdateTemporaryHasteMultiplier();
                 return;
@@ -185,12 +185,12 @@ namespace Warrior
             float dmg = 0;
             if (trigger == AuraTrigger.MainHandCritical)
             {
-                dmg = (int)(manager.iteration.simulation.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
+                dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
                 Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding MH Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0) + "). Damage: " + damage);
             }
             if (trigger == AuraTrigger.OffHandCritical)
             {
-                dmg = (int)(manager.iteration.simulation.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
+                dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
                 Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding OH Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
             }
             return dmg;
@@ -216,7 +216,7 @@ namespace Warrior
         public override void Trigger(AuraTrigger trigger)
         {
             int roll = manager.iteration.random.Next(1, 10000);
-            if (roll > manager.iteration.simulation.computedConstants.bloodsurgeChance * 100)
+            if (roll > manager.iteration.computedConstants.bloodsurgeChance * 100)
             {
                 return;
             }
@@ -251,3 +251,4 @@ namespace Warrior
         }
     }
 }
+ 

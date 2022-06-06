@@ -1,16 +1,14 @@
-﻿namespace Warrior
+﻿using Warrior.Entities;
+
+namespace Warrior.Settings
 {
-    public class Equipment
+    public class EquipmentSettings
     {
         public Dictionary<ItemSlot, Item> items { get; set; }
-        public Simulation simulation;
-        public CharacterStats equipmentStats { get; set; } = new CharacterStats();
-        public Enchants enchants { get; set; } = new Enchants();
-        public Equipment(Simulation simulation)
+        public Dictionary<ItemSlot, Enchant> enchants { get; set; }
+        public EquipmentSettings()
         {
             items = new Dictionary<ItemSlot, Item>();
-            this.simulation = simulation;
-            /*
             items[ItemSlot.MainHand] = ItemDatabase.items.Single(i => i.id == 50730);
             items[ItemSlot.OffHand] = ItemDatabase.items.Single(i => i.id == 50730);
             items[ItemSlot.Head] = ItemDatabase.items.Single(i => i.id == 51227);
@@ -21,45 +19,27 @@
             items[ItemSlot.Wrist] = ItemDatabase.items.Single(i => i.id == 50659);
             items[ItemSlot.Waist] = ItemDatabase.items.Single(i => i.id == 50620);
             items[ItemSlot.Legs] = ItemDatabase.items.Single(i => i.id == 51228);
-            items[ItemSlot.Ring1] = ItemDatabase.items.Single(i => i.id == 50657);
-            items[ItemSlot.Ring2] = ItemDatabase.items.Single(i => i.id == 54576);
-            items[ItemSlot.Trinket1] = ItemDatabase.items.Single(i => i.id == 54590);
-            items[ItemSlot.Trinket2] = ItemDatabase.items.Single(i => i.id == 50363);
-            items[ItemSlot.Ranged] = ItemDatabase.items.Single(i => i.id == 50733);
+            items[ItemSlot.Ring1] = ItemDatabase.items.Single(i => i.id == 54576);
+            items[ItemSlot.Ring2] = ItemDatabase.items.Single(i => i.id == 50657);
+            items[ItemSlot.Trinket1] = ItemDatabase.items.Single(i => i.id == 50363);
+            items[ItemSlot.Trinket2] = ItemDatabase.items.Single(i => i.id == 54590);
+            items[ItemSlot.Ranged] = ItemDatabase.items.Single(i => i.id == 51227);
             items[ItemSlot.Hands] = ItemDatabase.items.Single(i => i.id == 51226);
             items[ItemSlot.Boots] = ItemDatabase.items.Single(i => i.id == 54578);
-            */
-            UpdateEquipmentStats();
         }
-        public int GetSlotId(ItemSlot slot)
+        public void EquipItem(ItemSlot slot, int id)
+        {
+            items[slot] = ItemDatabase.items.Single(i => i.id == id);
+        }
+
+        public int? GetSlotId(ItemSlot slot)
         {
             bool success = items.TryGetValue(slot, out var item);
             if (success)
             {
                 return item.id;
             }
-            return -1;
-        }
-        public void EquipItem(ItemSlot slot, int id)
-        {
-            items[slot] = ItemDatabase.items.Single(i => i.id == id);
-            UpdateEquipmentStats();
-            //simulation.character.UpdateAdditiveCharacterStats();
-        }
-        public void UpdateEquipmentStats()
-        {
-            equipmentStats.agility = ComputeGearAgility();
-            equipmentStats.intellect = ComputeGearIntellect();
-            equipmentStats.stamina = ComputeGearStamina();
-            equipmentStats.spirit = ComputeGearSpirit();
-            equipmentStats.strength = ComputeGearStrength();
-            equipmentStats.armor = ComputeGearArmor();
-            equipmentStats.hitRating = ComputeGearHitRating();
-            equipmentStats.criticalStrikeRating = ComputeGearCritRating();
-            equipmentStats.hasteRating = ComputeGearHasteRating();
-            equipmentStats.expertiseRating = ComputeGearExpertiseRating();
-            equipmentStats.armorPenetrationRating = ComputeGearArmorPenetrationRating();
-            equipmentStats.attackPower = ComputeGearAP();
+            return null;
         }
         public Item GetItemBySlot(ItemSlot slot)
         {
@@ -178,23 +158,29 @@
             }
             return output;
         }
-        public int MainHandMinDamage()
-        {
-            bool success = items.TryGetValue(ItemSlot.MainHand, out var item);
-            if (success)
+        public List<Gem> GetGemSockets(ItemSlot slot)
+		{
+            List<Gem> gemSockets = new List<Gem>();
+            Item item = GetItemBySlot(slot);
+
+            for (int i = 0; i < item.metaSockets; i++)
+			{
+                gemSockets.Add(new Gem() { color = Color.Meta });
+			}
+            for (int i = 0; i < item.redSockets; i++)
             {
-                return item.minDamage;
+                gemSockets.Add(new Gem() { color = Color.Red });
             }
-            return -1;
-        }
-        public int MainHandMaxDamage()
-        {
-            bool success = items.TryGetValue(ItemSlot.MainHand, out var item);
-            if (success)
+            for (int i = 0; i < item.blueSockets; i++)
             {
-                return item.minDamage;
+                gemSockets.Add(new Gem() { color = Color.Red });
             }
-            return -1;
-        }
+            for (int i = 0; i < item.yellowSockets; i++)
+            {
+                gemSockets.Add(new Gem() { color = Color.Yellow });
+            }
+            return gemSockets;
+		}
+
     }
 }

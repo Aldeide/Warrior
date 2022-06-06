@@ -12,9 +12,9 @@
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
-            if (TalentUtils.HasFlurry(iteration.simulation.character.talents)) flurry = new Flurry(this);
-            if (TalentUtils.HasDeepWounds(iteration.simulation.character.talents)) deepWounds = new DeepWounds(this);
-            if (iteration.simulation.computedConstants.hasBloodsurge) bloodsurge = new Bloodsurge(this);
+            if (TalentUtils.HasFlurry(iteration.settings.talentSettings)) flurry = new Flurry(this);
+            if (TalentUtils.HasDeepWounds(iteration.settings.talentSettings)) deepWounds = new DeepWounds(this);
+            if (iteration.computedConstants.hasBloodsurge) bloodsurge = new Bloodsurge(this);
 
         }
         public void Reset()

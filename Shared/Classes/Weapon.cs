@@ -10,13 +10,13 @@
         public int minDamage = 0;
         public int maxDamage = 0;
         public int swingTimer = 0;
-        public DamageSummary damageSummary;
+        public DamageResults damageSummary;
         public int formerSpeed = 0;
 
         public Weapon(Iteration iteration, ItemSlot slot, Item item)
         {
             this.iteration = iteration;
-            damageSummary = new DamageSummary();
+            damageSummary = new DamageResults();
             baseSpeed = (int)((float)item.speed * 1000);
             
             effectiveSpeed = (int)(baseSpeed / iteration.statsManager.GetEffectiveHasteMultiplier());
@@ -62,7 +62,7 @@
 
             damageSummary.numCasts += 1;
             swingTimer = effectiveSpeed;
-            AttackResult result = AttackTableUtils.GetWhiteHitResult(iteration.random, iteration.simulation);
+            AttackResult result = AttackTableUtils.GetWhiteHitResult(iteration);
             if (result == AttackResult.Miss)
             {
                 Console.WriteLine("[ " + iteration.currentStep + " ] Melee Miss (" + weapon + ")");

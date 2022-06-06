@@ -70,6 +70,13 @@ a, .btn-link {
 
 #items {
     width: 100%;
+    margin-right: 0px;
+    margin-bottom: 0px;
+}
+
+#items h2 {
+    color: #fff;
+    margin-bottom: 20px;
 }
 
 #items table {
@@ -78,17 +85,28 @@ a, .btn-link {
 }
 
     #items table > thead > tr > td {
-        height: 35px;
-        font-weight: 600;
-        font-size: 12px;
+        height: 40px;
+        font-size: 14px;
         color: #fff;
         margin: 10px;
         border-bottom: 2px solid #fff;
     }
+    #items .main {
+        padding-left: 338px;
+        padding-top: 0;
+    }
 
+    #items .main .content {
+        padding-top: 0;
+        padding-right: 0;
+    }
+
+    #items .main .content .container-fluid {
+        padding-right: 0;
+    }
 #items td {
-    height: 25px;
-    font-size: 11px;
+    height: 30px;
+    font-size: 12px;
     padding-left: 5px;
 }
 
@@ -108,7 +126,7 @@ a, .btn-link {
             background-color: #1861ac;
         }
 .rowlink::before {
-    content: "";
+    
     display: block;
     position: relative;
     width: 100%;

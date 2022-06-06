@@ -5,7 +5,6 @@
         public int passiveTicks { get; set; } = int.MaxValue;
 
         public int auras { get; set; } = int.MaxValue;
-
         public int mainHand { get; set; } = 0;
         public int offHand { get; set; } = 0;
         public int globalCooldown { get; set; } = 0;

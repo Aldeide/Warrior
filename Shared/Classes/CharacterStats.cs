@@ -15,6 +15,7 @@
         public float hasteRating { get; set; } = 0;
         public float hitRating { get; set; } = 0;
         public float expertiseRating { get; set; } = 0;
+        public float offHandExpertiseRating { get; set; } = 0;
         public float armorPenetrationRating { get; set; } = 0;
         public float damageMultiplier { get; set; } = 0;
         public float hasteFactor { get; set; } = 0;
