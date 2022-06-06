@@ -5,7 +5,7 @@
 @using Warrior.Entities;
 @using Warrior.Settings;
 @inject ILogger<Settings> Logger
-@inject Blazored.LocalStorage.ILocalStorageService localStore
+@inject Blazored.LocalStorage.ISyncLocalStorageService localStorage
 @inject Simulation simulation;
 
 <EditForm EditContext="@editContext">
@@ -69,7 +69,7 @@
 							<h2>Additive Strength / Agility</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.AgilityStrength))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -78,7 +78,7 @@
 							<h2>Additive Attack Power</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.AttackPower))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -87,7 +87,7 @@
 							<h2>Additive Critical Chance</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.MeleeCrit))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -96,7 +96,7 @@
 							<h2>Additive Base Stats and Armor</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.StatAdd))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -107,7 +107,7 @@
 							<h2>Multiplicative Attack Power</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.AttackPowerPercent))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -116,7 +116,7 @@
 							<h2>Multiplicative Damage</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.DamagePercent))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -125,7 +125,7 @@
 							<h2>Multiplicative Haste</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.HastePercent))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -134,7 +134,7 @@
 							<h2>Multiplicative Melee Haste</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.MeleeHaste))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -145,7 +145,7 @@
 							<h2>Multiplicative Base Stats</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.StatPercent))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -154,7 +154,7 @@
 							<h2>Battle Elixir</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.BattleElixir))
 							{
-								<a rel="?item=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup)" @onmouseup:preventDefault>
+								<a rel="?item=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -163,7 +163,7 @@
 							<h2>Guardian Elixir</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.GuardianElixir))
 							{
-								<a rel="?item=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup)" @onmouseup:preventDefault>
+								<a rel="?item=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -172,7 +172,7 @@
 							<h2>Default Stance</h2>
 							@foreach (Stance stance in simulation.settings.stanceSettings.stances)
 							{
-								<a rel="?spell=@stance.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.stanceSettings.ProcessClick(args.Button, stance.id)" @onmouseup:preventDefault>
+								<a rel="?spell=@stance.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.stanceSettings.ProcessClick(args.Button, stance.id); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(simulation.settings.stanceSettings.currentStance.id == stance.id)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(stance.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -253,7 +253,7 @@
 										<table>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedHeroicStrike.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedHeroicStrike.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedHeroicStrike.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedHeroicStrike.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedHeroicStrike.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedHeroicStrike.rank" style="background-image: url('data/icons/arms.jpg'); background-position: 0px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedHeroicStrike.rank, simulation.settings.talentSettings.ImprovedHeroicStrike.maxRank)">
@@ -261,7 +261,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Deflection.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Deflection.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Deflection.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Deflection.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Deflection.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Deflection.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -36px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Deflection.rank, simulation.settings.talentSettings.Deflection.maxRank)">
@@ -269,7 +269,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedRend.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedRend.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedRend.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedRend.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedRend.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedRend.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -72px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedRend.rank, simulation.settings.talentSettings.ImprovedRend.maxRank)">
@@ -280,7 +280,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedCharge.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedCharge.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedCharge.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedCharge.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedCharge.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedCharge.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -108px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedCharge.rank, simulation.settings.talentSettings.ImprovedCharge.maxRank)">
@@ -288,7 +288,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.IronWill.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.IronWill.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.IronWill.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.IronWill.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.IronWill.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.IronWill.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -144px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.IronWill.rank, simulation.settings.talentSettings.IronWill.maxRank)">
@@ -296,7 +296,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.TacticalMastery.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.TacticalMastery.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.TacticalMastery.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.TacticalMastery.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.TacticalMastery.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.TacticalMastery.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -180px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.TacticalMastery.rank, simulation.settings.talentSettings.TacticalMastery.maxRank)">
@@ -307,7 +307,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedOverPower.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedOverPower.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedOverPower.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedOverPower.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedOverPower.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedOverPower.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -216px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedOverPower.rank, simulation.settings.talentSettings.ImprovedOverPower.maxRank)">
@@ -315,7 +315,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.AngerManagement.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.AngerManagement.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.AngerManagement.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.AngerManagement.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.AngerManagement.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.AngerManagement.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -252px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.AngerManagement.rank, simulation.settings.talentSettings.AngerManagement.maxRank)">
@@ -323,7 +323,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Impale.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Impale.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Impale.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Impale.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Impale.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Impale.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -288px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Impale.rank, simulation.settings.talentSettings.Impale.maxRank)">
@@ -331,7 +331,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.DeepWounds.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.DeepWounds.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.DeepWounds.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.DeepWounds.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.DeepWounds.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.DeepWounds.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -324px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.DeepWounds.rank, simulation.settings.talentSettings.DeepWounds.maxRank)">
@@ -343,7 +343,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.TwoHandedWeaponSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.TwoHandedWeaponSpecialization.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.TwoHandedWeaponSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.TwoHandedWeaponSpecialization.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.TwoHandedWeaponSpecialization.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.TwoHandedWeaponSpecialization.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -360px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.TwoHandedWeaponSpecialization.rank, simulation.settings.talentSettings.TwoHandedWeaponSpecialization.maxRank)">
@@ -351,7 +351,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.TasteForBlood.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.TasteForBlood.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.TasteForBlood.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.TasteForBlood.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.TasteForBlood.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.TasteForBlood.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -396px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.TasteForBlood.rank, simulation.settings.talentSettings.TasteForBlood.maxRank)">
@@ -363,7 +363,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.PoleaxeSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.PoleaxeSpecialization.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.PoleaxeSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.PoleaxeSpecialization.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.PoleaxeSpecialization.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.PoleaxeSpecialization.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -432px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.PoleaxeSpecialization.rank, simulation.settings.talentSettings.PoleaxeSpecialization.maxRank)">
@@ -371,7 +371,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.SweepingStrikes.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.SweepingStrikes.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.SweepingStrikes.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.SweepingStrikes.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.SweepingStrikes.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.SweepingStrikes.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -468px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.SweepingStrikes.rank, simulation.settings.talentSettings.SweepingStrikes.maxRank)">
@@ -379,7 +379,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.MaceSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.MaceSpecialization.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.MaceSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.MaceSpecialization.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.MaceSpecialization.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.MaceSpecialization.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -504px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.MaceSpecialization.rank, simulation.settings.talentSettings.MaceSpecialization.maxRank)">
@@ -387,7 +387,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.SwordSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.SwordSpecialization.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.SwordSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.SwordSpecialization.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.SwordSpecialization.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.SwordSpecialization.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -540px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.SwordSpecialization.rank, simulation.settings.talentSettings.SwordSpecialization.maxRank)">
@@ -397,7 +397,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.WeaponMastery.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.WeaponMastery.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.WeaponMastery.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.WeaponMastery.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.WeaponMastery.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.WeaponMastery.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -576px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.WeaponMastery.rank, simulation.settings.talentSettings.WeaponMastery.maxRank)">
@@ -407,7 +407,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedHamstring.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedHamstring.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedHamstring.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedHamstring.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedHamstring.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedHamstring.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -612px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedHamstring.rank, simulation.settings.talentSettings.ImprovedHamstring.maxRank)">
@@ -415,7 +415,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Trauma.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Trauma.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Trauma.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Trauma.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Trauma.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Trauma.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -648px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Trauma.rank, simulation.settings.talentSettings.Trauma.maxRank)">
@@ -425,7 +425,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.SecondWind.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.SecondWind.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.SecondWind.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.SecondWind.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.SecondWind.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.SecondWind.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -684px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.SecondWind.rank, simulation.settings.talentSettings.SecondWind.maxRank)">
@@ -433,7 +433,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.MortalStrike.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.MortalStrike.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.MortalStrike.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.MortalStrike.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.MortalStrike.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.MortalStrike.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -720px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.MortalStrike.rank, simulation.settings.talentSettings.MortalStrike.maxRank)">
@@ -441,7 +441,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.StrengthOfArms.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.StrengthOfArms.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.StrengthOfArms.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.StrengthOfArms.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.StrengthOfArms.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.StrengthOfArms.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -756px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.StrengthOfArms.rank, simulation.settings.talentSettings.StrengthOfArms.maxRank)">
@@ -449,7 +449,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedSlam.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedSlam.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedSlam.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedSlam.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedSlam.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedSlam.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -792px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedSlam.rank, simulation.settings.talentSettings.ImprovedSlam.maxRank)">
@@ -459,7 +459,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Juggernaut.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Juggernaut.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Juggernaut.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Juggernaut.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Juggernaut.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Juggernaut.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -828px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Juggernaut.rank, simulation.settings.talentSettings.Juggernaut.maxRank)">
@@ -467,7 +467,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedMortalStrike.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedMortalStrike.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedMortalStrike.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedMortalStrike.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedMortalStrike.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedMortalStrike.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -864px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedMortalStrike.rank, simulation.settings.talentSettings.ImprovedMortalStrike.maxRank)">
@@ -475,7 +475,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.UnrelentingAssault.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.UnrelentingAssault.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.UnrelentingAssault.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.UnrelentingAssault.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.UnrelentingAssault.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.UnrelentingAssault.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -900px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.UnrelentingAssault.rank, simulation.settings.talentSettings.UnrelentingAssault.maxRank)">
@@ -487,7 +487,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.SuddenDeath.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.SuddenDeath.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.SuddenDeath.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.SuddenDeath.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.SuddenDeath.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.SuddenDeath.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -936px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.SuddenDeath.rank, simulation.settings.talentSettings.SuddenDeath.maxRank)">
@@ -495,7 +495,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.EndlessRage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.EndlessRage.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.EndlessRage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.EndlessRage.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.EndlessRage.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.EndlessRage.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -972px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.EndlessRage.rank, simulation.settings.talentSettings.EndlessRage.maxRank)">
@@ -503,7 +503,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.BloodFrenzy.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.BloodFrenzy.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.BloodFrenzy.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.BloodFrenzy.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.BloodFrenzy.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.BloodFrenzy.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -1008px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.BloodFrenzy.rank, simulation.settings.talentSettings.BloodFrenzy.maxRank)">
@@ -517,7 +517,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.WreckingCrew.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.WreckingCrew.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.WreckingCrew.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.WreckingCrew.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.WreckingCrew.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.WreckingCrew.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -1044px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.WreckingCrew.rank, simulation.settings.talentSettings.WreckingCrew.maxRank)">
@@ -533,7 +533,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Bladestorm.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Bladestorm.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Bladestorm.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Bladestorm.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Bladestorm.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Bladestorm.rank" style="background-image: url('data/icons/arms.jpg'); background-position: -1080px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Bladestorm.rank, simulation.settings.talentSettings.Bladestorm.maxRank)">
@@ -553,7 +553,7 @@
 										<table>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ArmoredToTheTeeth.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ArmoredToTheTeeth.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ArmoredToTheTeeth.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ArmoredToTheTeeth.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ArmoredToTheTeeth.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ArmoredToTheTeeth.rank" style="background-image: url('data/icons/fury.jpg'); background-position: 0px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ArmoredToTheTeeth.rank, simulation.settings.talentSettings.ArmoredToTheTeeth.maxRank)">
@@ -561,7 +561,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.BoomingVoice.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.BoomingVoice.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.BoomingVoice.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.BoomingVoice.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.BoomingVoice.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.BoomingVoice.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -36px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.BoomingVoice.rank, simulation.settings.talentSettings.BoomingVoice.maxRank)">
@@ -569,7 +569,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Cruelty.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Cruelty.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Cruelty.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Cruelty.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Cruelty.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Cruelty.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -72px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Cruelty.rank, simulation.settings.talentSettings.Cruelty.maxRank)">
@@ -582,7 +582,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedDemoralizingShout.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedDemoralizingShout.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedDemoralizingShout.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedDemoralizingShout.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedDemoralizingShout.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedDemoralizingShout.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -108px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedDemoralizingShout.rank, simulation.settings.talentSettings.ImprovedDemoralizingShout.maxRank)">
@@ -590,7 +590,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.UnbridledWrath.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.UnbridledWrath.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.UnbridledWrath.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.UnbridledWrath.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.UnbridledWrath.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.UnbridledWrath.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -144px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.UnbridledWrath.rank, simulation.settings.talentSettings.UnbridledWrath.maxRank)">
@@ -601,7 +601,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedCleave.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedCleave.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedCleave.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedCleave.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedCleave.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedCleave.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -180px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedCleave.rank, simulation.settings.talentSettings.ImprovedCleave.maxRank)">
@@ -609,7 +609,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.PiercingHowl.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.PiercingHowl.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.PiercingHowl.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.PiercingHowl.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.PiercingHowl.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.PiercingHowl.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -216px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.PiercingHowl.rank, simulation.settings.talentSettings.PiercingHowl.maxRank)">
@@ -617,7 +617,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.BloodCraze.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.BloodCraze.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.BloodCraze.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.BloodCraze.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.BloodCraze.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.BloodCraze.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -252px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.BloodCraze.rank, simulation.settings.talentSettings.BloodCraze.maxRank)">
@@ -625,7 +625,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.CommandingPresence.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.CommandingPresence.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.CommandingPresence.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.CommandingPresence.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.CommandingPresence.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.CommandingPresence.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -288px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.CommandingPresence.rank, simulation.settings.talentSettings.CommandingPresence.maxRank)">
@@ -635,7 +635,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.DualWieldSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.DualWieldSpecialization.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.DualWieldSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.DualWieldSpecialization.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.DualWieldSpecialization.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.DualWieldSpecialization.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -324px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.DualWieldSpecialization.rank, simulation.settings.talentSettings.DualWieldSpecialization.maxRank)">
@@ -643,7 +643,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedExecute.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedExecute.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedExecute.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedExecute.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedExecute.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedExecute.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -360px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedExecute.rank, simulation.settings.talentSettings.ImprovedExecute.maxRank)">
@@ -651,7 +651,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Enrage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Enrage.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Enrage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Enrage.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Enrage.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Enrage.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -396px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Enrage.rank, simulation.settings.talentSettings.Enrage.maxRank)">
@@ -663,7 +663,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Precision.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Precision.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Precision.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Precision.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Precision.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Precision.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -432px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Precision.rank, simulation.settings.talentSettings.Precision.maxRank)">
@@ -671,7 +671,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.DeathWish.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.DeathWish.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.DeathWish.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.DeathWish.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.DeathWish.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.DeathWish.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -468px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.DeathWish.rank, simulation.settings.talentSettings.DeathWish.maxRank)">
@@ -679,7 +679,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedIntercept.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedIntercept.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedIntercept.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedIntercept.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedIntercept.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedIntercept.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -504px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedIntercept.rank, simulation.settings.talentSettings.ImprovedIntercept.maxRank)">
@@ -691,7 +691,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedBerserkerRage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedBerserkerRage.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedBerserkerRage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedBerserkerRage.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedBerserkerRage.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedBerserkerRage.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -540px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedBerserkerRage.rank, simulation.settings.talentSettings.ImprovedBerserkerRage.maxRank)">
@@ -701,7 +701,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Flurry.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Flurry.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Flurry.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Flurry.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Flurry.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Flurry.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -576px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Flurry.rank, simulation.settings.talentSettings.Flurry.maxRank)">
@@ -713,7 +713,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.IntensifyRage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.IntensifyRage.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.IntensifyRage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.IntensifyRage.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.IntensifyRage.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.IntensifyRage.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -612px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.IntensifyRage.rank, simulation.settings.talentSettings.IntensifyRage.maxRank)">
@@ -721,7 +721,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Bloodthirst.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Bloodthirst.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Bloodthirst.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Bloodthirst.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Bloodthirst.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Bloodthirst.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -648px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Bloodthirst.rank, simulation.settings.talentSettings.Bloodthirst.maxRank)">
@@ -731,7 +731,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedWhirlwind.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedWhirlwind.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedWhirlwind.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedWhirlwind.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedWhirlwind.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedWhirlwind.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -684px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedWhirlwind.rank, simulation.settings.talentSettings.ImprovedWhirlwind.maxRank)">
@@ -741,7 +741,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.FuriousAttacks.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.FuriousAttacks.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.FuriousAttacks.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.FuriousAttacks.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.FuriousAttacks.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.FuriousAttacks.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -720px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.FuriousAttacks.rank, simulation.settings.talentSettings.FuriousAttacks.maxRank)">
@@ -753,7 +753,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedBerserkerStance.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedBerserkerStance.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedBerserkerStance.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedBerserkerStance.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedBerserkerStance.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedBerserkerStance.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -756px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedBerserkerStance.rank, simulation.settings.talentSettings.ImprovedBerserkerStance.maxRank)">
@@ -763,7 +763,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.HeroicFury.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.HeroicFury.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.HeroicFury.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.HeroicFury.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.HeroicFury.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.HeroicFury.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -792px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.HeroicFury.rank, simulation.settings.talentSettings.HeroicFury.maxRank)">
@@ -771,7 +771,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Rampage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Rampage.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Rampage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Rampage.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Rampage.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Rampage.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -828px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Rampage.rank, simulation.settings.talentSettings.Rampage.maxRank)">
@@ -779,7 +779,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Bloodsurge.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Bloodsurge.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Bloodsurge.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Bloodsurge.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Bloodsurge.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Bloodsurge.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -864px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Bloodsurge.rank, simulation.settings.talentSettings.Bloodsurge.maxRank)">
@@ -793,7 +793,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.UnendingFury.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.UnendingFury.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.UnendingFury.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.UnendingFury.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.UnendingFury.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.UnendingFury.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -900px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.UnendingFury.rank, simulation.settings.talentSettings.UnendingFury.maxRank)">
@@ -809,7 +809,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.TitansGrip.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.TitansGrip.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.TitansGrip.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => {simulation.settings.talentSettings.TitansGrip.ProcessClick(args.Button); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.TitansGrip.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.TitansGrip.rank" style="background-image: url('data/icons/fury.jpg'); background-position: -936px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.TitansGrip.rank, simulation.settings.talentSettings.TitansGrip.maxRank)">
@@ -829,7 +829,7 @@
 										<table>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedBloodrage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedBloodrage.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedBloodrage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedBloodrage.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedBloodrage.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedBloodrage.rank" style="background-image: url('data/icons/protection.jpg'); background-position: 0px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedBloodrage.rank, simulation.settings.talentSettings.ImprovedBloodrage.maxRank)">
@@ -837,7 +837,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ShieldSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ShieldSpecialization.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ShieldSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ShieldSpecialization.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ShieldSpecialization.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ShieldSpecialization.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -36px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ShieldSpecialization.rank, simulation.settings.talentSettings.ShieldSpecialization.maxRank)">
@@ -845,7 +845,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedThunderClap.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedThunderClap.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedThunderClap.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedThunderClap.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedThunderClap.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedThunderClap.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -72px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedThunderClap.rank, simulation.settings.talentSettings.ImprovedThunderClap.maxRank)">
@@ -858,7 +858,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Incite.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Incite.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Incite.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Incite.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Incite.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Incite.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -108px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Incite.rank, simulation.settings.talentSettings.Incite.maxRank)">
@@ -866,7 +866,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Anticipation.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Anticipation.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Anticipation.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Anticipation.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Anticipation.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Anticipation.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -144px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Anticipation.rank, simulation.settings.talentSettings.Anticipation.maxRank)">
@@ -877,7 +877,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.LastStand.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.LastStand.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.LastStand.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.LastStand.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.LastStand.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.LastStand.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -180px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.LastStand.rank, simulation.settings.talentSettings.LastStand.maxRank)">
@@ -885,7 +885,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedRevenge.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedRevenge.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedRevenge.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedRevenge.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedRevenge.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedRevenge.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -216px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedRevenge.rank, simulation.settings.talentSettings.ImprovedRevenge.maxRank)">
@@ -893,7 +893,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ShieldMastery.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ShieldMastery.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ShieldMastery.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ShieldMastery.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ShieldMastery.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ShieldMastery.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -252px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ShieldMastery.rank, simulation.settings.talentSettings.ShieldMastery.maxRank)">
@@ -901,7 +901,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Toughness.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Toughness.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Toughness.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Toughness.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Toughness.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Toughness.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -288px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Toughness.rank, simulation.settings.talentSettings.Toughness.maxRank)">
@@ -911,7 +911,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedSpellReflection.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedSpellReflection.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedSpellReflection.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedSpellReflection.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedSpellReflection.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedSpellReflection.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -324px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedSpellReflection.rank, simulation.settings.talentSettings.ImprovedSpellReflection.maxRank)">
@@ -919,7 +919,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedDisarm.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedDisarm.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedDisarm.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedDisarm.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedDisarm.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedDisarm.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -360px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedDisarm.rank, simulation.settings.talentSettings.ImprovedDisarm.maxRank)">
@@ -927,7 +927,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Puncture.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Puncture.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Puncture.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Puncture.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Puncture.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Puncture.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -396px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Puncture.rank, simulation.settings.talentSettings.Puncture.maxRank)">
@@ -939,7 +939,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedDisciplines.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedDisciplines.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedDisciplines.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedDisciplines.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedDisciplines.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedDisciplines.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -432px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedDisciplines.rank, simulation.settings.talentSettings.ImprovedDisciplines.maxRank)">
@@ -947,7 +947,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ConcussionBlow.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ConcussionBlow.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ConcussionBlow.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ConcussionBlow.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ConcussionBlow.rank)" oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ConcussionBlow.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -468px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ConcussionBlow.rank, simulation.settings.talentSettings.ConcussionBlow.maxRank)">
@@ -955,7 +955,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.GagOrder.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.GagOrder.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.GagOrder.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.GagOrder.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.GagOrder.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.GagOrder.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -504px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.GagOrder.rank, simulation.settings.talentSettings.GagOrder.maxRank)">
@@ -971,7 +971,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.OneHandedWeaponSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.OneHandedWeaponSpecialization.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.OneHandedWeaponSpecialization.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.OneHandedWeaponSpecialization.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.OneHandedWeaponSpecialization.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.OneHandedWeaponSpecialization.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -540px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.OneHandedWeaponSpecialization.rank, simulation.settings.talentSettings.OneHandedWeaponSpecialization.maxRank)">
@@ -983,7 +983,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.ImprovedDefensiveStance.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.ImprovedDefensiveStance.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.ImprovedDefensiveStance.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.ImprovedDefensiveStance.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.ImprovedDefensiveStance.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.ImprovedDefensiveStance.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -576px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.ImprovedDefensiveStance.rank, simulation.settings.talentSettings.ImprovedDefensiveStance.maxRank)">
@@ -991,7 +991,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Vigilance.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Vigilance.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Vigilance.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Vigilance.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Vigilance.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Vigilance.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -612px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Vigilance.rank, simulation.settings.talentSettings.Vigilance.maxRank)">
@@ -999,7 +999,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.FocusedRage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.FocusedRage.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.FocusedRage.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.FocusedRage.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.FocusedRage.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.FocusedRage.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -648px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.FocusedRage.rank, simulation.settings.talentSettings.FocusedRage.maxRank)">
@@ -1013,7 +1013,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Vitality.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Vitality.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Vitality.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Vitality.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Vitality.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Vitality.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -684px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Vitality.rank, simulation.settings.talentSettings.Vitality.maxRank)">
@@ -1021,7 +1021,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Safeguard.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Safeguard.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Safeguard.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Safeguard.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Safeguard.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Safeguard.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -720px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Safeguard.rank, simulation.settings.talentSettings.Safeguard.maxRank)">
@@ -1033,7 +1033,7 @@
 											</tr>
 											<tr>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Warbringer.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Warbringer.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Warbringer.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Warbringer.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Warbringer.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Warbringer.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -756px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Warbringer.rank, simulation.settings.talentSettings.Warbringer.maxRank)">
@@ -1041,7 +1041,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Devastate.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Devastate.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Devastate.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Devastate.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Devastate.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Devastate.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -792px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Devastate.rank, simulation.settings.talentSettings.Devastate.maxRank)">
@@ -1049,7 +1049,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.CriticalBlock.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.CriticalBlock.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.CriticalBlock.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.CriticalBlock.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.CriticalBlock.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.CriticalBlock.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -828px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.CriticalBlock.rank, simulation.settings.talentSettings.CriticalBlock.maxRank)">
@@ -1063,7 +1063,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.SwordAndBoard.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.SwordAndBoard.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.SwordAndBoard.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.SwordAndBoard.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.SwordAndBoard.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.SwordAndBoard.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -864px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.SwordAndBoard.rank, simulation.settings.talentSettings.SwordAndBoard.maxRank)">
@@ -1071,7 +1071,7 @@
 													</div>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.DamageShield.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.DamageShield.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.DamageShield.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.DamageShield.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.DamageShield.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.DamageShield.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -900px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.DamageShield.rank, simulation.settings.talentSettings.DamageShield.maxRank)">
@@ -1085,7 +1085,7 @@
 												<td>
 												</td>
 												<td>
-													<a href="?spell=@simulation.settings.talentSettings.Shockwave.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.talentSettings.Shockwave.ProcessClick(args.Button)" @onmouseup:preventDefault>
+													<a href="?spell=@simulation.settings.talentSettings.Shockwave.currentSpellId" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.talentSettings.Shockwave.ProcessClick(args.Button); UpdateLocalStorage(); }" @onmouseup:preventDefault>
 														<div class="talent-icon @GrayscaleIcon(simulation.settings.talentSettings.Shockwave.rank) " oncontextmenu="return false;" data-count="@simulation.settings.talentSettings.Shockwave.rank" style="background-image: url('data/icons/protection.jpg'); background-position: -936px 0px"></div>
 													</a>
 													<div class="talent-number @TalentNumberStyles(simulation.settings.talentSettings.Shockwave.rank, simulation.settings.talentSettings.Shockwave.maxRank)">
@@ -1160,34 +1160,30 @@
 	public EditContext? editContext;
 	protected override void OnInitialized()
 	{
-		editContext = new EditContext(simulation);
+		var storedSettings = localStorage.GetItem<Warrior.Settings.Settings>("Settings");
+		if (storedSettings != null)
+		{
+			simulation.settings = storedSettings;
+		}
+		editContext = new EditContext(simulation.settings);
 		editContext.OnFieldChanged += (sender, eventArgs) =>
 		{
-			Console.WriteLine("OnFieldChanged for FieldName = " + eventArgs.FieldIdentifier.FieldName + " " + sender.ToString());
+			Console.WriteLine("FieldChanged");
+			localStorage.SetItem("Settings", simulation.settings);
 		};
 		base.OnInitialized();
-	}
-
-	const string noteKey = "note";
-	string noteContent;
-
-	public async void UpdateLocalStorage()
-	{
-		await localStore.SetItemAsync("settings", simulation);
-		//Logger.LogInformation(simulation.settings.character.race.ToString());
-	}
-
-	public async void ClearLocalStorage()
-	{
-		//var result = await localStore.GetItemAsync<Warrior.Settings>("settings");
-		//var test = await localStore.GetItemAsStringAsync("settings");
-		//Logger.LogInformation(test);
 	}
 
 	protected override async Task OnInitializedAsync()
 	{
 
 	}
+
+	protected void UpdateLocalStorage()
+	{
+		localStorage.SetItem("Settings", simulation.settings);
+	}
+
 	private string GrayscaleIcon(int rank)
 	{
 		if (rank == 0)
