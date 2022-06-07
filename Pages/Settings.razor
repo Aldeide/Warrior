@@ -26,7 +26,7 @@
 								<InputSelect @bind-Value="simulation.settings.characterSettings.race">
 									@foreach (Enum race in Enum.GetValues(typeof(Warrior.Settings.Race)))
 									{
-										<option title="test" value="@race">@race</option>
+										<option title="test" value="@race">@Utils.EnumUtils.GetDescription(race)</option>
 									}
 								</InputSelect>
 							</div><div style="clear:both"></div>

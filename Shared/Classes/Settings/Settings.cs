@@ -11,6 +11,7 @@ namespace Warrior.Settings
         public TalentsSettings talentSettings { get; set; } = new TalentsSettings();
         public GlyphSettings glyphSettings { get; set; } = new GlyphSettings();
         public EnchantSettings enchantSettings { get; set; } = new EnchantSettings();
+        public GemSettings gemSettings { get; set; } = new GemSettings();
         public StanceSettings stanceSettings { get; set; } = new StanceSettings();
 
         public BuffSettings buffSettings { get; set; } = new BuffSettings();

@@ -1,23 +1,41 @@
-﻿namespace Warrior
+﻿using System.ComponentModel;
+namespace Warrior
 {
     public enum ItemSlot
     {
+        [Description("Main Hand")]
         MainHand,
+        [Description("Off Hand")]
         OffHand,
+        [Description("Head")]
         Head,
+        [Description("Neck")]
         Neck,
+        [Description("Shoulders")]
         Shoulders,
+        [Description("Cloak")]
         Back,
+        [Description("Chest")]
         Chest,
+        [Description("Bracers")]
         Wrist,
+        [Description("Belt")]
         Waist,
+        [Description("Legs")]
         Legs,
+        [Description("Gloves")]
         Hands,
+        [Description("Boots")]
         Boots,
+        [Description("Ring 1")]
         Ring1,
+        [Description("Ring 2")]
         Ring2,
+        [Description("Trinket 1")]
         Trinket1,
+        [Description("Trinket 2")]
         Trinket2,
+        [Description("Ranged")]
         Ranged
     }
     public enum WeaponType

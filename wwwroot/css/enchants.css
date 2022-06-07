@@ -14,14 +14,13 @@ select {
     line-height: inherit;
 }
 
-select.enchants {
-    width: 250px;
-    height: 45px;
-    border-radius: 4px;
-    box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.19);
-    outline: none;
-    padding-left: 10px;
-}
+    select.enchants {
+        width: 250px;
+        border-radius: 4px;
+        outline: none;
+        padding-left: 10px;
+        border: 1px solid #ced4da
+    }
 
 select.enchants > option {
     height: 35px;
@@ -29,5 +28,9 @@ select.enchants > option {
 
 a.select-link {
     text-decoration: none;
+}
+
+.input-group-text {
+    border-radius: 0;
 }
 

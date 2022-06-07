@@ -3,6 +3,7 @@
 @using Blazored.LocalStorage;
 @using System.ComponentModel;
 
+@inject IJSRuntime jsRuntime
 @inject ILogger<Settings> Logger
 @inject Blazored.LocalStorage.ISyncLocalStorageService localStorage
 @inject Simulation simulation;
@@ -20,7 +21,7 @@
 						<div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 							@foreach (ItemSlot slot in Enum.GetValues(typeof(ItemSlot)))
 							{
-								<button class="nav-link @(slot == ItemSlot.MainHand ? "active" : "")" id="v-pills-@(slot)-tab" data-bs-toggle="pill" data-bs-target="#v-pills-@slot" type="button" role="tab" aria-controls="v-pills-mainhand" aria-selected="true">@slot</button>
+								<button class="nav-link @(slot == ItemSlot.MainHand ? "active" : "")" id="v-pills-@(slot)-tab" data-bs-toggle="pill" data-bs-target="#v-pills-@slot" type="button" role="tab" aria-controls="v-pills-mainhand" aria-selected="true">@Utils.EnumUtils.GetDescription(slot)</button>
 							}
 						</div>
 						<div class="tab-content" id="v-pills-tabContent">
@@ -29,7 +30,7 @@
 							{
 								<div class="tab-pane fade show @(slot == ItemSlot.MainHand ? "active" : "")" id="v-pills-@slot" role="tabpanel" aria-labelledby="v-pills-@(slot)-tab">
 
-									<h2>@slot</h2>
+									<h2>@Utils.EnumUtils.GetDescription(slot)</h2>
 
 									@if (slot != ItemSlot.Neck && slot != ItemSlot.Trinket1 && slot != ItemSlot.Trinket2 && slot != ItemSlot.Ranged)
 									{
@@ -49,50 +50,21 @@
 									
 									Gems
 
-
-  
-<div class="select-box">
-  <div class="select-box__current" tabindex="1">
-    <div class="select-box__value">
-      <input class="select-box__input" type="radio" id="0" value="1" name="Ben" checked="checked"/>
-      <p class="select-box__input-text">Cream</p>
-    </div>
-    <div class="select-box__value">
-      <input class="select-box__input" type="radio" id="1" value="2" name="Ben"/>
-      <p class="select-box__input-text">Cheese</p>
-    </div>
-    <div class="select-box__value">
-      <input class="select-box__input" type="radio" id="2" value="3" name="Ben"/>
-      <p class="select-box__input-text">Milk</p>
-    </div>
-    <div class="select-box__value">
-      <input class="select-box__input" type="radio" id="3" value="4" name="Ben"/>
-      <p class="select-box__input-text">Honey</p>
-    </div>
-    <div class="select-box__value">
-      <input class="select-box__input" type="radio" id="4" value="5" name="Ben"/>
-      <p class="select-box__input-text">Toast</p>
-    </div><img class="select-box__icon" src="http://cdn.onlinewebfonts.com/svg/img_295694.svg" alt="Arrow Icon" aria-hidden="true"/>
-  </div>
-  <ul class="select-box__list">
-    <li>
-      <label class="select-box__option" for="0">Cream</label>
-    </li>
-    <li>
-      <label class="select-box__option" for="1" aria-hidden="aria-hidden">Cheese</label>
-    </li>
-    <li>
-      <label class="select-box__option" for="2" aria-hidden="aria-hidden">Milk</label>
-    </li>
-    <li>
-      <label class="select-box__option" for="3" aria-hidden="aria-hidden">Honey</label>
-    </li>
-    <li>
-      <label class="select-box__option" for="4" aria-hidden="aria-hidden">Toast</label>
-    </li>
+									@foreach(var g in simulation.settings.equipmentSettings.GetGemSockets(slot))
+									{
+																			<form class="gem">
+  <input class="chosen-value" type="text" value="@simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id)" placeholder="Type to filter">
+  <ul class="value-list">
+											@foreach(Entities.Gem gem in Databases.GemDatabase.gems)
+											{
+												<li value="@gem.id" @onclick="() => GemClicked(gem.id)">@gem.name<span><br />@gem.Description()</span></li>
+											}
   </ul>
-</div>
-  
+</form>
+									}
+
+
+
 
 									<table>
 										<thead>
@@ -162,6 +134,11 @@
 		localStorage.SetItem("Settings", simulation.settings);
 	}
 
+	public void GemClicked(int id)
+	{
+		Console.WriteLine("Called GemClicked: " + id);
+	}
+
 	public void EnchantSelected(object value, ItemSlot slot)
 	{
 		Console.WriteLine("Called enchantSelected: " + slot.ToString() + ":" + Int32.Parse(value.ToString()));
@@ -173,6 +150,12 @@
 	{
 		//simulation = localStorage.GetItem<Simulation>("Simulation");
 	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await jsRuntime.InvokeVoidAsync("renderjQueryComponents");
+        await base.OnAfterRenderAsync(firstRender);
+    }
 }
 
 

@@ -2,6 +2,10 @@
 using AutoMapper;
 using Warrior.Entities;
 using Warrior.Results;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace Warrior
 {
@@ -43,15 +47,16 @@ namespace Warrior
         {
             Setup();
             simulationResults = new SimulationResults();
-            Iteration iteration = new Iteration(settings, computedConstants);
-            List<IterationResults> iterationsResults = new List<IterationResults>();
+            
+            ConcurrentBag<IterationResults> iterationsResults = new ConcurrentBag<IterationResults>();
 
-            for (int i = 0; i < settings.simulationSettings.numIterations; i++)
-            {
+            Parallel.For(0, settings.simulationSettings.numIterations, index =>
+			{
+                Iteration iteration = new Iteration(settings, computedConstants);
                 iteration.Setup();
                 iterationsResults.Add(iteration.Iterate());
-            }
-            simulationResults.Populate(iterationsResults);
+            });
+            simulationResults.Populate(iterationsResults.ToList());
             simulationResults.combatDuration = settings.simulationSettings.combatLength;
             simulationResults.numIterations = settings.simulationSettings.numIterations;
             simulationResults.dps = simulationResults.totalDamage / simulationResults.combatDuration;
