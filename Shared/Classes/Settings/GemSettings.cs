@@ -5,9 +5,14 @@ namespace Warrior.Settings
 	{
 		public Dictionary<int, List<Gem>> itemGemsPair = new Dictionary<int, List<Gem>>();
 
-		public List<Gem>? GetGemsByItemId(int id)
+		public List<Gem> GetGemsByItemId(int id)
 		{
-			return itemGemsPair[id];
+			var found = itemGemsPair.TryGetValue(id, out var gems);
+			if (found && gems != null)
+			{
+				return gems;
+			}
+			return new List<Gem>();
 		}
 	}
 }

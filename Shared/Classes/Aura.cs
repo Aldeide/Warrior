@@ -107,7 +107,6 @@ namespace Warrior
                 }
             }
         }
-
         public void Fade()
         {
             
@@ -121,7 +120,6 @@ namespace Warrior
 
     public class DeepWounds : Aura
     {
-        
         public DeepWounds(AuraManager arg) : base(arg)
         {
             name = "Deep Wounds";

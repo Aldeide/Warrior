@@ -52,20 +52,16 @@
 
 									@foreach(var g in simulation.settings.equipmentSettings.GetGemSockets(slot))
 									{
-																			<form class="gem">
-  <input class="chosen-value" type="text" value="@simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id)" placeholder="Type to filter">
-  <ul class="value-list">
+										<form class="gem">
+											<input class="chosen-value" type="text" value="@simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id)" placeholder="Type to filter">
+											<ul class="value-list">
 											@foreach(Entities.Gem gem in Databases.GemDatabase.gems)
 											{
 												<li value="@gem.id" @onclick="() => GemClicked(gem.id)">@gem.name<span><br />@gem.Description()</span></li>
 											}
-  </ul>
-</form>
+											</ul>
+										</form>
 									}
-
-
-
-
 									<table>
 										<thead>
 											<tr>
