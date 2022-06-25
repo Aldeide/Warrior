@@ -187,7 +187,7 @@
 							<h2>Armor (Major)</h2>
 							@foreach (Debuff aura in simulation.settings.debuffSettings.debuffs.Where<Debuff>(s => s.debuffGroup == DebuffGroup.MajorArmor))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.debuffSettings.ProcessClick(args.Button, aura.id, aura.debuffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.debuffSettings.ProcessClick(args.Button, aura.id, aura.debuffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -196,7 +196,7 @@
 							<h2>Armor (Minor)</h2>
 							@foreach (Debuff aura in simulation.settings.debuffSettings.debuffs.Where<Debuff>(s => s.debuffGroup == DebuffGroup.MinorArmor))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.debuffSettings.ProcessClick(args.Button, aura.id, aura.debuffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.debuffSettings.ProcessClick(args.Button, aura.id, aura.debuffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -205,7 +205,7 @@
 							<h2>Physical Vulnerability</h2>
 							@foreach (Debuff aura in simulation.settings.debuffSettings.debuffs.Where<Debuff>(s => s.debuffGroup == DebuffGroup.PhysicalVulnerability))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.debuffSettings.ProcessClick(args.Button, aura.id, aura.debuffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.debuffSettings.ProcessClick(args.Button, aura.id, aura.debuffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -214,7 +214,7 @@
 							<h2>Increased Critical Strike Chance</h2>
 							@foreach (Debuff aura in simulation.settings.debuffSettings.debuffs.Where<Debuff>(s => s.debuffGroup == DebuffGroup.CriticalStrike))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.debuffSettings.ProcessClick(args.Button, aura.id, aura.debuffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.debuffSettings.ProcessClick(args.Button, aura.id, aura.debuffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}
@@ -225,7 +225,7 @@
 							<h2>Increased Bleed Damage</h2>
 							@foreach (Debuff aura in simulation.settings.debuffSettings.debuffs.Where<Debuff>(s => s.debuffGroup == DebuffGroup.BleedEffects))
 							{
-								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => simulation.settings.debuffSettings.ProcessClick(args.Button, aura.id, aura.debuffGroup)" @onmouseup:preventDefault>
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.debuffSettings.ProcessClick(args.Button, aura.id, aura.debuffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
 									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
 								</a>
 							}

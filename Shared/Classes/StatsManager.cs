@@ -181,8 +181,6 @@ namespace Warrior
             return GetEffectiveHitRating() / Constants.kHitRatingPerPercent
                 + (float)TalentUtils.GetPrecisionExtraHitChance(iteration.settings.talentSettings);
         }
-
-
         public void UpdateTemporaryHasteMultiplier()
         {
             float value = 1.0f;
@@ -195,10 +193,12 @@ namespace Warrior
             iteration.mainHand.UpdateWeaponSpeed();
             iteration.offHand.UpdateWeaponSpeed();
         }
-
         public void UpdateCriticalStrikeChance()
         {
             return;
         }
+
+
+
     }
 }

@@ -14,7 +14,8 @@ namespace Warrior.Stats
                 + Constants.bonusStatsPerRace["Strength"][settings.characterSettings.race]
                 + settings.equipmentSettings.ComputeGearStrength()
                 + settings.buffSettings.GetAdditiveStat(Stat.Strength)
-                + settings.buffSettings.GetAdditiveStat(Stat.AllBase)) * settings.buffSettings.GetMultiplicativeStat(Stat.AllBase) * berserkerStancemultiplier);
+                + settings.buffSettings.GetAdditiveStat(Stat.AllBase)) * settings.buffSettings.GetMultiplicativeStat(Stat.AllBase) * berserkerStancemultiplier)
+                + GetGemStats(settings, Stat.Strength);
         }
         public static int DisplayAgility(Settings.Settings settings)
         {
@@ -177,6 +178,16 @@ namespace Warrior.Stats
             float effectiveArmor = DisplayEnemyEffectiveArmor(settings);
             return 1 - effectiveArmor /
                 ((467.5f * settings.simulationSettings.targetLevel) + effectiveArmor - 22167.5f);
+        }
+
+        public static int GetGemStats(Settings.Settings settings, Stat stat)
+        {
+            var output = 0;
+            foreach(var item in settings.equipmentSettings.items)
+            {
+                output += settings.gemSettings.GetItemGemStats(Utils.MiscUtils.CombineItemAndSlot(item.Value.id, item.Key), stat);
+            }
+            return output;
         }
     }
 }

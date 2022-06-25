@@ -48,19 +48,22 @@
 										</div></a>
 									}
 									<br /><br />	
-									
-									Gems
-
+								
+									@{int i = 0;}
 									@foreach(var g in simulation.settings.equipmentSettings.GetGemSockets(slot))
 									{
-										int i = 0;
+										
 										int itemid = simulation.settings.equipmentSettings.GetItemBySlot(slot).id;
-										selectedGems.Add(new List<Entities.Gem>() { simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id)[i] });
-										<select class="gem-slot select2" data-slot="@i" data-item="@itemid">
+										selectedGems.Add(new List<Entities.Gem>() { simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id.ToString() + ":" + slot.ToString())[i] });
+										<div class="input-group mb-3">
+										<span class="input-group-text" id="basic-addon1">Gem</span>
+										<select class="gem-slot select2" data-item="@itemid" data-slot="@i" data-item-slot="@slot" data-value="@simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id.ToString() + ":" + slot.ToString())[i].id">
 											@foreach(Entities.Gem gem in Databases.GemDatabase.gems) {
+												
 												<option value="@gem.id">@gem.name</option>
 											}	
 										</select>
+										</div>
 										i++;
 									}
 									<br /><br />
@@ -106,9 +109,12 @@
 </EditForm>
 
 @code {
-	public EditContext editContext;
+	public EditContext? editContext;
 	public ItemSlot currentTab { get; set; } = ItemSlot.MainHand;
 	private List<List<Entities.Gem>> selectedGems = new List<List<Entities.Gem>> { };
+
+	private static Action<int, string, int> _updateGem;
+
 	protected override void OnInitialized()
 	{
 		var storedSettings = localStorage.GetItem<Warrior.Settings.Settings>("Settings");
@@ -122,7 +128,21 @@
 			Console.WriteLine("OnFieldChanged for FieldName = " + eventArgs.FieldIdentifier.FieldName + " " + sender.ToString());
 			localStorage.SetItem("Settings", simulation.settings);
 		};
+
+		_updateGem = UpdateGem;
+
 		base.OnInitialized();
+	}
+
+	private void UpdateGem(int gemId, string itemId, int slotId)
+	{
+		simulation.settings.gemSettings.SetGemForItemId(itemId, gemId, slotId);
+		localStorage.SetItem("Settings", simulation.settings);
+		InvokeAsync(() =>
+                {
+
+                    StateHasChanged();
+                });
 	}
 
 	private Item[]? items;
@@ -133,7 +153,7 @@
 		localStorage.SetItem("Settings", simulation.settings);
 	}
 
-	public void GemClicked(object value, int itemId, int index)
+	public void GemClicked(object value, string itemId, int index)
 	{
 		int id = ((Entities.Gem)value).id;
 		simulation.settings.gemSettings.SetGemForItemId(itemId, id, index);
@@ -159,9 +179,10 @@
 	}
 
 	[JSInvokable]
-	public static void UpdateGem(string value, string item, string slot)
+	public static void UpdateGem(string value, string slot, string item, string itemslot)
 	{
 		Console.WriteLine("Gem Changed" + value + ":" + item + ":" + slot);
+		_updateGem.Invoke(Int32.Parse(value), item + ":" + itemslot, Int32.Parse(slot));
 	}
 }
 
