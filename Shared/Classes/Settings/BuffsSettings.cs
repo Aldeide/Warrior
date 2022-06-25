@@ -104,7 +104,6 @@ namespace Warrior.Settings
                     if (effect.stat == stat && effect.type == Entities.EffectType.Additive)
                     {   
                         output += (int)effect.value;
-                        Console.WriteLine(buff.name + ":" + effect.value);
                     }
                 }
             }

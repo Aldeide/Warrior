@@ -2,12 +2,13 @@
 @using Microsoft.Extensions.Logging
 @using Blazored.LocalStorage;
 @using System.ComponentModel;
+@using System.Reflection;
 
 @inject IJSRuntime jsRuntime
 @inject ILogger<Settings> Logger
 @inject Blazored.LocalStorage.ISyncLocalStorageService localStorage
 @inject Simulation simulation;
-@inject HttpClient Http
+@inject HttpClient Http;
 
 <EditForm EditContext="@editContext">
 	<div class="sidebar summary" style="min-width: 300px; background-color: #eee; background-image: none;">
@@ -52,16 +53,17 @@
 
 									@foreach(var g in simulation.settings.equipmentSettings.GetGemSockets(slot))
 									{
-										<form class="gem">
-											<input class="chosen-value" type="text" value="@simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id)" placeholder="Type to filter">
-											<ul class="value-list">
-											@foreach(Entities.Gem gem in Databases.GemDatabase.gems)
-											{
-												<li value="@gem.id" @onclick="() => GemClicked(gem.id)">@gem.name<span><br />@gem.Description()</span></li>
-											}
-											</ul>
-										</form>
+										int i = 0;
+										int itemid = simulation.settings.equipmentSettings.GetItemBySlot(slot).id;
+										selectedGems.Add(new List<Entities.Gem>() { simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id)[i] });
+										<select class="gem-slot select2" data-slot="@i" data-item="@itemid">
+											@foreach(Entities.Gem gem in Databases.GemDatabase.gems) {
+												<option value="@gem.id">@gem.name</option>
+											}	
+										</select>
+										i++;
 									}
+									<br /><br />
 									<table>
 										<thead>
 											<tr>
@@ -106,6 +108,7 @@
 @code {
 	public EditContext editContext;
 	public ItemSlot currentTab { get; set; } = ItemSlot.MainHand;
+	private List<List<Entities.Gem>> selectedGems = new List<List<Entities.Gem>> { };
 	protected override void OnInitialized()
 	{
 		var storedSettings = localStorage.GetItem<Warrior.Settings.Settings>("Settings");
@@ -130,8 +133,10 @@
 		localStorage.SetItem("Settings", simulation.settings);
 	}
 
-	public void GemClicked(int id)
+	public void GemClicked(object value, int itemId, int index)
 	{
+		int id = ((Entities.Gem)value).id;
+		simulation.settings.gemSettings.SetGemForItemId(itemId, id, index);
 		Console.WriteLine("Called GemClicked: " + id);
 	}
 
@@ -148,10 +153,16 @@
 	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await jsRuntime.InvokeVoidAsync("renderjQueryComponents");
-        await base.OnAfterRenderAsync(firstRender);
-    }
+	{
+		await jsRuntime.InvokeVoidAsync("renderjQueryComponents");
+		await base.OnAfterRenderAsync(firstRender);
+	}
+
+	[JSInvokable]
+	public static void UpdateGem(string value, string item, string slot)
+	{
+		Console.WriteLine("Gem Changed" + value + ":" + item + ":" + slot);
+	}
 }
 
 

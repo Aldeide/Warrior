@@ -10,26 +10,6 @@
         {
             items = new Dictionary<ItemSlot, Item>();
             this.simulation = simulation;
-            /*
-            items[ItemSlot.MainHand] = ItemDatabase.items.Single(i => i.id == 50730);
-            items[ItemSlot.OffHand] = ItemDatabase.items.Single(i => i.id == 50730);
-            items[ItemSlot.Head] = ItemDatabase.items.Single(i => i.id == 51227);
-            items[ItemSlot.Neck] = ItemDatabase.items.Single(i => i.id == 54581);
-            items[ItemSlot.Shoulders] = ItemDatabase.items.Single(i => i.id == 51229);
-            items[ItemSlot.Back] = ItemDatabase.items.Single(i => i.id == 50677);
-            items[ItemSlot.Chest] = ItemDatabase.items.Single(i => i.id == 51225);
-            items[ItemSlot.Wrist] = ItemDatabase.items.Single(i => i.id == 50659);
-            items[ItemSlot.Waist] = ItemDatabase.items.Single(i => i.id == 50620);
-            items[ItemSlot.Legs] = ItemDatabase.items.Single(i => i.id == 51228);
-            items[ItemSlot.Ring1] = ItemDatabase.items.Single(i => i.id == 50657);
-            items[ItemSlot.Ring2] = ItemDatabase.items.Single(i => i.id == 54576);
-            items[ItemSlot.Trinket1] = ItemDatabase.items.Single(i => i.id == 54590);
-            items[ItemSlot.Trinket2] = ItemDatabase.items.Single(i => i.id == 50363);
-            items[ItemSlot.Ranged] = ItemDatabase.items.Single(i => i.id == 50733);
-            items[ItemSlot.Hands] = ItemDatabase.items.Single(i => i.id == 51226);
-            items[ItemSlot.Boots] = ItemDatabase.items.Single(i => i.id == 54578);
-            */
-            UpdateEquipmentStats();
         }
         public int GetSlotId(ItemSlot slot)
         {
@@ -43,8 +23,6 @@
         public void EquipItem(ItemSlot slot, int id)
         {
             items[slot] = ItemDatabase.items.Single(i => i.id == id);
-            UpdateEquipmentStats();
-            //simulation.character.UpdateAdditiveCharacterStats();
         }
         public void UpdateEquipmentStats()
         {

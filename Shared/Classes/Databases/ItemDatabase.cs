@@ -1,7 +1,32 @@
-﻿namespace Warrior
+﻿using Warrior.Entities;
+
+namespace Warrior
 {
     public static class ItemDatabase
     {
+        public static List<Gem> GetGemSockets(int itemId)
+        {
+            List<Gem> gemSockets = new List<Gem>();
+            Item item = items.Where(i => i.id == itemId).FirstOrDefault();
+             
+            for (int i = 0; i < item.metaSockets; i++)
+            {
+                gemSockets.Add(new Gem() { color = Color.Meta });
+            }
+            for (int i = 0; i < item.redSockets; i++)
+            {
+                gemSockets.Add(new Gem() { color = Color.Red });
+            }
+            for (int i = 0; i < item.blueSockets; i++)
+            {
+                gemSockets.Add(new Gem() { color = Color.Red });
+            }
+            for (int i = 0; i < item.yellowSockets; i++)
+            {
+                gemSockets.Add(new Gem() { color = Color.Yellow });
+            }
+            return gemSockets;
+        }
         public static List<Item> items { get; set; } = new List<Item>()
         {
             new Item() {
