@@ -60,7 +60,7 @@
       "System.Private.Xml.Linq.dll": "sha256-RYIvYPR9u4UJag4iBc3OAYklnmhmd5BRJBeahiPHZIY=",
       "System.Resources.ResourceManager.dll": "sha256-fzFkJECdlDYGhXHUTVMbgQiG3sTj7CKzag6aJEsTuec=",
       "System.Runtime.CompilerServices.Unsafe.dll": "sha256-Vtux2eGFF4QYVPg9DLWK8fIv8khYOUf2a5aPczdq+O4=",
-      "System.Runtime.dll": "sha256-zKBr\/8q\/cIKViqnw9\/PVIAJpe4WqhT0gFXwveI5nTD0=",
+      "System.Runtime.dll": "sha256-W8Cm724AbCHcWzbCyBONkEJlw8MhSnhdCY9xWKkD9zI=",
       "System.Runtime.Numerics.dll": "sha256-ygbJP1TiLhUhwTnvwy1ZOlhVrA8Y1DYtB5YBA14f8DU=",
       "System.Runtime.Serialization.Formatters.dll": "sha256-22W91rnPKMALks9tIPDk3FYnsvFgRP3\/bqgyw+lrIGA=",
       "System.Runtime.Serialization.Primitives.dll": "sha256-CY4c0JAerTeuSFGAiA1TD8\/7ZnIHDIrZs4HVLNg0kvI=",
@@ -74,7 +74,7 @@
       "System.Threading.Tasks.Extensions.dll": "sha256-YhKD5\/r4qecqhTFc6znIwhHTlLwzyhiH4gua6QPfGLA=",
       "System.Threading.Tasks.Parallel.dll": "sha256-SEhsNBazRbJAhRnNfchDTi\/TV4YfJUgYtKqebgLITX8=",
       "System.Threading.ThreadPool.dll": "sha256-zDFd8He\/wEfpV1dW051QwkqfiM5xqqVudlplpCknDc8=",
-      "Warrior.dll": "sha256-iAHtbzUAEoIYiAhm4cPh\/2ZWeqLkrWPtVkHsRNUSW0w="
+      "Warrior.dll": "sha256-B0o6J+lrER1VAUUxxwYwG4FP7tScV2Zv9hdXwaO2ZGo="
     },
     "extensions": null,
     "lazyAssembly": null,

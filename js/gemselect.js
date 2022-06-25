@@ -6,7 +6,7 @@
 
 function Reload() {
     $('.select2').select2({
-        placeholder: "Select",
+        width: "250px",
     }).on('select2:unselecting', function () {
         $(this).data('unselecting', true);
     }).on('select2:opening', function (e) {
@@ -16,8 +16,17 @@ function Reload() {
         }
     }).on('change.select2', function (e) {
         var selectedVal = e.target.value;
-        DotNet.invokeMethodAsync('Warrior', 'UpdateGem', selectedVal);
-        //BlazorApp - Your Application DLL Name
-        //UpdateModel - Function Name [JSInvokable]
-    });;
+        var slot = e.target.dataset["slot"];
+        var item = e.target.dataset["item"];
+        var itemSlot = e.target.dataset["itemSlot"];
+        if (selectedVal == e.target.dataset["value"]) {
+            return;
+        }
+        DotNet.invokeMethodAsync('Warrior', 'UpdateGem', selectedVal, slot, item, itemSlot);
+    });
+    $('.select2').each(function (index) {
+        var setValue = this.dataset["value"];
+        $(this).val(setValue).trigger("change");
+    });
+
 }
