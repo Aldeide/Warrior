@@ -65,8 +65,10 @@
                 }
 
                 // Auras
+                
                 auraManager.deepWounds?.Update();
                 auraManager.bloodsurge?.Update();
+                auraManager.bloodRage?.Update();
                 auraManager.GetNext();
 
                 int next = nextStep.GetNextStep();
@@ -118,7 +120,7 @@
             // Anger Management.
             if (computedConstants.HasAngerManagement && currentStep % (3 * Constants.kStepsPerSecond) == 0)
             {
-                IncrementRage(1);
+                IncrementRage(1, "Anger Management");
                 Console.WriteLine("[ " + currentStep + " ] Anger Management Tick");
                 nextStep.passiveTicks = currentStep + 3 * Constants.kStepsPerSecond;
             }
@@ -132,6 +134,9 @@
         }
         public void Abilities()
         {
+            // Bloodrage.
+            if (settings.simulationSettings.useBloodRage && rage < settings.simulationSettings.bloodRageThreshold) abilityManager.bloodrage.Use();
+
             // Bloodthirst.
             if (abilityManager.bloodthirst != null) {
                 abilityManager.bloodthirst.Use();
@@ -148,15 +153,19 @@
                 }
             }
 
-            if (rage >= 45 && !abilityManager.heroicStrike.isQueued)
-            {
-                Console.WriteLine("[ " + currentStep + " ] Iteration: Queueing Heroic Strike");
-                abilityManager.heroicStrike.Use();
+            if (settings.simulationSettings.useHeroicStrike)
+			{
+                if (rage >= settings.simulationSettings.heroicStrikeRagethreshold && !abilityManager.heroicStrike.isQueued)
+                {
+                    Console.WriteLine("[ " + currentStep + " ] Iteration: Queueing Heroic Strike");
+                    abilityManager.heroicStrike.Use();
+                }
             }
             abilityManager.GetNext();
         }
-        public void IncrementRage(int value)
+        public void IncrementRage(int value, string source)
         {
+            Console.WriteLine("[ " + currentStep + " ] Gained Rage from " + source + ": " + value);
             iterationResults.rageSummary.rageGenerated += value;
             if (rage + value > 100)
             {

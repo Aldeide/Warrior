@@ -23,7 +23,7 @@
         public HeroicStrike heroicStrike { get; set; }
 
         public Slam slam { get; set; }
-
+        public BloodRageAbility bloodrage { get; set; }
         public AbilityManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -34,6 +34,7 @@
             whirlwind = new Whirlwind(iteration);
             heroicStrike = new HeroicStrike(iteration);
             slam = new Slam(iteration);
+            bloodrage = new BloodRageAbility(iteration);
         }
         public void ApplyTime(int d)
         {

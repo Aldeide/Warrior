@@ -31,11 +31,12 @@ namespace Warrior
         public void InitialSetup()
 		{
             additiveCharacterStats.strength = (int)(
-                174 
+                174
                 + Constants.bonusStatsPerRace["Strength"][iteration.settings.characterSettings.race]
                 + iteration.settings.equipmentSettings.ComputeGearStrength()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.Strength)
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.AllBase)
+                + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.Strength)
                 );
             multiplicativeCharacterStats.strength = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AllBase);
             if (iteration.settings.stanceSettings.IsInBerserkerStance())

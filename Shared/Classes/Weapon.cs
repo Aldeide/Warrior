@@ -79,7 +79,7 @@
             }
             int damage = DamageUtils.WeaponDamage(result, this, iteration, /* bonus = */ 0);
             int rage = DamageUtils.ComputeGeneratedRage(result, damage, this, iteration);
-            iteration.IncrementRage(rage);
+            iteration.IncrementRage(rage, "Melee");
             damageSummary.totalDamage += damage;
             if (result == AttackResult.Glancing)  
             {

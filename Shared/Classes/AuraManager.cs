@@ -8,19 +8,21 @@
         public Flurry? flurry;
         public DeepWounds? deepWounds;
         public Bloodsurge? bloodsurge;
-
+        public BloodRage? bloodRage;
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
             if (TalentUtils.HasFlurry(iteration.settings.talentSettings)) flurry = new Flurry(this);
             if (TalentUtils.HasDeepWounds(iteration.settings.talentSettings)) deepWounds = new DeepWounds(this);
             if (iteration.computedConstants.hasBloodsurge) bloodsurge = new Bloodsurge(this);
+            bloodRage = new BloodRage(this);
 
         }
         public void Reset()
         {
             deepWounds?.Reset();
             flurry?.Reset();
+            bloodRage?.Reset();
         }
         public void MeleeCriticalTrigger()
         {
@@ -50,6 +52,7 @@
         {
             bloodsurge?.Trigger(AuraTrigger.Bloodthirst);
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
+            deepWounds?.Trigger(AuraTrigger.Bloodthirst);
         }
         public void WhirlwindTrigger()
         {
@@ -59,6 +62,7 @@
         {
             bloodsurge?.Trigger(AuraTrigger.Whirlwind);
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
+            deepWounds?.Trigger(AuraTrigger.Whirlwind);
         }
         public void HeroicStrikeTrigger()
         {
@@ -69,6 +73,7 @@
         {
             bloodsurge?.Trigger(AuraTrigger.HeroicStrike);
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
+            deepWounds?.Trigger(AuraTrigger.HeroicStrike);
         }
         public void ApplyTime(int d)
         {
@@ -79,6 +84,7 @@
             int next = int.MaxValue;
             if (deepWounds != null && deepWounds.next < next && deepWounds.active) next = deepWounds.next;
             if (bloodsurge != null && bloodsurge.next < next && bloodsurge.active) next = bloodsurge.next;
+            if (bloodRage != null && bloodRage.next < next && bloodRage.active) next = bloodRage.next;
             iteration.nextStep.auras = next;
         }
     }

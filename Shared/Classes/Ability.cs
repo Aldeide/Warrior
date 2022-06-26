@@ -320,4 +320,23 @@
             base.Use();
         }
     }
+
+    public class BloodRageAbility : Ability
+    {
+        public BloodRageAbility(Iteration iteration) : base(iteration)
+        {
+            name = "Blood Rage";
+            globalCooldown = 0;
+            cooldown = 60 * Constants.kStepsPerSecond;
+        }
+
+        public override void Use()
+        {
+            if (!CanUse()) return;
+            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Bloodrage");
+            iteration.auraManager.bloodRage.Trigger(AuraTrigger.Use);
+            base.Use();
+        }
+    }
+
 }

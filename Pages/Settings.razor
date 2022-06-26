@@ -17,7 +17,7 @@
 			<div class="container-fluid">
 
 				<div class="row">
-					<div class="col-sm-4">
+					<div class="col-sm-4" style="min-width: 400px">
 
 						<section id="simulation">
 							<h1>Simulation Settings</h1>
@@ -57,6 +57,118 @@
 					<div class="col-sm-8">
 						<section id="rotation">
 							<h1>Rotation and Cooldowns</h1>
+							<div class="row">
+							<div class="col-sm-4">
+
+
+							@if(simulation.settings.talentSettings.Bloodthirst.rank == 1)
+							{
+							<label for="useBT" class="rotation-label">Use Bloodthirst</label>
+							<InputCheckbox name="useBT" @bind-Value="simulation.settings.simulationSettings.useBloodthirst" class="checkbox" />
+							<img src="data/icons/rotations/bloodthirst.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useBloodthirst)" />
+
+							<div style="clear:both"></div>
+							<br />
+							}
+							<label for="useWW" class="rotation-label">Use Whirlwind</label>
+							<InputCheckbox name="useBT" @bind-Value="simulation.settings.simulationSettings.useWhirlwind" class="checkbox" />
+							<img src="data/icons/rotations/whirlwind.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useWhirlwind)" />
+
+							<div style="clear:both"></div>
+							<br />
+							@if(simulation.settings.talentSettings.MortalStrike.rank == 1)
+							{
+							<label for="useBT" class="rotation-label">Use Mortal Strike</label>
+							<InputCheckbox name="useBT" @bind-Value="simulation.settings.simulationSettings.useMortalStrike" class="checkbox" />
+							<img src="data/icons/rotations/mortalstrike.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useMortalStrike)" />
+
+							<div style="clear:both"></div>
+							<br />
+							}
+							
+
+							<label for="useHS" class="rotation-label">Use Heroic Strike</label>
+							<InputCheckbox name="useHS" @bind-Value="simulation.settings.simulationSettings.useHeroicStrike" class="checkbox" />
+							<img src="data/icons/rotations/heroicstrike.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useHeroicStrike)" />
+							
+							<div style="clear:both"></div>
+							@if(simulation.settings.simulationSettings.useHeroicStrike)
+							{
+								<p class="rotation-option">Over <InputNumber @bind-Value="simulation.settings.simulationSettings.heroicStrikeRagethreshold" class="inline-number"></InputNumber> rage</p>
+							}
+							<br />
+
+							<label for="useHS" class="rotation-label">Use Slam</label>
+							<InputCheckbox name="useHS" @bind-Value="simulation.settings.simulationSettings.useSlam" class="checkbox" />
+							<img src="data/icons/rotations/slam.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useSlam)" />
+							
+							<div style="clear:both"></div>
+							@if(simulation.settings.simulationSettings.useSlam && simulation.settings.talentSettings.Bloodsurge.rank > 0)
+							{
+								<p class="rotation-option"><label for="useHS" class="rotation-label">Only on Bloodsurge</label>
+								<InputCheckbox name="useHS" @bind-Value="simulation.settings.simulationSettings.slamOnlyOnBloodsurge" class="checkbox" /></p>
+							}
+							<br />
+
+							
+
+							<label for="useSunder" class="rotation-label">Use free GCDs for Sunder Armor</label>
+							<InputCheckbox name="useSunder" @bind-Value="simulation.settings.simulationSettings.useSunderArmor" class="checkbox" />
+							<img src="data/icons/rotations/sunderarmor.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useSunderArmor)" />
+
+							<div style="clear:both"></div>
+
+
+							
+							</div>
+							<div class="col-sm-4">
+							<label for="useDW" class="rotation-label">Use Death Wish</label>
+							<InputCheckbox name="useDW" @bind-Value="simulation.settings.simulationSettings.useDeathWish" class="checkbox" />
+							<img src="data/icons/rotations/deathwish.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useDeathWish)" />
+							
+							<div style="clear:both"></div>
+							@if(simulation.settings.simulationSettings.useDeathWish)
+							{
+								<p class="rotation-option">In last <InputNumber @bind-Value="simulation.settings.simulationSettings.deathWishOnLastSeconds" class="inline-number"></InputNumber> seconds</p>
+							}
+							<br />
+							<label for="useBloodRage" class="rotation-label">Use Bloodrage on cooldown</label>
+							<InputCheckbox name="useBloodRage" @bind-Value="simulation.settings.simulationSettings.useBloodRage" class="checkbox" />
+							<img src="data/icons/rotations/bloodrage.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useBloodRage)" />
+							
+							<div style="clear:both"></div>
+							@if(simulation.settings.simulationSettings.useBloodRage)
+							{
+								<p class="rotation-option">When below <InputNumber @bind-Value="simulation.settings.simulationSettings.bloodRageThreshold" class="inline-number"></InputNumber> rage</p>
+							}
+							<br />
+							<label for="useST" class="rotation-label">Use Shattering Throw</label>
+							<InputCheckbox name="useDW" @bind-Value="simulation.settings.simulationSettings.useShatteringThrow" class="checkbox" />
+							<img src="data/icons/rotations/shatteringthrow.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useShatteringThrow)" />
+							
+							<div style="clear:both"></div>
+							@if(simulation.settings.simulationSettings.useShatteringThrow)
+							{
+								<p class="rotation-option">In last <InputNumber @bind-Value="simulation.settings.simulationSettings.shatteringThrowOnLastSeconds" class="inline-number"></InputNumber> seconds</p>
+							}
+							<br />
+							</div>
+
+							<div class="col-sm-4">
+								<label for="useHeroism" class="rotation-label">Heroism / Bloodlust</label>
+								<InputCheckbox name="useHeroism" @bind-Value="simulation.settings.simulationSettings.useHeroism" class="checkbox" />
+								<img src="data/icons/rotations/heroism.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useHeroism)" />
+							
+								<div style="clear:both"></div>
+								@if(simulation.settings.simulationSettings.useHeroism)
+								{
+									<p class="rotation-option">In last <InputNumber @bind-Value="simulation.settings.simulationSettings.heroismOnLastSeconds" class="inline-number"></InputNumber> seconds</p>
+								}
+								<br />
+
+							</div>
+
+							</div>
 						</section>
 					</div>
 
@@ -65,7 +177,7 @@
 				<section id="buffs">
 					<h1>Raid Buffs & Consumables</h1>
 					<div class="row">
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Additive Strength / Agility</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.AgilityStrength))
 							{
@@ -74,7 +186,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Additive Attack Power</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.AttackPower))
 							{
@@ -83,7 +195,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Additive Critical Chance</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.MeleeCrit))
 							{
@@ -92,7 +204,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Additive Base Stats and Armor</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.StatAdd))
 							{
@@ -103,7 +215,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Multiplicative Attack Power</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.AttackPowerPercent))
 							{
@@ -112,7 +224,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Multiplicative Damage</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.DamagePercent))
 							{
@@ -121,7 +233,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Multiplicative Haste</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.HastePercent))
 							{
@@ -130,7 +242,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Multiplicative Melee Haste</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.MeleeHaste))
 							{
@@ -141,7 +253,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Multiplicative Base Stats</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.StatPercent))
 							{
@@ -150,7 +262,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Battle Elixir</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.BattleElixir))
 							{
@@ -159,7 +271,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Guardian Elixir</h2>
 							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.GuardianElixir))
 							{
@@ -168,7 +280,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Default Stance</h2>
 							@foreach (Stance stance in simulation.settings.stanceSettings.stances)
 							{
@@ -183,7 +295,7 @@
 				<section id="debuffs">
 					<h1>Raid Debuffs</h1>
 					<div class="row">
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Armor (Major)</h2>
 							@foreach (Debuff aura in simulation.settings.debuffSettings.debuffs.Where<Debuff>(s => s.debuffGroup == DebuffGroup.MajorArmor))
 							{
@@ -192,7 +304,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Armor (Minor)</h2>
 							@foreach (Debuff aura in simulation.settings.debuffSettings.debuffs.Where<Debuff>(s => s.debuffGroup == DebuffGroup.MinorArmor))
 							{
@@ -201,7 +313,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Physical Vulnerability</h2>
 							@foreach (Debuff aura in simulation.settings.debuffSettings.debuffs.Where<Debuff>(s => s.debuffGroup == DebuffGroup.PhysicalVulnerability))
 							{
@@ -210,7 +322,7 @@
 								</a>
 							}
 						</div>
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Increased Critical Strike Chance</h2>
 							@foreach (Debuff aura in simulation.settings.debuffSettings.debuffs.Where<Debuff>(s => s.debuffGroup == DebuffGroup.CriticalStrike))
 							{
@@ -221,7 +333,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-3">
+						<div class="col-sm-3 buff-column">
 							<h2>Increased Bleed Damage</h2>
 							@foreach (Debuff aura in simulation.settings.debuffSettings.debuffs.Where<Debuff>(s => s.debuffGroup == DebuffGroup.BleedEffects))
 							{
@@ -243,7 +355,7 @@
 				<!-- #region Talents -->
 
 				<div class="row">
-					<div class="col-sm-6">
+					<div class="col-sm-6 talents">
 						<section id="talents">
 							<h1>Talents</h1>
 							<div class="container" style="max-width: 900px; margin-left: 0">

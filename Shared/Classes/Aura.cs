@@ -191,6 +191,21 @@ namespace Warrior
                 dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
                 Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding OH Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
             }
+            if (trigger == AuraTrigger.Whirlwind)
+            {
+                dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
+                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding WW Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
+            }
+            if (trigger == AuraTrigger.Bloodthirst)
+            {
+                dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
+                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding BT Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
+            }
+            if (trigger == AuraTrigger.HeroicStrike)
+            {
+                dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
+                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding BT Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
+            }
             return dmg;
         }
         public override int GetNext()
@@ -242,6 +257,46 @@ namespace Warrior
             if (manager.iteration.currentStep >= fade)
             {
                 //Console.WriteLine("Bloodsurge Fade");
+                active = false;
+                auraSummary.uptime += fade - start;
+                next = int.MaxValue;
+            }
+        }
+    }
+
+
+    public class BloodRage 
+        : Aura
+    {
+        public BloodRage(AuraManager arg) : base(arg)
+        {
+            name = "Bloodrage";
+            auraSummary.name = name;
+            duration = 10 * Constants.kStepsPerSecond;
+        }
+
+        public override void Trigger(AuraTrigger trigger)
+        {
+                manager.iteration.IncrementRage(10, "Bloodrage");
+                auraSummary.procs += 1;
+                active = true;
+                next = manager.iteration.currentStep + 1 * Constants.kStepsPerSecond;
+                fade = manager.iteration.currentStep + duration;
+                start = manager.iteration.currentStep;
+                return;
+        }
+
+        public override void Update()
+        {
+            if (!active) return;
+            if (manager.iteration.currentStep != next)
+            {
+                return;
+            }
+            manager.iteration.IncrementRage(1, "Bloodrage");
+            next = manager.iteration.currentStep + 1 * Constants.kStepsPerSecond;
+            if (manager.iteration.currentStep >= fade)
+            {
                 active = false;
                 auraSummary.uptime += fade - start;
                 next = int.MaxValue;
