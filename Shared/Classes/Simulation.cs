@@ -86,7 +86,9 @@ namespace Warrior
             computedConstants.bloodsurgeChance = TalentUtils.GetBloodSurgeChance(settings.talentSettings);
             computedConstants.focusedRageRageReduction = settings.talentSettings.FocusedRage.rank;
             computedConstants.slamDamageMultiplier = computedConstants.titansGripDamageMultiplier * computedConstants.meleeDamageMultiplier * computedConstants.unendingFuryDamageMultiplier;
-            
+            computedConstants.hasMHBerserking = settings.enchantSettings.GetEnchant(ItemSlot.MainHand).id == 59621;
+            // TODO: Check if OH is equipped.
+            computedConstants.hasOHBerserking = settings.enchantSettings.GetEnchant(ItemSlot.OffHand).id == 59621;
         }
     }
 }

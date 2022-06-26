@@ -199,7 +199,19 @@ namespace Warrior
             return;
         }
 
-
+        public void UpdateTemporaryAdditiveAttackPower()
+		{
+            int value = 0;
+            if (iteration.auraManager.mainHandBerserking != null && iteration.auraManager.mainHandBerserking.active)
+			{
+                value += 400;
+			}
+            if (iteration.auraManager.offHandBerserking != null && iteration.auraManager.offHandBerserking.active)
+            {
+                value += 400;
+            }
+            tempAdditiveCharacterStats.attackPower = value;
+        }
 
     }
 }

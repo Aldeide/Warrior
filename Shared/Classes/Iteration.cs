@@ -69,6 +69,8 @@
                 auraManager.deepWounds?.Update();
                 auraManager.bloodsurge?.Update();
                 auraManager.bloodRage?.Update();
+                auraManager.mainHandBerserking?.Update();
+                auraManager.offHandBerserking?.Update();
                 auraManager.GetNext();
 
                 int next = nextStep.GetNextStep();
@@ -102,6 +104,9 @@
             if (auraManager.deepWounds != null) iterationResults.dotDamageSummaries.Add((DotDamageResults)auraManager.deepWounds.dotSummary.Clone());
             if (auraManager.flurry != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.flurry.auraSummary.Clone());
             if (auraManager.bloodsurge != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.bloodsurge.auraSummary.Clone());
+            if (auraManager.mainHandBerserking != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.mainHandBerserking.auraSummary.Clone());
+            if (auraManager.offHandBerserking != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.offHandBerserking.auraSummary.Clone());
+            if (auraManager.bloodRage != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.bloodRage.auraSummary.Clone());
             return iterationResults;
         }
 

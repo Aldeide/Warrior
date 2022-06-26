@@ -22,6 +22,7 @@ namespace Warrior
         public int timer { get; set; } = 0;
         public int fade { get; set; } = 0;
         public int damage { get; set; } = 0;
+        public float ppm { get; set; } = 0;
         public int tickInterval { get; set; } = 0;
         public int tickSize = 0;
         public int next { get; set; } = int.MaxValue;
@@ -96,7 +97,6 @@ namespace Warrior
                     return;
                 }
                 stacks -= 1;
-                //Console.WriteLine("Flurry current stacks: " + stacks);
                 if (stacks == 0)
                 {
                     Console.WriteLine("Flurry Faded.");
@@ -117,7 +117,6 @@ namespace Warrior
             active = false;
         }
     }
-
     public class DeepWounds : Aura
     {
         public DeepWounds(AuraManager arg) : base(arg)
@@ -213,7 +212,6 @@ namespace Warrior
             return next;
         }
     }
-
     public class Bloodsurge : Aura
     {
         public Bloodsurge(AuraManager arg) : base(arg)
@@ -263,8 +261,6 @@ namespace Warrior
             }
         }
     }
-
-
     public class BloodRage 
         : Aura
     {
@@ -301,6 +297,103 @@ namespace Warrior
                 auraSummary.uptime += fade - start;
                 next = int.MaxValue;
             }
+        }
+    }
+
+    public class MainHandBerserking : Aura
+	{
+        public MainHandBerserking(AuraManager arg) : base(arg)
+        {
+            name = "Berserking (MH)";
+            ppm = 1.0f;
+            auraSummary.name = name;
+            duration = 15 * Constants.kStepsPerSecond;
+        }
+
+        public override void Trigger(AuraTrigger trigger)
+        {
+            var pph = manager.iteration.mainHand.baseSpeed * ppm / (60 * Constants.kStepsPerSecond); //0.08
+            var roll = manager.iteration.random.Next(0, 10000);
+            if (roll > pph * 10000)
+			{
+                return;
+			}
+            // Refresh.
+            if (active)
+			{
+                fade = manager.iteration.currentStep + duration;
+                next = fade;
+                auraSummary.refreshes += 1;
+                return;
+            }
+            manager.iteration.statsManager.UpdateTemporaryAdditiveAttackPower();
+            fade = manager.iteration.currentStep + duration;
+            auraSummary.procs += 1;
+            active = true;
+            next = fade;
+            start = manager.iteration.currentStep;
+            return;
+        }
+
+        public override void Update()
+        {
+            if (!active) return;
+            if (manager.iteration.currentStep != next)
+            {
+                return;
+            }
+            active = false;
+            auraSummary.uptime += fade - start;
+            next = int.MaxValue;
+            manager.iteration.statsManager.UpdateTemporaryAdditiveAttackPower();
+        }
+    }
+
+    public class OffHandBerserking : Aura
+    {
+        public OffHandBerserking(AuraManager arg) : base(arg)
+        {
+            name = "Berserking (OH)";
+            ppm = 1.0f;
+            auraSummary.name = name;
+            duration = 15 * Constants.kStepsPerSecond;
+        }
+
+        public override void Trigger(AuraTrigger trigger)
+        {
+            var pph = manager.iteration.mainHand.baseSpeed * ppm / (60 * Constants.kStepsPerSecond); //0.08
+            var roll = manager.iteration.random.Next(0, 10000);
+            if (roll > pph * 10000)
+            {
+                return;
+            }
+            // Refresh.
+            if (active)
+            {
+                fade = manager.iteration.currentStep + duration;
+                next = fade;
+                auraSummary.refreshes += 1;
+                return;
+            }
+
+            fade = manager.iteration.currentStep + duration;
+            auraSummary.procs += 1;
+            active = true;
+            next = fade;
+            start = manager.iteration.currentStep;
+            return;
+        }
+
+        public override void Update()
+        {
+            if (!active) return;
+            if (manager.iteration.currentStep != next)
+            {
+                return;
+            }
+            active = false;
+            auraSummary.uptime += fade - start;
+            next = int.MaxValue;
         }
     }
 }

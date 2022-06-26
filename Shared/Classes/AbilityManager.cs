@@ -41,6 +41,7 @@
             bloodthirst?.ApplyTime(d);
             whirlwind.ApplyTime(d);
             heroicStrike.ApplyTime(d);
+            bloodrage.ApplyTime(d);
         }
         public void UseAbility(string name)
         {

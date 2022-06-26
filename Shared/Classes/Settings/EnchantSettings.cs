@@ -27,5 +27,10 @@ namespace Warrior.Settings
 		{
 			enchants[slot] = EnchantDatabase.GetEnchantById(id);
 		}
+
+		public Enchant GetEnchant(ItemSlot slot)
+		{
+			return enchants[slot];
+		}
 	}
 }

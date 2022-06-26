@@ -26,5 +26,8 @@
         public int focusedRageRageReduction { get; set; } = 0;
 
 
+        public bool hasMHBerserking { get; set; } = false;
+        public bool hasOHBerserking { get; set; } = false;
+
     }
 }

@@ -17,7 +17,7 @@
         {
             this.iteration = iteration;
             damageSummary = new DamageResults();
-            baseSpeed = (int)((float)item.speed * 1000);
+            baseSpeed = (int)((float)item.speed * Constants.kStepsPerSecond);
             
             effectiveSpeed = (int)(baseSpeed / iteration.statsManager.GetEffectiveHasteMultiplier());
             formerSpeed = effectiveSpeed;
@@ -67,14 +67,12 @@
             {
                 Console.WriteLine("[ " + iteration.currentStep + " ] Melee Miss (" + weapon + ")");
                 damageSummary.numMiss += 1;
-                iteration.auraManager.MeleeNonCriticalTrigger();
                 return;
             }
             if (result == AttackResult.Dodge)
             {
                 Console.WriteLine("[ " + iteration.currentStep + " ] Melee Dodge (" + weapon + ")");
                 damageSummary.numDodge += 1;
-                iteration.auraManager.MeleeNonCriticalTrigger();
                 return;
             }
             int damage = DamageUtils.WeaponDamage(result, this, iteration, /* bonus = */ 0);
@@ -87,7 +85,14 @@
                 Console.WriteLine("[ " + iteration.currentStep + " ] Melee Glancing: " + damage + " (" + weapon + ")");
                 damageSummary.numGlancing += 1;
                 damageSummary.glancingDamage += damage;
-                iteration.auraManager.MeleeNonCriticalTrigger();
+                if (isMainHand)
+                {
+                    iteration.auraManager.MainHandNonCriticalTrigger();
+                }
+                else
+                {
+                    iteration.auraManager.OffHandNonCriticalTrigger();
+                }
                 return;
             }
             if (result == AttackResult.Critical)
@@ -98,7 +103,7 @@
                 iteration.auraManager.MeleeCriticalTrigger();
                 if (isMainHand)
                 {
-                    iteration.auraManager.MainHandCriticalTtrigger();
+                    iteration.auraManager.MainHandCriticalTrigger();
                 } else
                 {
                     iteration.auraManager.OffHandCriticalTtrigger();
@@ -108,13 +113,19 @@
             Console.WriteLine("[ " + iteration.currentStep + " ] Melee Hit: " + damage + " (" + weapon + ")");
             damageSummary.numHit += 1;
             damageSummary.hitDamage += damage;
-            iteration.auraManager.MeleeNonCriticalTrigger();
+            if (isMainHand)
+            {
+                iteration.auraManager.MainHandNonCriticalTrigger();
+            }
+            else
+            {
+                iteration.auraManager.OffHandNonCriticalTrigger();
+            }
             return;
         }
         public void UpdateWeaponSpeed()
         {
             effectiveSpeed = (int)(baseSpeed / iteration.statsManager.GetEffectiveHasteMultiplier());
-            //Console.WriteLine("Haste Multiplier: " + iteration.statsManager.GetEffectiveHasteMultiplier());
             if (effectiveSpeed != formerSpeed)
             {
                 swingTimer = (int)(effectiveSpeed * (float)swingTimer / baseSpeed);

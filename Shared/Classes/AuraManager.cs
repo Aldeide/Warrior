@@ -9,6 +9,11 @@
         public DeepWounds? deepWounds;
         public Bloodsurge? bloodsurge;
         public BloodRage? bloodRage;
+
+        // Enchants.
+        public MainHandBerserking? mainHandBerserking;
+        public OffHandBerserking? offHandBerserking;
+
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -16,6 +21,10 @@
             if (TalentUtils.HasDeepWounds(iteration.settings.talentSettings)) deepWounds = new DeepWounds(this);
             if (iteration.computedConstants.hasBloodsurge) bloodsurge = new Bloodsurge(this);
             bloodRage = new BloodRage(this);
+
+            // Enchants.
+            if (iteration.computedConstants.hasMHBerserking) mainHandBerserking = new MainHandBerserking(this);
+            if (iteration.computedConstants.hasOHBerserking) offHandBerserking = new OffHandBerserking(this);
 
         }
         public void Reset()
@@ -27,6 +36,7 @@
         public void MeleeCriticalTrigger()
         {
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
+            
         }
         public void MeleeNonCriticalTrigger()
         {
@@ -36,44 +46,62 @@
         {
             flurry?.Trigger(AuraTrigger.AllMeleeNonCritical);
         }
-        public void MainHandCriticalTtrigger()
+        public void MainHandNonCriticalTrigger()
+		{
+            mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
+        }
+        public void MainHandCriticalTrigger()
         {
             deepWounds?.Trigger(AuraTrigger.MainHandCritical);
+            mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
+            MeleeNonCriticalTrigger();
+        }
+        public void OffHandNonCriticalTrigger()
+        {
+            MeleeNonCriticalTrigger();
+            offHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
         }
         public void OffHandCriticalTtrigger()
         {
             deepWounds?.Trigger(AuraTrigger.OffHandCritical);
+            offHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
         }
         public void BloodthirstTrigger()
         {
             bloodsurge?.Trigger(AuraTrigger.Bloodthirst);
+            mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
         }
         public void BloodthirstCriticalTrigger()
         {
             bloodsurge?.Trigger(AuraTrigger.Bloodthirst);
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
+            mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
             deepWounds?.Trigger(AuraTrigger.Bloodthirst);
         }
         public void WhirlwindTrigger()
         {
             bloodsurge?.Trigger(AuraTrigger.Whirlwind);
+            mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
         }
         public void WhirlwindCriticalTrigger()
         {
             bloodsurge?.Trigger(AuraTrigger.Whirlwind);
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
             deepWounds?.Trigger(AuraTrigger.Whirlwind);
+            mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
         }
         public void HeroicStrikeTrigger()
         {
             bloodsurge?.Trigger(AuraTrigger.HeroicStrike);
             flurry?.Trigger(AuraTrigger.AllMeleeNonCritical);
+            mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
         }
         public void HeroicStrikeCriticalTrigger()
         {
             bloodsurge?.Trigger(AuraTrigger.HeroicStrike);
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
             deepWounds?.Trigger(AuraTrigger.HeroicStrike);
+            mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
         }
         public void ApplyTime(int d)
         {
@@ -85,6 +113,8 @@
             if (deepWounds != null && deepWounds.next < next && deepWounds.active) next = deepWounds.next;
             if (bloodsurge != null && bloodsurge.next < next && bloodsurge.active) next = bloodsurge.next;
             if (bloodRage != null && bloodRage.next < next && bloodRage.active) next = bloodRage.next;
+            if (mainHandBerserking != null && mainHandBerserking.next < next && mainHandBerserking.active) next = mainHandBerserking.next;
+            if (offHandBerserking != null && offHandBerserking.next < next && offHandBerserking.active) next = offHandBerserking.next;
             iteration.nextStep.auras = next;
         }
     }
