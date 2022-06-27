@@ -23,6 +23,31 @@ namespace Warrior.Settings
 			return sockets;
 		}
 
+		public List<Gem> GetGemsByItemId(string id, int extraslot)
+		{
+			int itemid = Int32.Parse(id.Split(':')[0]);
+			var sockets = ItemDatabase.GetGemSockets(itemid);
+
+			var found = itemGemsPair.TryGetValue(id, out var gems);
+			if (found && gems != null)
+			{
+				if (gems.Count >= sockets.Count + extraslot)
+				{
+					return gems;
+				}
+				for (int i = 0; i < extraslot; i++)
+				{
+					gems.Add(new Gem() { id = 0, name = "None" });
+				}
+				return gems;
+			}
+			for (int i = 0; i < sockets.Count; i++)
+			{
+				sockets[i] = new Gem() { id = 0, name = "None" };
+			}
+			return sockets;
+		}
+
 		public void SetGemForItemId(string itemId, int gemId, int index)
 		{
 

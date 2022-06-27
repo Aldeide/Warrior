@@ -172,6 +172,10 @@ namespace Warrior.Settings
 			{
                 gemSockets.Add(new Gem() { color = Color.Meta });
 			}
+            for (int i = 0; i < item.yellowSockets; i++)
+            {
+                gemSockets.Add(new Gem() { color = Color.Yellow });
+            }
             for (int i = 0; i < item.redSockets; i++)
             {
                 gemSockets.Add(new Gem() { color = Color.Red });
@@ -180,10 +184,7 @@ namespace Warrior.Settings
             {
                 gemSockets.Add(new Gem() { color = Color.Blue });
             }
-            for (int i = 0; i < item.yellowSockets; i++)
-            {
-                gemSockets.Add(new Gem() { color = Color.Yellow });
-            }
+
             return gemSockets;
 		}
 
