@@ -348,7 +348,6 @@ namespace Warrior
             manager.iteration.statsManager.UpdateTemporaryAdditiveAttackPower();
         }
     }
-
     public class OffHandBerserking : Aura
     {
         public OffHandBerserking(AuraManager arg) : base(arg)
@@ -396,5 +395,54 @@ namespace Warrior
             next = int.MaxValue;
         }
     }
+
+    public class Heroism : Aura
+    {
+        public Heroism(AuraManager arg) : base(arg)
+        {
+            name = "Heroism";
+            auraSummary.name = name;
+            duration = 40 * Constants.kStepsPerSecond;
+            trigger.Add(AuraTrigger.AllMeleeCritical);
+            trigger.Add(AuraTrigger.AllMeleeNonCritical);
+            effects.Add(
+                new Effect(
+                    EffectType.Multiplicative,
+                    Stat.MeleeHaste,
+                    1.30f));
+        }
+        public override void Trigger(AuraTrigger trigger)
+        {
+            start = manager.iteration.currentStep;
+            active = true;
+            next = start + duration;
+            manager.iteration.statsManager.UpdateTemporaryHasteMultiplier();
+            auraSummary.procs += 1;
+        }
+
+        public override void Update()
+        {
+            if (manager.iteration.currentStep != next) { return; }
+            if (active)
+            {
+                auraSummary.uptime += (manager.iteration.currentStep - start);
+            }
+            active = false;
+            next = Int32.MaxValue;
+            manager.iteration.statsManager.UpdateTemporaryHasteMultiplier();
+        }
+
+        public void Fade()
+        {
+            if (active)
+            {
+                auraSummary.uptime += (manager.iteration.currentStep - start);
+            }
+            active = false;
+            next = Int32.MaxValue;
+            manager.iteration.statsManager.UpdateTemporaryHasteMultiplier();
+        }
+    }
+
 }
  

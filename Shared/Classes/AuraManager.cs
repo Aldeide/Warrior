@@ -14,6 +14,9 @@
         public MainHandBerserking? mainHandBerserking;
         public OffHandBerserking? offHandBerserking;
 
+        // Cooldowns.
+        public Heroism? heroism;
+
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -26,12 +29,15 @@
             if (iteration.computedConstants.hasMHBerserking) mainHandBerserking = new MainHandBerserking(this);
             if (iteration.computedConstants.hasOHBerserking) offHandBerserking = new OffHandBerserking(this);
 
+            // Cooldowns.
+            if (iteration.settings.simulationSettings.useHeroism) heroism = new Heroism(this);
         }
         public void Reset()
         {
             deepWounds?.Reset();
             flurry?.Reset();
             bloodRage?.Reset();
+            heroism?.Reset();
         }
         public void MeleeCriticalTrigger()
         {
@@ -115,6 +121,7 @@
             if (bloodRage != null && bloodRage.next < next && bloodRage.active) next = bloodRage.next;
             if (mainHandBerserking != null && mainHandBerserking.next < next && mainHandBerserking.active) next = mainHandBerserking.next;
             if (offHandBerserking != null && offHandBerserking.next < next && offHandBerserking.active) next = offHandBerserking.next;
+            if (heroism != null && heroism.next < next && heroism.active) next = heroism.next;
             iteration.nextStep.auras = next;
         }
     }

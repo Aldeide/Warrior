@@ -51,6 +51,9 @@
                 // Passive ticks such as anger management.
                 PassiveTicks();
 
+                // Cooldowns.
+                Cooldowns(currentStep, numSteps);
+
                 // Main hand and off hand attacks.
                 Attacks();
 
@@ -65,12 +68,12 @@
                 }
 
                 // Auras
-                
                 auraManager.deepWounds?.Update();
                 auraManager.bloodsurge?.Update();
                 auraManager.bloodRage?.Update();
                 auraManager.mainHandBerserking?.Update();
                 auraManager.offHandBerserking?.Update();
+                auraManager.heroism?.Update();
                 auraManager.GetNext();
 
                 int next = nextStep.GetNextStep();
@@ -90,6 +93,7 @@
 
             // Fading all auras to update final uptime.
             auraManager.flurry?.Fade();
+            auraManager.heroism?.Fade();
 
             // Moving the results.
             iterationResults.mainHand = (DamageResults)mainHand.damageSummary.Clone();
@@ -107,6 +111,7 @@
             if (auraManager.mainHandBerserking != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.mainHandBerserking.auraSummary.Clone());
             if (auraManager.offHandBerserking != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.offHandBerserking.auraSummary.Clone());
             if (auraManager.bloodRage != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.bloodRage.auraSummary.Clone());
+            if (auraManager.heroism != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.heroism.auraSummary.Clone());
             return iterationResults;
         }
 
@@ -181,5 +186,18 @@
             rage += value;
         }
 
+        public void Cooldowns(int currentStep, int numSteps)
+		{
+            if (settings.simulationSettings.useHeroism && RemainingTime(currentStep, numSteps) < settings.simulationSettings.heroismOnLastSeconds && !auraManager.heroism.active)
+			{
+                auraManager.heroism?.Trigger(AuraTrigger.None);
+                Console.WriteLine("[ " + currentStep + " ] Buff: Heroism Applied");
+            }
+		}
+
+        public float RemainingTime(int currentStep, int numSteps)
+		{
+            return (numSteps - currentStep) / Constants.kStepsPerSecond;
+		}
     }
 }

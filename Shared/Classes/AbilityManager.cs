@@ -2,6 +2,7 @@
 {
     public enum AuraTrigger
     {
+        None,
         AllMeleeAttacks,
         AllMeleeNonCritical,
         AllMeleeCritical,
@@ -11,7 +12,6 @@
         Whirlwind,
         HeroicStrike,
         Use
-
     }
     public class AbilityManager
     {

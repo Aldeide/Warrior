@@ -190,6 +190,11 @@ namespace Warrior
                 value *= iteration.auraManager.flurry.effects[0].value;
             }
             
+            if (iteration.auraManager.heroism != null && iteration.auraManager.heroism.active)
+            {
+                value *= iteration.auraManager.heroism.effects[0].value;
+            }
+
             tempMultiplicativeCharacterStats.hasteFactor = value;
             iteration.mainHand.UpdateWeaponSpeed();
             iteration.offHand.UpdateWeaponSpeed();
