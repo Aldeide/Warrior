@@ -3,6 +3,7 @@
 @using Blazored.LocalStorage;
 @using System.ComponentModel;
 @using System.Reflection;
+@using Warrior.Databases;
 
 @inject IJSRuntime jsRuntime
 @inject ILogger<Settings> Logger
@@ -56,16 +57,37 @@
 										int itemid = simulation.settings.equipmentSettings.GetItemBySlot(slot).id;
 										selectedGems.Add(new List<Entities.Gem>() { simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id.ToString() + ":" + slot.ToString())[i] });
 										<div class="input-group mb-3">
-										<span class="input-group-text" id="basic-addon1">Gem</span>
+										<span class="input-group-text" id="basic-addon1">@g.color.ToString()</span>
 										<select class="gem-slot select2" data-item="@itemid" data-slot="@i" data-item-slot="@slot" data-value="@simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id.ToString() + ":" + slot.ToString())[i].id">
-											@foreach(Entities.Gem gem in Databases.GemDatabase.gems) {
+												@if(g.color == Entities.Color.Meta)
+												{
+													@foreach(Entities.Gem gem in Databases.GemDatabase.gems.Where(g => g.color == Entities.Color.Meta)) {
 												
 												<option value="@gem.id">@gem.name</option>
 											}	
+												} else
+												{
+													@foreach(Entities.Gem gem in Databases.GemDatabase.gems.Where(g => g.color != Entities.Color.Meta)) {
+												
+												<option value="@gem.id">@gem.name</option>
+											}	
+												}
+												
 										</select>
+										
 										</div>
 										i++;
 									}
+									@if(Stats.DisplayStats.HasGems(simulation.settings, slot))
+									{
+										var test = Stats.DisplayStats.GetSocketBonus(simulation.settings, slot);
+										if (test != null)
+										{
+											<p class="socket @SocketIsActive(Stats.DisplayStats.SocketBonusIsActive(simulation.settings, slot))">Socket bonus: +@test.Item2 @test.Item1.ToString()</p>
+										}
+										
+									}
+									
 									<br /><br />
 									<table>
 										<thead>
@@ -183,6 +205,15 @@
 	{
 		Console.WriteLine("Gem Changed" + value + ":" + item + ":" + slot);
 		_updateGem.Invoke(Int32.Parse(value), item + ":" + itemslot, Int32.Parse(slot));
+	}
+
+	private string SocketIsActive(bool isActive)
+	{
+		if (isActive)
+		{
+			return "socket-active";
+		}
+		return "";
 	}
 }
 

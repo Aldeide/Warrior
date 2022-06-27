@@ -1,4 +1,5 @@
 ﻿using Warrior.Entities;
+using Warrior.Databases;
 
 namespace Warrior.Settings
 {
@@ -31,7 +32,6 @@ namespace Warrior.Settings
         {
             items[slot] = ItemDatabase.items.Single(i => i.id == id);
         }
-
         public int? GetSlotId(ItemSlot slot)
         {
             bool success = items.TryGetValue(slot, out var item);
@@ -41,14 +41,14 @@ namespace Warrior.Settings
             }
             return null;
         }
-        public Item GetItemBySlot(ItemSlot slot)
+        public Item? GetItemBySlot(ItemSlot slot)
         {
             bool success = items.TryGetValue(slot, out var item);
             if (success)
             {
                 return item;
             }
-            return item;
+            return null;
         }
         public int ComputeGearStrength()
         {
@@ -161,7 +161,12 @@ namespace Warrior.Settings
         public List<Gem> GetGemSockets(ItemSlot slot)
 		{
             List<Gem> gemSockets = new List<Gem>();
-            Item item = GetItemBySlot(slot);
+            Item? item = GetItemBySlot(slot);
+
+            if (item == null)
+			{
+                return gemSockets;
+			}
 
             for (int i = 0; i < item.metaSockets; i++)
 			{
@@ -173,7 +178,7 @@ namespace Warrior.Settings
             }
             for (int i = 0; i < item.blueSockets; i++)
             {
-                gemSockets.Add(new Gem() { color = Color.Red });
+                gemSockets.Add(new Gem() { color = Color.Blue });
             }
             for (int i = 0; i < item.yellowSockets; i++)
             {
@@ -181,6 +186,7 @@ namespace Warrior.Settings
             }
             return gemSockets;
 		}
+
 
     }
 }

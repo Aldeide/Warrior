@@ -1,6 +1,6 @@
 ﻿using Warrior.Entities;
 
-namespace Warrior
+namespace Warrior.Databases
 {
     public static class ItemDatabase
     {
@@ -39,7 +39,8 @@ namespace Warrior
                 criticalStrikeRating = 114,
                 armorPenetrationRating = 106,
                 redSockets = 1,
-                metaSockets = 1
+                metaSockets = 1,
+                gemBonusStrength = 8
             },
             new Item() {
                 id = 54581,

@@ -22,7 +22,7 @@
         }
         public void EquipItem(ItemSlot slot, int id)
         {
-            items[slot] = ItemDatabase.items.Single(i => i.id == id);
+            items[slot] = Databases.ItemDatabase.items.Single(i => i.id == id);
         }
         public void UpdateEquipmentStats()
         {

@@ -189,5 +189,60 @@ namespace Warrior.Stats
             }
             return output;
         }
+
+        public static Tuple<Stat, int>? GetSocketBonus(Settings.Settings settings, ItemSlot slot)
+        {
+            var item = settings.equipmentSettings.GetItemBySlot(slot);
+
+            item = Databases.ItemDatabase.items.Single(i => i.id == item.id);
+            if (item == null) return null;
+            if (item.gemBonusStrength > 0)
+            {
+                return new Tuple<Stat, int>(Stat.Strength, item.gemBonusStrength);
+            }
+            if (item.gemBonusAgility > 0)
+            {
+                return new Tuple<Stat, int>(Stat.Agility, item.gemBonusAgility);
+            }
+            if (item.gemBonusCriticalStrikeRating > 0)
+            {
+                return new Tuple<Stat, int>(Stat.CriticalRating, item.gemBonusCriticalStrikeRating);
+            }
+            return null;
+        }
+
+        public static bool SocketBonusIsActive(Settings.Settings settings, ItemSlot slot)
+        {
+            var sockets = settings.equipmentSettings.GetGemSockets(slot);
+            //if (sockets.Count() == 0) return false;
+            Item? item = settings.equipmentSettings.GetItemBySlot(slot);
+            //if (item == null) return false;
+            bool output = true;
+            int i = 0;
+            foreach (var socket in sockets)
+            {
+                var gem = settings.gemSettings.GetGemsByItemId(Utils.MiscUtils.CombineItemAndSlot(item.id, slot));
+                var actualGem = Databases.GemDatabase.gems.Single(g => g.id == gem[i].id);
+                if (!GemMatchesSocket(socket.color, actualGem.color)) output = false;
+                i++;
+            }
+            return output;
+        }
+
+        public static bool HasGems(Settings.Settings settings, ItemSlot slot)
+        {
+            return settings.equipmentSettings.GetGemSockets(slot).Count() > 0;
+        }
+
+        public static bool GemMatchesSocket(Color socket, Color gem)
+		{
+            if (socket != Color.Meta && gem == Color.Prismatic) return true;
+            if (socket == Color.Prismatic && gem != Color.Meta) return true;
+            if (socket == Color.Meta && gem == Color.Meta) return true;
+            if (socket == Color.Red && (gem == Color.Red || gem == Color.Orange || gem == Color.Purple)) return true;
+            if (socket == Color.Blue && (gem == Color.Blue || gem == Color.Purple || gem == Color.Green)) return true;
+            if (socket == Color.Yellow && (gem == Color.Yellow || gem == Color.Orange || gem == Color.Green)) return true;
+            return false;
+        }
     }
 }

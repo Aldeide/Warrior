@@ -273,3 +273,11 @@ input.inline-number::-webkit-inner-spin-button {
 input[type=number].inline-number {
     -moz-appearance: textfield;
 }
+
+.socket {
+    color: #aaa;
+}
+
+.socket-active {
+    color: #26b050;
+}
