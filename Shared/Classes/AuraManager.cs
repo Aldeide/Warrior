@@ -16,7 +16,7 @@
 
         // Cooldowns.
         public Heroism? heroism;
-
+        public DeathWishAura? deathWish;
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -31,6 +31,7 @@
 
             // Cooldowns.
             if (iteration.settings.simulationSettings.useHeroism) heroism = new Heroism(this);
+            if (iteration.settings.simulationSettings.useDeathWish && iteration.settings.talentSettings.DeathWish.rank > 0) deathWish = new DeathWishAura(this);
         }
         public void Reset()
         {
@@ -38,6 +39,7 @@
             flurry?.Reset();
             bloodRage?.Reset();
             heroism?.Reset();
+            deathWish?.Reset();
         }
         public void MeleeCriticalTrigger()
         {
@@ -122,6 +124,7 @@
             if (mainHandBerserking != null && mainHandBerserking.next < next && mainHandBerserking.active) next = mainHandBerserking.next;
             if (offHandBerserking != null && offHandBerserking.next < next && offHandBerserking.active) next = offHandBerserking.next;
             if (heroism != null && heroism.next < next && heroism.active) next = heroism.next;
+            if (deathWish != null && deathWish.next < next && deathWish.active) next = deathWish.next;
             iteration.nextStep.auras = next;
         }
     }

@@ -24,6 +24,9 @@
 
         public Slam slam { get; set; }
         public BloodRageAbility bloodrage { get; set; }
+
+        public DeathWish deathWish { get; set; }
+
         public AbilityManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -35,6 +38,7 @@
             heroicStrike = new HeroicStrike(iteration);
             slam = new Slam(iteration);
             bloodrage = new BloodRageAbility(iteration);
+            deathWish = new DeathWish(iteration);
         }
         public void ApplyTime(int d)
         {
@@ -42,10 +46,9 @@
             whirlwind.ApplyTime(d);
             heroicStrike.ApplyTime(d);
             bloodrage.ApplyTime(d);
+            deathWish.ApplyTime(d);
         }
-        public void UseAbility(string name)
-        {
-        }
+
         public void GetNext()
         {
             int next = int.MaxValue;

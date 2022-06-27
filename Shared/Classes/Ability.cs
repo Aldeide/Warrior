@@ -346,13 +346,14 @@
             cooldown = (int)Math.Round((double)(180 * Constants.kStepsPerSecond * (1.0f - iteration.settings.talentSettings.IntensifyRage.rank * 0.11f)));
             globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
             currentCooldown = 0;
+            
         }
         public override void Use()
         {
             if (!CanUse()) return;
             damageSummary.numCasts += 1;
             Console.WriteLine("[ " + iteration.currentStep + " ] Applied Death Wish");
-            //iteration.auraManager
+            iteration.auraManager.deathWish.Trigger(AuraTrigger.Use);
             base.Use();
         }
     }

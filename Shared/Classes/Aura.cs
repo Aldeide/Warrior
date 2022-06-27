@@ -300,6 +300,7 @@ namespace Warrior
         }
     }
 
+    // Enchants
     public class MainHandBerserking : Aura
 	{
         public MainHandBerserking(AuraManager arg) : base(arg)
@@ -396,6 +397,7 @@ namespace Warrior
         }
     }
 
+    // Cooldown
     public class Heroism : Aura
     {
         public Heroism(AuraManager arg) : base(arg)
@@ -441,6 +443,52 @@ namespace Warrior
             active = false;
             next = Int32.MaxValue;
             manager.iteration.statsManager.UpdateTemporaryHasteMultiplier();
+        }
+    }
+
+    public class DeathWishAura : Aura
+    {
+        public DeathWishAura(AuraManager arg) : base(arg)
+        {
+            name = "Death Wish";
+            auraSummary.name = name;
+            duration = 30 * Constants.kStepsPerSecond;
+            effects.Add(
+                new Effect(
+                    EffectType.Multiplicative,
+                    Stat.MeleeDamage,
+                    1.20f));
+        }
+        public override void Trigger(AuraTrigger trigger)
+        {
+            start = manager.iteration.currentStep;
+            active = true;
+            next = start + duration;
+            manager.iteration.statsManager.UpdateTemporaryDamageMultiplier();
+            auraSummary.procs += 1;
+        }
+
+        public override void Update()
+        {
+            if (manager.iteration.currentStep != next) { return; }
+            if (active)
+            {
+                auraSummary.uptime += (manager.iteration.currentStep - start);
+            }
+            active = false;
+            next = Int32.MaxValue;
+            manager.iteration.statsManager.UpdateTemporaryDamageMultiplier();
+        }
+
+        public void Fade()
+        {
+            if (active)
+            {
+                auraSummary.uptime += (manager.iteration.currentStep - start);
+            }
+            active = false;
+            next = Int32.MaxValue;
+            manager.iteration.statsManager.UpdateTemporaryDamageMultiplier();
         }
     }
 

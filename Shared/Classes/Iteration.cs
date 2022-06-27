@@ -74,6 +74,7 @@
                 auraManager.mainHandBerserking?.Update();
                 auraManager.offHandBerserking?.Update();
                 auraManager.heroism?.Update();
+                auraManager.deathWish?.Update();
                 auraManager.GetNext();
 
                 int next = nextStep.GetNextStep();
@@ -112,6 +113,7 @@
             if (auraManager.offHandBerserking != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.offHandBerserking.auraSummary.Clone());
             if (auraManager.bloodRage != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.bloodRage.auraSummary.Clone());
             if (auraManager.heroism != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.heroism.auraSummary.Clone());
+            if (auraManager.deathWish != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.deathWish.auraSummary.Clone());
             return iterationResults;
         }
 
@@ -192,6 +194,18 @@
 			{
                 auraManager.heroism?.Trigger(AuraTrigger.None);
                 Console.WriteLine("[ " + currentStep + " ] Buff: Heroism Applied");
+            }
+
+            if (settings.simulationSettings.useDeathWish && !auraManager.deathWish.active)
+            {
+                if (RemainingTime(currentStep, numSteps) > settings.simulationSettings.deathWishOnLastSeconds + abilityManager.deathWish.cooldown / Constants.kStepsPerSecond && abilityManager.deathWish.CanUse())
+                {
+                    abilityManager.deathWish.Use();
+                }
+                if (RemainingTime(currentStep, numSteps) < settings.simulationSettings.deathWishOnLastSeconds && abilityManager.deathWish.CanUse())
+                {
+                    abilityManager.deathWish.Use();
+                }
             }
 		}
 

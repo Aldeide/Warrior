@@ -161,7 +161,8 @@ namespace Warrior
         }
         public float GetEffectiveDamageMultiplier()
         {
-            return multiplicativeCharacterStats.damageMultiplier;
+            Console.WriteLine("[ Info ] Damage Multiplier: " + multiplicativeCharacterStats.damageMultiplier * tempMultiplicativeCharacterStats.damageMultiplier);
+            return multiplicativeCharacterStats.damageMultiplier * tempMultiplicativeCharacterStats.damageMultiplier;
         }
         public float GetEffectiveCritChanceBeforeSuppression()
         {
@@ -216,6 +217,17 @@ namespace Warrior
                 value += 400;
             }
             tempAdditiveCharacterStats.attackPower = value;
+        }
+
+        public void UpdateTemporaryDamageMultiplier()
+        {
+            float value = 1.0f;
+            // Death wish
+            if (iteration.auraManager.deathWish != null && iteration.auraManager.deathWish.active)
+            {
+                value *= iteration.auraManager.deathWish.effects[0].value;
+            }
+            tempMultiplicativeCharacterStats.damageMultiplier = value;
         }
 
     }
