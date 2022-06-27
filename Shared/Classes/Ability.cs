@@ -125,7 +125,6 @@
             globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
             currentCooldown = 0;
         }
-
         public override void Use()
         {
             if (!CanUse()) return;
@@ -156,7 +155,6 @@
             damageSummary.totalDamage += mainHandDamage + offHandDamage;
             base.Use();
         }
-
         private int ComputeWhirlwindDamage(AttackResult result, Weapon weapon)
         {
             if (result == AttackResult.Dodge || result == AttackResult.Miss)
@@ -320,14 +318,13 @@
             base.Use();
         }
     }
-
     public class BloodRageAbility : Ability
     {
         public BloodRageAbility(Iteration iteration) : base(iteration)
         {
             name = "Blood Rage";
             globalCooldown = 0;
-            cooldown = 60 * Constants.kStepsPerSecond;
+            cooldown = (int)Math.Round((double)(60 * Constants.kStepsPerSecond * (1.0f - iteration.settings.talentSettings.IntensifyRage.rank * 0.11f)));
         }
 
         public override void Use()
@@ -339,4 +336,24 @@
         }
     }
 
+    public class DeathWish : Ability
+    {
+        public DeathWish(Iteration iteration) : base(iteration)
+        {
+            name = "Death Wish";
+            damageSummary.name = name;
+            rageCost = 10;
+            cooldown = (int)Math.Round((double)(180 * Constants.kStepsPerSecond * (1.0f - iteration.settings.talentSettings.IntensifyRage.rank * 0.11f)));
+            globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
+            currentCooldown = 0;
+        }
+        public override void Use()
+        {
+            if (!CanUse()) return;
+            damageSummary.numCasts += 1;
+            Console.WriteLine("[ " + iteration.currentStep + " ] Applied Death Wish");
+            //iteration.auraManager
+            base.Use();
+        }
+    }
 }
