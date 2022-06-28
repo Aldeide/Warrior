@@ -65,13 +65,11 @@
             AttackResult result = AttackTableUtils.GetWhiteHitResult(iteration, isMainHand);
             if (result == AttackResult.Miss)
             {
-                Console.WriteLine("[ " + iteration.currentStep + " ] Melee Miss (" + weapon + ")");
                 damageSummary.numMiss += 1;
                 return;
             }
             if (result == AttackResult.Dodge)
             {
-                Console.WriteLine("[ " + iteration.currentStep + " ] Melee Dodge (" + weapon + ")");
                 damageSummary.numDodge += 1;
                 return;
             }
@@ -81,8 +79,6 @@
             damageSummary.totalDamage += damage;
             if (result == AttackResult.Glancing)  
             {
-                
-                Console.WriteLine("[ " + iteration.currentStep + " ] Melee Glancing: " + damage + " (" + weapon + ")");
                 damageSummary.numGlancing += 1;
                 damageSummary.glancingDamage += damage;
                 if (isMainHand)
@@ -97,7 +93,6 @@
             }
             if (result == AttackResult.Critical)
             {
-                Console.WriteLine("[ " + iteration.currentStep + " ] Melee Critical: " + damage + " (" + weapon + ")");
                 damageSummary.numCrit += 1;
                 damageSummary.critDamage += damage;
                 iteration.auraManager.MeleeCriticalTrigger();
@@ -110,7 +105,6 @@
                 }
                 return;
             }
-            Console.WriteLine("[ " + iteration.currentStep + " ] Melee Hit: " + damage + " (" + weapon + ")");
             damageSummary.numHit += 1;
             damageSummary.hitDamage += damage;
             if (isMainHand)
@@ -139,7 +133,6 @@
             {
                 iteration.nextStep.offHand = iteration.currentStep + swingTimer;
             }
-            Console.WriteLine("[ " + iteration.currentStep + " ] Effective swing timer: " + effectiveSpeed);
             formerSpeed = effectiveSpeed;
         }
         public void ApplyTime(int delta)  

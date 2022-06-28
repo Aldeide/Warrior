@@ -22,6 +22,11 @@ namespace Warrior.Settings
         {
             return majorOne == 58390 || majorTwo == 58390 || majorThree == 58390;
         }
+
+        public bool HasGlyphOfHeroicStrike()
+        {
+            return majorOne == 58403 || majorTwo == 58403 || majorThree == 58403;
+        }
     }
 
     public static class GlyphDatabase

@@ -22,6 +22,10 @@
         public void Reset()
         {
             currentCooldown = 0;
+            castTime = 0;
+            endCast = 0;
+            isCasting = false;
+            isQueued = false;
         }
         public bool CanUse()
         {
@@ -59,7 +63,6 @@
         public override void Use()
         {
             if (!CanUse()) return;
-            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Bloodthirst");
             AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
             damageSummary.numCasts += 1;
             if (result == AttackResult.Miss)
@@ -100,7 +103,7 @@
             // Unending Fury.
             damage = 0.50f 
                 * iteration.statsManager.GetEffectiveAttackPower() 
-                * TalentUtils.GetUnendingFuryDamageMultiplier(iteration.settings.talentSettings) 
+                * iteration.computedConstants.unendingFuryDamageMultiplier
                 * DamageUtils.EffectiveDamageCoefficient(iteration) * 1.06f;
 
             if (result == AttackResult.Critical)
@@ -130,7 +133,6 @@
         {
             if (!CanUse()) return;
             damageSummary.numCasts += 1;
-            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Whirlwind");
             AttackResult mainHandResult = AttackTableUtils.GetYellowHitResult(iteration);
             AttackResult offHandResult = AttackTableUtils.GetYellowHitResult(iteration);
 
@@ -173,15 +175,14 @@
             // Unending Fury.
             // Improved Whirlwind
             damage = damage
-                * TalentUtils.GetUnendingFuryDamageMultiplier(iteration.settings.talentSettings)
+                * iteration.computedConstants.unendingFuryDamageMultiplier
                 * TalentUtils.GetImprovedWhirlwindDamageMultiplier(iteration.settings.talentSettings)
                 * DamageUtils.EffectiveDamageCoefficient(iteration);
 
             // Offhand penalty
             if (!weapon.isMainHand)
             {
-                damage *= 0.5f;
-                damage *= TalentUtils.GetDualWieldSpecializationMultiplier(iteration.settings.talentSettings);
+                damage *= 0.5f * iteration.computedConstants.dualWieldSpecializationMultiplier;
             }
 
             if (result == AttackResult.Critical)
@@ -221,13 +222,11 @@
         {
             if (iteration.rage >= rageCost && !isQueued)
             {
-                Console.WriteLine("[ " + iteration.currentStep + " ] Queueing Heric Strike");
                 isQueued = true;
                 return;
             }
             if (CanUse() && isQueued)
             {
-                Console.WriteLine("[ " + iteration.currentStep + " ] Casting Heroic Strike");
                 iteration.rage -= rageCost;
                 AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
                 damageSummary.numCasts += 1;
@@ -291,7 +290,6 @@
 
             if (!iteration.auraManager.bloodsurge.active && !isCasting && CanUse())
             {
-                Console.WriteLine("[ " + iteration.currentStep + " ] Casting Slam");
                 endCast = iteration.currentStep + castTime;
                 isCasting = true;
                 return;
@@ -300,7 +298,6 @@
             if (iteration.auraManager.bloodsurge.active || (isCasting && endCast == iteration.currentStep))
             {
                 iteration.auraManager.bloodsurge.Fade();
-                Console.WriteLine("[ " + iteration.currentStep + " ] Slam Hit");
                 endCast = Int32.MaxValue;
                 isCasting = false;
                 AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
@@ -350,8 +347,7 @@
         public override void Use()
         {
             if (!CanUse()) return;
-            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Bloodrage");
-            iteration.auraManager.bloodRage.Trigger(AuraTrigger.Use);
+            iteration.auraManager.bloodRage?.Trigger(AuraTrigger.Use);
             base.Use();
         }
     }
@@ -372,8 +368,7 @@
         {
             if (!CanUse()) return;
             damageSummary.numCasts += 1;
-            Console.WriteLine("[ " + iteration.currentStep + " ] Applied Death Wish");
-            iteration.auraManager.deathWish.Trigger(AuraTrigger.Use);
+            iteration.auraManager.deathWish?.Trigger(AuraTrigger.Use);
             base.Use();
         }
     }
@@ -393,8 +388,7 @@
         {
             if (!CanUse()) return;
             damageSummary.numCasts += 1;
-            Console.WriteLine("[ " + iteration.currentStep + " ] Applied Heroism");
-            iteration.auraManager.heroism.Trigger(AuraTrigger.Use);
+            iteration.auraManager.heroism?.Trigger(AuraTrigger.Use);
             base.Use();
         }
     }
@@ -417,7 +411,6 @@
             if (!CanUse() && !isCasting) return;
             if (!isCasting && CanUse())
             {
-                Console.WriteLine("[ " + iteration.currentStep + " ] Casting Shattering Throw");
                 isCasting = true;
                 endCast = iteration.currentStep + castTime;
                 return;
@@ -427,8 +420,7 @@
                 endCast = Int32.MaxValue;
                 isCasting = false;
                 damageSummary.numCasts += 1;
-                Console.WriteLine("[ " + iteration.currentStep + " ] Applied Shattering Throw");
-                iteration.auraManager.shatteringThrow.Trigger(AuraTrigger.Use);
+                iteration.auraManager.shatteringThrow?.Trigger(AuraTrigger.Use);
             }
 
             base.Use();
@@ -479,7 +471,7 @@
         {
             return (int)(
                 DamageUtils.WeaponDamage(result, iteration.mainHand, iteration, 380)
-                * TalentUtils.GetImprovedMortalStrikeMultiplier(iteration.settings.talentSettings));
+                * iteration.computedConstants.improvedMortalStrikeMultiplier);
         }
     }
 
@@ -513,11 +505,11 @@
         {
             if (!CanUse()) return;
             if (iteration.settings.characterSettings.race != Settings.Race.Orc) return;
-            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Blood Fury");
-            iteration.auraManager.bloodFury.Trigger(AuraTrigger.Use);
+            iteration.auraManager.bloodFury?.Trigger(AuraTrigger.Use);
             base.Use();
         }
     }
+
     public class Berserking : Ability
     {
         public Berserking(Iteration iteration) : base(iteration)
@@ -530,8 +522,7 @@
         {
             if (!CanUse()) return;
             if (iteration.settings.characterSettings.race != Settings.Race.Troll) return;
-            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Berserking");
-            iteration.auraManager.berserking.Trigger(AuraTrigger.Use);
+            iteration.auraManager.berserking?.Trigger(AuraTrigger.Use);
             base.Use();
         }
     }

@@ -11,11 +11,8 @@ namespace Warrior
 
             // Talents and permanent buffs.
             coefficient *= iteration.statsManager.GetEffectiveDamageMultiplier();
-            Console.WriteLine("Computing damage coefficient before armor: " + coefficient);
             // Boss armor reduction.
             coefficient *= ArmorUtils.ComputeEffectiveArmorDamageReductionMultiplier(iteration);
-
-            Console.WriteLine("Computing damage coefficient: " + coefficient);
             return coefficient;
 
         }
@@ -30,17 +27,14 @@ namespace Warrior
         }
         public static float EffectiveCritCoefficient(TalentsSettings talents)
         {
-            Console.WriteLine("Computing crit coefficient: " + 1.0f + 1.0f * TalentUtils.GetCritBonusImpaleMultiplier(talents));
             return 1.0f + 1.0f * TalentUtils.GetCritBonusImpaleMultiplier(talents);
         }
         public static int WeaponDamage(AttackResult result, Weapon weapon, Iteration iteration, int bonus)
         {
             // Base weapon damage.
             float damage = iteration.random.Next(weapon.minDamage, weapon.maxDamage) + bonus;
-            Console.WriteLine("Base weapon damage: " + damage);
             // Attack power contribution. Speed value?
             damage += iteration.statsManager.GetEffectiveAttackPower() / 14.0f * weapon.baseSpeed / Constants.kStepsPerSecond;
-            Console.WriteLine("After AP: " + damage);
 
             // Two-Handed Specialization talent.
             if (weapon.item.weaponHandedness == WeaponHandedness.TwoHand)
@@ -52,10 +46,8 @@ namespace Warrior
             {
                 damage *= TalentUtils.GetOneHandedWeaponSpecializationDamageMultiplier(iteration.settings.talentSettings);
             }
-            Console.WriteLine("After talents: " + damage);
             // Other multipliers (raid buffs, titan's grip if applicable, boss armor reduction).
             damage *= EffectiveDamageCoefficient(iteration);
-            Console.WriteLine("After multipliers: " + damage);
             // Offhand damage penalty.
             if (!weapon.isMainHand)
             {
@@ -90,7 +82,7 @@ namespace Warrior
                 factor *= 2;
             }
 
-            int rage = (int)(15 * damage / (4 * 453.3f) + 0.5f * factor * (float)weapon.baseSpeed / Constants.kStepsPerSecond);
+            float rage = (int)(15 * damage / (4 * 453.3f) + 0.5f * factor * (float)weapon.baseSpeed / Constants.kStepsPerSecond);
             if (TalentUtils.GetUnbridledWrathPPM(iteration.settings.talentSettings) > 0)
             {
                 float pph = weapon.baseSpeed * TalentUtils.GetUnbridledWrathPPM(iteration.settings.talentSettings) / 60 * 10;
@@ -100,7 +92,11 @@ namespace Warrior
                     rage += 1;
                 }
             }
-            return rage;
+            if (iteration.computedConstants.hasEndlessRage)
+            {
+                rage *= 1.25f;
+            }
+            return (int)rage;
         }
         public static int AverageWeaponDamage(Weapon weapon, Iteration iteration, int bonus)
         {

@@ -37,7 +37,9 @@ namespace Warrior
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.AllBase)
                 + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.Strength)
                 );
-            multiplicativeCharacterStats.strength = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AllBase);
+            multiplicativeCharacterStats.strength =
+                iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AllBase)
+                * (1 + iteration.settings.talentSettings.StrengthOfArms.rank * 0.02f);
             additiveCharacterStats.agility = (int)(113
                 + Constants.bonusStatsPerRace["Agility"][iteration.settings.characterSettings.race]
                 + iteration.settings.equipmentSettings.ComputeGearAgility()
@@ -57,20 +59,27 @@ namespace Warrior
             additiveCharacterStats.hitRating = iteration.settings.equipmentSettings.ComputeGearHitRating()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.HitRating);
             multiplicativeCharacterStats.hitRating = 1.0f;
+
             additiveCharacterStats.criticalStrikeRating = iteration.settings.equipmentSettings.ComputeGearCritRating()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.CriticalRating);
             multiplicativeCharacterStats.criticalStrikeRating = 1.0f;
+
             additiveCharacterStats.expertiseRating = iteration.settings.equipmentSettings.ComputeGearExpertiseRating()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.ExpertiseRating);
             multiplicativeCharacterStats.expertiseRating = 1.0f;
+
             additiveCharacterStats.offHandExpertiseRating = iteration.settings.equipmentSettings.ComputeGearExpertiseRating()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.ExpertiseRating);
             multiplicativeCharacterStats.offHandExpertiseRating = 1.0f;
+
             additiveCharacterStats.armorPenetrationRating = iteration.settings.equipmentSettings.ComputeGearArmorPenetrationRating()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.ArmorPenetrationRating);
             multiplicativeCharacterStats.armorPenetrationRating = 1.0f;
+
             multiplicativeCharacterStats.hasteFactor = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.Haste)
-                * iteration.settings.buffSettings.GetMultiplicativeStat(Stat.MeleeHaste);
+                * iteration.settings.buffSettings.GetMultiplicativeStat(Stat.MeleeHaste)
+                * iteration.computedConstants.bloodFrenzySpeedMultiplier;
+
             multiplicativeCharacterStats.damageMultiplier = 1.0f
                 * TalentUtils.GetTitansDamageReductionMultiplier(iteration.settings.talentSettings, iteration.settings.equipmentSettings)
                 * iteration.settings.buffSettings.GetMultiplicativeStat(Stat.Damage);
@@ -123,10 +132,6 @@ namespace Warrior
         }
         public int GetEffectiveArmorPenetrationRating()
         {
-            Console.WriteLine("Armor Penetration Rating: " + (int)((additiveCharacterStats.armorPenetrationRating
-                + tempAdditiveCharacterStats.armorPenetrationRating
-                ) * multiplicativeCharacterStats.armorPenetrationRating
-                * tempMultiplicativeCharacterStats.armorPenetrationRating));
             return (int)((additiveCharacterStats.armorPenetrationRating
                 + tempAdditiveCharacterStats.armorPenetrationRating
                 ) * multiplicativeCharacterStats.armorPenetrationRating
@@ -136,20 +141,10 @@ namespace Warrior
         {
             const float hasteRatingPerPercent = 25.21f;
             float hasteFromHasteRating = (1 + GetEffectiveHasteRating() / hasteRatingPerPercent / 100).RoundToSignificantDigits(4);
-            Console.WriteLine("Computed Haste Multiplier: " + hasteFromHasteRating * multiplicativeCharacterStats.hasteFactor * tempMultiplicativeCharacterStats.hasteFactor);
             return MathF.Round((hasteFromHasteRating * multiplicativeCharacterStats.hasteFactor * tempMultiplicativeCharacterStats.hasteFactor), 4);
         }
         public int GetEffectiveAttackPower()
         {
-            Console.WriteLine("Additive Attack Power: " + additiveCharacterStats.attackPower);
-            Console.WriteLine("Computed Attack Power: " + (int)((
-                additiveCharacterStats.attackPower
-                + tempAdditiveCharacterStats.attackPower
-                + GetEffectiveStrength() * 2
-                + TalentUtils.GetArmoredToTheTeethAPBonus(iteration.settings.talentSettings) * GetEffectiveArmor() / 108.0f)
-                * multiplicativeCharacterStats.attackPower * tempMultiplicativeCharacterStats.attackPower
-                ));
-
             return (int)((
                 additiveCharacterStats.attackPower
                 + tempAdditiveCharacterStats.attackPower
@@ -165,7 +160,6 @@ namespace Warrior
         }
         public float GetEffectiveDamageMultiplier()
         {
-            Console.WriteLine("[ Info ] Damage Multiplier: " + multiplicativeCharacterStats.damageMultiplier * tempMultiplicativeCharacterStats.damageMultiplier);
             return multiplicativeCharacterStats.damageMultiplier * tempMultiplicativeCharacterStats.damageMultiplier * iteration.settings.debuffSettings.GetMultiplicativeStat(Stat.MeleeDamage);
         }
         public float GetEffectiveCritChanceBeforeSuppression()
@@ -242,6 +236,13 @@ namespace Warrior
             {
                 value *= iteration.auraManager.deathWish.effects[0].value;
             }
+
+            // Wrecking Crew
+            if (iteration.auraManager.wreckingCrew != null && iteration.auraManager.wreckingCrew.active)
+            {
+                value *= iteration.auraManager.wreckingCrew.effects[0].value;
+            }
+
             tempMultiplicativeCharacterStats.damageMultiplier = value;
         }
 

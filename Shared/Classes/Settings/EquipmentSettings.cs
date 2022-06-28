@@ -24,7 +24,7 @@ namespace Warrior.Settings
             items[ItemSlot.Ring2] = ItemDatabase.items.Single(i => i.id == 50657);
             items[ItemSlot.Trinket1] = ItemDatabase.items.Single(i => i.id == 50363);
             items[ItemSlot.Trinket2] = ItemDatabase.items.Single(i => i.id == 54590);
-            items[ItemSlot.Ranged] = ItemDatabase.items.Single(i => i.id == 51227);
+            items[ItemSlot.Ranged] = ItemDatabase.items.Single(i => i.id == 50733);
             items[ItemSlot.Hands] = ItemDatabase.items.Single(i => i.id == 51226);
             items[ItemSlot.Boots] = ItemDatabase.items.Single(i => i.id == 54578);
         }

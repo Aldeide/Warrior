@@ -22,6 +22,9 @@
         // Racial abilities.
         public BloodFuryAura? bloodFury;
         public BerserkingAura? berserking;
+
+        // Talents
+        public WreckingCrew? wreckingCrew;
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -50,6 +53,12 @@
             {
                 berserking = new BerserkingAura(this);
             }
+
+            // Talents
+            if (iteration.settings.talentSettings.WreckingCrew.rank > 0)
+            {
+                wreckingCrew = new WreckingCrew(this);
+            }
         }
         public void Reset()
         {
@@ -61,6 +70,7 @@
             shatteringThrow?.Reset();
             bloodFury?.Reset();
             berserking?.Reset();
+            wreckingCrew?.Reset();
         }
         public void MeleeCriticalTrigger()
         {
@@ -83,6 +93,7 @@
         {
             deepWounds?.Trigger(AuraTrigger.MainHandCritical);
             mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
+            wreckingCrew?.Trigger(AuraTrigger.MainHandCritical);
             MeleeNonCriticalTrigger();
         }
         public void OffHandNonCriticalTrigger()
@@ -94,6 +105,7 @@
         {
             deepWounds?.Trigger(AuraTrigger.OffHandCritical);
             offHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
+            wreckingCrew?.Trigger(AuraTrigger.MainHandCritical);
         }
         public void BloodthirstTrigger()
         {
@@ -106,6 +118,7 @@
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
             mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
             deepWounds?.Trigger(AuraTrigger.Bloodthirst);
+            wreckingCrew?.Trigger(AuraTrigger.MainHandCritical);
         }
         public void WhirlwindTrigger()
         {
@@ -118,6 +131,7 @@
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
             deepWounds?.Trigger(AuraTrigger.Whirlwind);
             mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
+            wreckingCrew?.Trigger(AuraTrigger.MainHandCritical);
         }
         public void HeroicStrikeTrigger()
         {
@@ -131,6 +145,12 @@
             flurry?.Trigger(AuraTrigger.AllMeleeCritical);
             deepWounds?.Trigger(AuraTrigger.HeroicStrike);
             mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
+            wreckingCrew?.Trigger(AuraTrigger.MainHandCritical);
+
+            if (iteration.settings.glyphSettings.HasGlyphOfHeroicStrike())
+            {
+                iteration.IncrementRage(10, "Glyph of heroic Strike");
+            }
         }
         public void ApplyTime(int d)
         {
@@ -149,6 +169,8 @@
             if (shatteringThrow != null && shatteringThrow.next < next && shatteringThrow.active) next = shatteringThrow.next;
             if (bloodFury != null && bloodFury.next < next && bloodFury.active) next = bloodFury.next;
             if (berserking != null && berserking.next < next && berserking.active) next = berserking.next;
+            if (wreckingCrew != null && wreckingCrew.next < next && wreckingCrew.active) next = wreckingCrew.next;
+
             iteration.nextStep.auras = next;
         }
     }

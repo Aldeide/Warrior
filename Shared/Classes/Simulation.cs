@@ -73,6 +73,7 @@ namespace Warrior
             
             computedConstants.bleedDamageMultiplier = settings.debuffSettings.GetMultiplicativeStat(Stat.BleedDamage);
             computedConstants.deepWoundsDamageMultiplier = TalentUtils.GetDeepWoundsMultiplier(settings.talentSettings) * computedConstants.bleedDamageMultiplier;
+            computedConstants.rendDamageMultiplier = computedConstants.bleedDamageMultiplier * (1 + settings.talentSettings.ImprovedRend.rank * 0.1f);
             computedConstants.meleeDamageMultiplier =
                 TalentUtils.GetTwoHandedWeaponSpecializationDamageMultiplier(settings.talentSettings)
                 * TalentUtils.GetTitansDamageReductionMultiplier(settings.talentSettings, settings.equipmentSettings);
@@ -84,12 +85,20 @@ namespace Warrior
             computedConstants.hasBloodsurge = settings.talentSettings.Bloodsurge.rank > 0;
             computedConstants.hasBloodthirst = settings.talentSettings.Bloodthirst.rank > 0;
             computedConstants.hasMortalStrike = settings.talentSettings.MortalStrike.rank > 0;
+            computedConstants.improvedMortalStrikeMultiplier = TalentUtils.GetImprovedMortalStrikeMultiplier(settings.talentSettings);
             computedConstants.bloodsurgeChance = TalentUtils.GetBloodSurgeChance(settings.talentSettings);
             computedConstants.focusedRageRageReduction = settings.talentSettings.FocusedRage.rank;
             computedConstants.slamDamageMultiplier = computedConstants.titansGripDamageMultiplier * computedConstants.meleeDamageMultiplier * computedConstants.unendingFuryDamageMultiplier;
             computedConstants.hasMHBerserking = settings.enchantSettings.GetEnchant(ItemSlot.MainHand).id == 59621;
             // TODO: Check if OH is equipped.
             computedConstants.hasOHBerserking = settings.enchantSettings.GetEnchant(ItemSlot.OffHand).id == 59621;
+            computedConstants.dualWieldSpecializationMultiplier = TalentUtils.GetDualWieldSpecializationMultiplier(settings.talentSettings);
+
+            // Rage
+            computedConstants.hasEndlessRage = settings.talentSettings.EndlessRage.rank > 0;
+
+            // Attack speed
+            computedConstants.bloodFrenzySpeedMultiplier = 1 + settings.talentSettings.BloodFrenzy.rank * 0.05f;
         }
     }
 }

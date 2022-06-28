@@ -14,8 +14,11 @@ namespace Warrior.Stats
                 + Constants.bonusStatsPerRace["Strength"][settings.characterSettings.race]
                 + settings.equipmentSettings.ComputeGearStrength()
                 + settings.buffSettings.GetAdditiveStat(Stat.Strength)
-                + settings.buffSettings.GetAdditiveStat(Stat.AllBase)) * settings.buffSettings.GetMultiplicativeStat(Stat.AllBase) * berserkerStancemultiplier)
-                + GetGemStats(settings, Stat.Strength);
+                + settings.buffSettings.GetAdditiveStat(Stat.AllBase)
+                + GetGemStats(settings, Stat.Strength))
+                * settings.buffSettings.GetMultiplicativeStat(Stat.AllBase)
+                * berserkerStancemultiplier
+                * (1 + settings.talentSettings.StrengthOfArms.rank * 0.02f));
         }
         public static int DisplayAgility(Settings.Settings settings)
         {
@@ -31,7 +34,9 @@ namespace Warrior.Stats
                 + Constants.bonusStatsPerRace["Stamina"][settings.characterSettings.race]
                 + settings.equipmentSettings.ComputeGearStamina()
                 + settings.buffSettings.GetAdditiveStat(Stat.Stamina)
-                + settings.buffSettings.GetAdditiveStat(Stat.AllBase)) * settings.buffSettings.GetMultiplicativeStat(Stat.AllBase));
+                + settings.buffSettings.GetAdditiveStat(Stat.AllBase))
+                * settings.buffSettings.GetMultiplicativeStat(Stat.AllBase)
+                * (1 + settings.talentSettings.StrengthOfArms.rank * 0.02f));
         }
         public static int DisplayHealth(Settings.Settings settings)
         {

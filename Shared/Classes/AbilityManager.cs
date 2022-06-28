@@ -85,5 +85,20 @@
             if (shatteringThrow.isCasting && shatteringThrow.endCast < iteration.nextStep.abilities) iteration.nextStep.abilities = shatteringThrow.endCast;
         }
 
+        public void Reset()
+        {
+            bloodthirst?.Reset();
+            mortalStrike?.Reset();
+            whirlwind.Reset();
+            heroicStrike.Reset();
+            slam.Reset();
+            bloodrage.Reset();
+            deathWish.Reset();
+            heroism.Reset();
+            shatteringThrow.Reset();
+            berserking?.Reset();
+            bloodFury?.Reset();
+        }
+
     }
 }

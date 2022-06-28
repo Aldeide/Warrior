@@ -22,7 +22,6 @@ namespace Warrior
                 + 85 * iteration.settings.simulationSettings.targetLevel
                 + 4.5f * 85 * (iteration.settings.simulationSettings.targetLevel - 59);
             float armorPenetrationCap = (armor + armorConstant) / 3;
-            Console.WriteLine("ArmorPenCap: " + armorPenetrationCap);
             float armorPenetrationPercent = iteration.statsManager.GetEffectiveArmorPenetrationRating()
                 / Constants.kArmorPenetrationPerPercent;
             if (iteration.stanceManager.IsInBattleStance())
@@ -30,8 +29,7 @@ namespace Warrior
                 armorPenetrationPercent += 10;
             }
             float armorReduction = Math.Min(iteration.settings.simulationSettings.targetArmor, armorPenetrationCap) * armorPenetrationPercent / 100;
-            Console.WriteLine("ArmorReduction: " + armorReduction);
-            //TODO(replace targetArmor by armor after debuffs)
+
             float effectiveArmor = armor - armorReduction;
             return effectiveArmor;
         }

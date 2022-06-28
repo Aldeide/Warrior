@@ -85,8 +85,6 @@ namespace Warrior
                 }
                 stacks = 3;
                 active = true;
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Applied Flurry");
-
                 manager.iteration.statsManager.UpdateTemporaryHasteMultiplier();
                 return;
             }
@@ -99,7 +97,6 @@ namespace Warrior
                 stacks -= 1;
                 if (stacks == 0)
                 {
-                    Console.WriteLine("Flurry Faded.");
                     auraSummary.uptime += (manager.iteration.currentStep - start);
                     active = false;
                     manager.iteration.statsManager.UpdateTemporaryHasteMultiplier();
@@ -142,7 +139,6 @@ namespace Warrior
                 dotSummary.applications += 1;
             } else
             {
-                start = manager.iteration.currentStep;
                 auraSummary.refreshes += 1;
                 damage += (int)DeepWoundsDamage(trigger);
                 tickSize = (int)(damage * tickInterval / (float)duration);
@@ -154,57 +150,56 @@ namespace Warrior
         }
         public override void Update()
         {
-            if (!active)
+            if (manager.iteration.currentStep != next || !active)
             {
                 return;
             }
-            if (manager.iteration.currentStep != next)
-            {
-                return;
-            }
-            Console.WriteLine("[ " + manager.iteration.currentStep + " ] Deep Wounds Tick: " + tickSize);
-            Console.WriteLine("[ " + manager.iteration.currentStep + " ] Total Ticks: " + dotSummary.ticks);
             damage -= tickSize;
-            Console.WriteLine("[ " + manager.iteration.currentStep + " ] Deep Wounds Damage Remaining: " + damage);
             currentDuration -= 1 * Constants.kStepsPerSecond;
             next = manager.iteration.currentStep + 1 * Constants.kStepsPerSecond;
+            
+            dotSummary.totalDamage += tickSize;
+            dotSummary.ticks += 1;
             if (currentDuration <= 0)
             {
                 damage = 0;
                 active = false;
                 next = int.MaxValue;
+                dotSummary.uptime += (manager.iteration.currentStep - start);
             }
-            dotSummary.uptime += 1 * Constants.kStepsPerSecond;
-            dotSummary.totalDamage += tickSize;
-            dotSummary.ticks += 1;
+
         }
+
+        public void Fade()
+        {
+            damage = 0;
+            active = false;
+            next = int.MaxValue;
+            dotSummary.uptime += (manager.iteration.currentStep - start);
+        }
+
         public float DeepWoundsDamage(AuraTrigger trigger)
         {
             float dmg = 0;
             if (trigger == AuraTrigger.MainHandCritical)
             {
                 dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding MH Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0) + "). Damage: " + damage);
             }
             if (trigger == AuraTrigger.OffHandCritical)
             {
                 dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding OH Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
             }
             if (trigger == AuraTrigger.Whirlwind)
             {
                 dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding WW Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
             }
             if (trigger == AuraTrigger.Bloodthirst)
             {
                 dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding BT Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
             }
             if (trigger == AuraTrigger.HeroicStrike)
             {
                 dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding BT Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
             }
             return dmg;
         }
@@ -235,7 +230,6 @@ namespace Warrior
             }
             if (!active)
             {
-                //Console.WriteLine("Bloodsurge Proc");
                 auraSummary.procs += 1;
                 active = true;
                 next = manager.iteration.currentStep + duration;
@@ -256,7 +250,6 @@ namespace Warrior
             if (!active) return;
             if (manager.iteration.currentStep >= fade)
             {
-                //Console.WriteLine("Bloodsurge Fade");
                 active = false;
                 auraSummary.uptime += fade - start;
                 next = int.MaxValue;
@@ -550,8 +543,8 @@ namespace Warrior
             dotSummary.name = name;
             trigger.Add(AuraTrigger.MainHandCritical);
             trigger.Add(AuraTrigger.OffHandCritical);
-            tickInterval = 1 * Constants.kStepsPerSecond;
-            duration = 6 * Constants.kStepsPerSecond;
+            tickInterval = 3 * Constants.kStepsPerSecond;
+            duration = 15 * Constants.kStepsPerSecond;
         }
         public override void Trigger(AuraTrigger trigger)
         {
@@ -560,15 +553,14 @@ namespace Warrior
                 active = true;
                 auraSummary.procs += 1;
                 start = manager.iteration.currentStep;
-                damage = (int)DeepWoundsDamage(trigger);
+                damage = (int)RendDamage();
                 tickSize = (int)(damage * tickInterval / (float)duration);
                 dotSummary.applications += 1;
             }
             else
             {
-                start = manager.iteration.currentStep;
                 auraSummary.refreshes += 1;
-                damage += (int)DeepWoundsDamage(trigger);
+                damage += (int)RendDamage();
                 tickSize = (int)(damage * tickInterval / (float)duration);
                 dotSummary.refreshes += 1;
             }
@@ -586,10 +578,7 @@ namespace Warrior
             {
                 return;
             }
-            Console.WriteLine("[ " + manager.iteration.currentStep + " ] Deep Wounds Tick: " + tickSize);
-            Console.WriteLine("[ " + manager.iteration.currentStep + " ] Total Ticks: " + dotSummary.ticks);
             damage -= tickSize;
-            Console.WriteLine("[ " + manager.iteration.currentStep + " ] Deep Wounds Damage Remaining: " + damage);
             currentDuration -= 1 * Constants.kStepsPerSecond;
             next = manager.iteration.currentStep + 1 * Constants.kStepsPerSecond;
             if (currentDuration <= 0)
@@ -602,35 +591,11 @@ namespace Warrior
             dotSummary.totalDamage += tickSize;
             dotSummary.ticks += 1;
         }
-        public float DeepWoundsDamage(AuraTrigger trigger)
+        public float RendDamage()
         {
-            float dmg = 0;
-            if (trigger == AuraTrigger.MainHandCritical)
-            {
-                dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding MH Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0) + "). Damage: " + damage);
-            }
-            if (trigger == AuraTrigger.OffHandCritical)
-            {
-                dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding OH Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
-            }
-            if (trigger == AuraTrigger.Whirlwind)
-            {
-                dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding WW Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
-            }
-            if (trigger == AuraTrigger.Bloodthirst)
-            {
-                dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding BT Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
-            }
-            if (trigger == AuraTrigger.HeroicStrike)
-            {
-                dmg = (int)(manager.iteration.computedConstants.deepWoundsDamageMultiplier * DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0));
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Adding BT Deep Wounds (" + DamageUtils.AverageWeaponDamage(manager.iteration.offHand, manager.iteration, 0) + "). Damage: " + damage);
-            }
-            return dmg;
+            int damage = (int)(DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0) + 380
+                * manager.iteration.computedConstants.rendDamageMultiplier);
+            return damage;
         }
         public override int GetNext()
         {
@@ -653,8 +618,6 @@ namespace Warrior
         }
         public override void Trigger(AuraTrigger trigger)
         {
-
-            Console.WriteLine("[ " + manager.iteration.currentStep + " ] Blood Fury Aura Applied");
             start = manager.iteration.currentStep;
             active = true;
             next = start + duration;
@@ -729,6 +692,58 @@ namespace Warrior
             active = false;
             next = Int32.MaxValue;
             manager.iteration.statsManager.UpdateTemporaryHasteMultiplier();
+        }
+    }
+
+    public class WreckingCrew : Aura
+    {
+        public WreckingCrew(AuraManager arg) : base(arg)
+        {
+            name = "Wrecking Crew";
+            auraSummary.name = name;
+            duration = 12 * Constants.kStepsPerSecond;
+            effects.Add(
+                new Effect(
+                    EffectType.Multiplicative,
+                    Stat.MeleeDamage,
+                    1 + manager.iteration.settings.talentSettings.WreckingCrew.rank * 0.02f));
+        }
+        public override void Trigger(AuraTrigger trigger)
+        {
+            if (active)
+            {
+                next = manager.iteration.currentStep + duration;
+                auraSummary.refreshes += 1;
+                return;
+            }
+            start = manager.iteration.currentStep;
+            active = true;
+            next = start + duration;
+            manager.iteration.statsManager.UpdateTemporaryDamageMultiplier();
+            auraSummary.procs += 1;
+        }
+
+        public override void Update()
+        {
+            if (manager.iteration.currentStep != next) { return; }
+            if (active)
+            {
+                auraSummary.uptime += (manager.iteration.currentStep - start);
+            }
+            active = false;
+            next = Int32.MaxValue;
+            manager.iteration.statsManager.UpdateTemporaryDamageMultiplier();
+        }
+
+        public void Fade()
+        {
+            if (active)
+            {
+                auraSummary.uptime += (manager.iteration.currentStep - start);
+            }
+            active = false;
+            next = Int32.MaxValue;
+            manager.iteration.statsManager.UpdateTemporaryDamageMultiplier();
         }
     }
 }

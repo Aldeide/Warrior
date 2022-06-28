@@ -83,11 +83,11 @@
                 auraManager.shatteringThrow?.Update();
                 auraManager.bloodFury?.Update();
                 auraManager.berserking?.Update();
+                auraManager.wreckingCrew?.Update();
                 auraManager.GetNext();
 
                 int next = nextStep.GetNextStep();
                 int delta = next - currentStep;
-                Console.WriteLine("[ " + currentStep + " ] NextStep: (" + next + ")");
 
                 // The passage of time.
                 mainHand.ApplyTime(delta);
@@ -106,7 +106,8 @@
             auraManager.shatteringThrow?.Fade();
             auraManager.bloodFury?.Fade();
             auraManager.berserking?.Fade();
-
+            auraManager.deepWounds?.Fade();
+            auraManager.wreckingCrew?.Fade();
             // Moving the results.
             iterationResults.mainHand = (DamageResults)mainHand.damageSummary.Clone();
             iterationResults.offHand = (DamageResults)offHand.damageSummary.Clone();
@@ -128,6 +129,7 @@
             if (auraManager.shatteringThrow != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.shatteringThrow.auraSummary.Clone());
             if (auraManager.berserking != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.berserking.auraSummary.Clone());
             if (auraManager.bloodFury != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.bloodFury.auraSummary.Clone());
+            if (auraManager.wreckingCrew != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.wreckingCrew.auraSummary.Clone());
             return iterationResults;
         }
 
@@ -135,7 +137,7 @@
         {
             nextStep = new NextStep();
             auraManager.Reset();
-            abilityManager = new AbilityManager(this);
+            abilityManager.Reset();
             mainHand = new Weapon(this, ItemSlot.MainHand, settings.equipmentSettings.GetItemBySlot(ItemSlot.MainHand));
             offHand = new Weapon(this, ItemSlot.OffHand, settings.equipmentSettings.GetItemBySlot(ItemSlot.OffHand));
             rage = 0;
@@ -147,7 +149,6 @@
             if (computedConstants.HasAngerManagement && currentStep % (3 * Constants.kStepsPerSecond) == 0)
             {
                 IncrementRage(1, "Anger Management");
-                Console.WriteLine("[ " + currentStep + " ] Anger Management Tick");
                 nextStep.passiveTicks = currentStep + 3 * Constants.kStepsPerSecond;
             }
             return;
@@ -187,7 +188,7 @@
             }
             if (auraManager.bloodsurge != null && auraManager.bloodsurge.active)
             {
-                if(abilityManager.bloodthirst.currentCooldown > 1.6f)
+                if (abilityManager.bloodthirst?.currentCooldown > 1.6f)
                 {
                     
                 }
@@ -197,7 +198,6 @@
 			{
                 if (rage >= settings.simulationSettings.heroicStrikeRagethreshold && !abilityManager.heroicStrike.isQueued)
                 {
-                    Console.WriteLine("[ " + currentStep + " ] Iteration: Queueing Heroic Strike");
                     abilityManager.heroicStrike.Use();
                 }
             }
@@ -205,7 +205,6 @@
         }
         public void IncrementRage(int value, string source)
         {
-            Console.WriteLine("[ " + currentStep + " ] Gained Rage from " + source + ": " + value);
             iterationResults.rageSummary.rageGenerated += value;
             if (rage + value > 100)
             {
@@ -222,7 +221,6 @@
             if (settings.simulationSettings.useHeroism && RemainingTime(currentStep, numSteps) < settings.simulationSettings.heroismOnLastSeconds && !auraManager.heroism.active)
 			{
                 abilityManager.heroism?.Use();
-                Console.WriteLine("[ " + currentStep + " ] Buff: Heroism Applied");
             }
 
             // Blood Fury.
