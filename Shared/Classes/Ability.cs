@@ -208,7 +208,7 @@
             damageSummary.name = name;
             rageCost = 15
                 - TalentUtils.GetImprovedHeroicStrikeReduction(iteration.settings.talentSettings)
-                - iteration.settings.talentSettings.FocusedRage.rank
+                - iteration.settings.talentSettings.FocusedRage.rank;
             cooldown = 0;
         }
 
