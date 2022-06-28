@@ -27,7 +27,6 @@ namespace Warrior
             tempMultiplicativeCharacterStats.armorPenetrationRating = 1;
             tempMultiplicativeCharacterStats.damageMultiplier = 1;
         }
-
         public void InitialSetup()
 		{
             additiveCharacterStats.strength = (int)(
@@ -83,7 +82,6 @@ namespace Warrior
                 * TalentUtils.GetTitansDamageReductionMultiplier(iteration.settings.talentSettings, iteration.settings.equipmentSettings)
                 * iteration.settings.buffSettings.GetMultiplicativeStat(Stat.Damage);
         }
-
         public int GetEffectiveAgility()
         {
             return (int)((additiveCharacterStats.agility
@@ -183,6 +181,8 @@ namespace Warrior
             return GetEffectiveHitRating() / Constants.kHitRatingPerPercent
                 + (float)TalentUtils.GetPrecisionExtraHitChance(iteration.settings.talentSettings);
         }
+
+        // Update methods.
         public void UpdateTemporaryHasteMultiplier()
         {
             float value = 1.0f;
@@ -204,7 +204,6 @@ namespace Warrior
         {
             return;
         }
-
         public void UpdateTemporaryAdditiveAttackPower()
 		{
             int value = 0;
@@ -218,7 +217,6 @@ namespace Warrior
             }
             tempAdditiveCharacterStats.attackPower = value;
         }
-
         public void UpdateTemporaryDamageMultiplier()
         {
             float value = 1.0f;
