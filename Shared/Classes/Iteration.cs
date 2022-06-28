@@ -192,7 +192,7 @@
 		{
             if (settings.simulationSettings.useHeroism && RemainingTime(currentStep, numSteps) < settings.simulationSettings.heroismOnLastSeconds && !auraManager.heroism.active)
 			{
-                auraManager.heroism?.Trigger(AuraTrigger.None);
+                abilityManager.heroism?.Use();
                 Console.WriteLine("[ " + currentStep + " ] Buff: Heroism Applied");
             }
 

@@ -398,9 +398,9 @@ namespace Warrior
     }
 
     // Cooldown
-    public class Heroism : Aura
+    public class HeroismAura : Aura
     {
-        public Heroism(AuraManager arg) : base(arg)
+        public HeroismAura(AuraManager arg) : base(arg)
         {
             name = "Heroism";
             auraSummary.name = name;

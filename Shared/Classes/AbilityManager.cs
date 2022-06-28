@@ -26,7 +26,7 @@
         public BloodRageAbility bloodrage { get; set; }
 
         public DeathWish deathWish { get; set; }
-
+        public Heroism heroism { get; set; }
         public AbilityManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -39,6 +39,7 @@
             slam = new Slam(iteration);
             bloodrage = new BloodRageAbility(iteration);
             deathWish = new DeathWish(iteration);
+            heroism = new Heroism(iteration);
         }
         public void ApplyTime(int d)
         {
@@ -47,6 +48,7 @@
             heroicStrike.ApplyTime(d);
             bloodrage.ApplyTime(d);
             deathWish.ApplyTime(d);
+            heroism.ApplyTime(d);
         }
 
         public void GetNext()

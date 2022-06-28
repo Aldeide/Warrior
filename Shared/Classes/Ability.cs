@@ -357,4 +357,25 @@
             base.Use();
         }
     }
+
+    public class Heroism : Ability
+    {
+        public Heroism(Iteration iteration) : base(iteration)
+        {
+            name = "Heroism";
+            damageSummary.name = name;
+            cooldown = 600 * Constants.kStepsPerSecond;
+            globalCooldown = 0;
+            currentCooldown = 0;
+
+        }
+        public override void Use()
+        {
+            if (!CanUse()) return;
+            damageSummary.numCasts += 1;
+            Console.WriteLine("[ " + iteration.currentStep + " ] Applied Heroism");
+            iteration.auraManager.heroism.Trigger(AuraTrigger.Use);
+            base.Use();
+        }
+    }
 }
