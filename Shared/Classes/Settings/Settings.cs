@@ -5,6 +5,7 @@ namespace Warrior.Settings
 {
     public class Settings
     {
+        public string version { get; set; } = "1.0.0";
         public SimulationSettings simulationSettings {get;set;} = new SimulationSettings();
         public CharacterSettings characterSettings { get; set; } = new CharacterSettings();
         public EquipmentSettings equipmentSettings { get; set; } = new EquipmentSettings();

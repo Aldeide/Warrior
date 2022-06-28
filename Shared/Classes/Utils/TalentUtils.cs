@@ -42,8 +42,8 @@ namespace Warrior
         }
         public static float GetTitansDamageReductionMultiplier(TalentsSettings talents, EquipmentSettings equipment)
         {
-            if (equipment.GetItemBySlot(ItemSlot.MainHand).weaponType == WeaponType.TwoHand 
-                || equipment.GetItemBySlot(ItemSlot.OffHand).weaponType == WeaponType.TwoHand)
+            if (equipment.GetItemBySlot(ItemSlot.MainHand).weaponHandedness == WeaponHandedness.TwoHand 
+                || equipment.GetItemBySlot(ItemSlot.OffHand).weaponHandedness == WeaponHandedness.TwoHand)
             {
                 return 0.9f;
             }

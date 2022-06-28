@@ -186,7 +186,8 @@ namespace Warrior
         public float GetExtraHitChance()
 		{
             return GetEffectiveHitRating() / Constants.kHitRatingPerPercent
-                + (float)TalentUtils.GetPrecisionExtraHitChance(iteration.settings.talentSettings);
+                + (float)TalentUtils.GetPrecisionExtraHitChance(iteration.settings.talentSettings)
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.HitChance); ;
         }
 
         // Update methods.

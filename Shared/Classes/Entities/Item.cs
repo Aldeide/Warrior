@@ -43,6 +43,20 @@ namespace Warrior
         OneHand,
         OffHand,
         Dagger,
+        TwoHand,
+        OneHandedSword,
+        TwoHandedSword,
+        OneHandedMace,
+        TwoHandedMace,
+        Fist,
+        OneHandedAxe,
+        TwoHandedAxe
+    }
+    public enum WeaponHandedness
+    {
+        OneHand,
+        OffHand,
+        MainHand,
         TwoHand
     }
     public enum ItemType
@@ -68,6 +82,7 @@ namespace Warrior
         public ItemSlot itemSlot { get; set; }
         public ItemType itemType { get; set; }
         public WeaponType weaponType { get; set; }
+        public WeaponHandedness weaponHandedness { get; set; }
         public int armor { get; set; }
         public int strength { get; set; }
         public int agility { get; set; }

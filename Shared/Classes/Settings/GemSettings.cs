@@ -44,6 +44,11 @@ namespace Warrior.Settings
 			for (int i = 0; i < sockets.Count; i++)
 			{
 				sockets[i] = new Gem() { id = 0, name = "None" };
+
+			}
+			for (int i = 0; i < extraslot; i++)
+			{
+				sockets.Add(new Gem() { id = 0, name = "None" });
 			}
 			return sockets;
 		}

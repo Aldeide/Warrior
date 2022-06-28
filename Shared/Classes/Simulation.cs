@@ -83,6 +83,7 @@ namespace Warrior
             computedConstants.HasAngerManagement = settings.talentSettings.AngerManagement.rank > 0;
             computedConstants.hasBloodsurge = settings.talentSettings.Bloodsurge.rank > 0;
             computedConstants.hasBloodthirst = settings.talentSettings.Bloodthirst.rank > 0;
+            computedConstants.hasMortalStrike = settings.talentSettings.MortalStrike.rank > 0;
             computedConstants.bloodsurgeChance = TalentUtils.GetBloodSurgeChance(settings.talentSettings);
             computedConstants.focusedRageRageReduction = settings.talentSettings.FocusedRage.rank;
             computedConstants.slamDamageMultiplier = computedConstants.titansGripDamageMultiplier * computedConstants.meleeDamageMultiplier * computedConstants.unendingFuryDamageMultiplier;

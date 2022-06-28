@@ -100,7 +100,8 @@ namespace Warrior.Stats
         public static float DisplayExtraHitChance(Settings.Settings settings)
 		{
             return DisplayHitRating(settings) / Constants.kHitRatingPerPercent
-                + (float)TalentUtils.GetPrecisionExtraHitChance(settings.talentSettings);
+                + (float)TalentUtils.GetPrecisionExtraHitChance(settings.talentSettings)
+                + settings.buffSettings.GetAdditiveStat(Stat.HitChance);
         }
         public static float DisplayGlancingChance(Settings.Settings settings)
 		{
@@ -192,7 +193,6 @@ namespace Warrior.Stats
             }
             return output;
         }
-
         public static Tuple<Stat, int>? GetSocketBonus(Settings.Settings settings, ItemSlot slot)
         {
             var item = settings.equipmentSettings.GetItemBySlot(slot);
@@ -213,7 +213,6 @@ namespace Warrior.Stats
             }
             return null;
         }
-
         public static bool SocketBonusIsActive(Settings.Settings settings, ItemSlot slot)
         {
             var sockets = settings.equipmentSettings.GetGemSockets(slot);
@@ -231,12 +230,10 @@ namespace Warrior.Stats
             }
             return output;
         }
-
         public static bool HasGems(Settings.Settings settings, ItemSlot slot)
         {
             return settings.equipmentSettings.GetGemSockets(slot).Count() > 0;
         }
-
         public static bool GemMatchesSocket(Color socket, Color gem)
 		{
             if (socket != Color.Meta && gem == Color.Prismatic) return true;

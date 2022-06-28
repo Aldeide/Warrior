@@ -442,9 +442,8 @@
             name = "Mortal Strike";
             rageCost = 25 - iteration.settings.talentSettings.FocusedRage.rank;
             damageSummary.name = name;
-            castTime = (int)(1.5f * Constants.kStepsPerSecond);
-            cooldown = 600 * Constants.kStepsPerSecond;
             globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
+            cooldown = (int)(6f * Constants.kStepsPerSecond);
             currentCooldown = 0;
         }
         public override void Use()
@@ -481,6 +480,24 @@
             return (int)(
                 DamageUtils.WeaponDamage(result, iteration.mainHand, iteration, 380)
                 * TalentUtils.GetImprovedMortalStrikeMultiplier(iteration.settings.talentSettings));
+        }
+    }
+
+    public class Rend : Ability
+    {
+        public Rend(Iteration iteration) : base(iteration)
+        {
+            name = "Rend";
+            rageCost = 10 - iteration.settings.talentSettings.FocusedRage.rank;
+            damageSummary.name = name;
+            globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
+            currentCooldown = 0;
+        }
+        public override void Use()
+        {
+            if (!CanUse()) return;
+            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Rend");
+            base.Use();
         }
     }
 }

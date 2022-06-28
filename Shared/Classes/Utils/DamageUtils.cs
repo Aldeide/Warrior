@@ -43,12 +43,12 @@ namespace Warrior
             Console.WriteLine("After AP: " + damage);
 
             // Two-Handed Specialization talent.
-            if (weapon.item.weaponType == WeaponType.TwoHand)
+            if (weapon.item.weaponHandedness == WeaponHandedness.TwoHand)
             {
                 damage *= TalentUtils.GetTwoHandedWeaponSpecializationDamageMultiplier(iteration.settings.talentSettings);
             }
             // One-Handed Specialization talent.
-            if (weapon.item.weaponType == WeaponType.OneHand)
+            if (weapon.item.weaponHandedness == WeaponHandedness.OneHand)
             {
                 damage *= TalentUtils.GetOneHandedWeaponSpecializationDamageMultiplier(iteration.settings.talentSettings);
             }
@@ -110,12 +110,12 @@ namespace Warrior
             damage += iteration.statsManager.GetEffectiveAttackPower() / 14f * (float)weapon.baseSpeed / 1000;
 
             // Two-Handed Specialization talent.
-            if (weapon.item.weaponType == WeaponType.TwoHand)
+            if (weapon.item.weaponHandedness == WeaponHandedness.TwoHand)
             {
                 damage *= TalentUtils.GetTwoHandedWeaponSpecializationDamageMultiplier(iteration.settings.talentSettings);
             }
             // One-Handed Specialization talent.
-            if (weapon.item.weaponType == WeaponType.OneHand)
+            if (weapon.item.weaponHandedness == WeaponHandedness.OneHand)
             {
                 damage *= TalentUtils.GetOneHandedWeaponSpecializationDamageMultiplier(iteration.settings.talentSettings);
             }

@@ -62,7 +62,7 @@
 
             damageSummary.numCasts += 1;
             swingTimer = effectiveSpeed;
-            AttackResult result = AttackTableUtils.GetWhiteHitResult(iteration);
+            AttackResult result = AttackTableUtils.GetWhiteHitResult(iteration, isMainHand);
             if (result == AttackResult.Miss)
             {
                 Console.WriteLine("[ " + iteration.currentStep + " ] Melee Miss (" + weapon + ")");

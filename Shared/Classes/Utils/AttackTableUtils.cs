@@ -44,10 +44,10 @@
             }
             return random.Next(91000, 99000) / 100000f;
         }
-        public static float ComputeDodgeChance(Iteration iteration)
+        public static float ComputeDodgeChance(Iteration iteration, bool isMainHand)
         {
             int expertiseRating = iteration.statsManager.GetEffectiveExpertiseRating();
-            float reductionChance = expertiseRating / Constants.kExpertisePerPoint / 4;
+            float reductionChance = (expertiseRating + GetBonusExpertise(iteration, isMainHand)) / Constants.kExpertisePerPoint / 4;
             if (iteration.settings.simulationSettings.targetLevel == 83)
             {
                 return Math.Max(0, 6.5f - reductionChance);
@@ -118,11 +118,11 @@
             float chance = missChance - iteration.statsManager.GetExtraHitChance();
             return chance <= 0 ? 0 : chance;
         }
-        public static AttackResult GetWhiteHitResult(Iteration iteration)
+        public static AttackResult GetWhiteHitResult(Iteration iteration, bool isMainHand)
         {
             int roll = iteration.random.Next(0, 10000);
             float missChance = ComputeMissChance(iteration) * 100;
-            float dodgeChance = ComputeDodgeChance(iteration) * 100;
+            float dodgeChance = ComputeDodgeChance(iteration, isMainHand) * 100;
             float glancingChance = ComputeGlancingChance(iteration.settings.simulationSettings.targetLevel) * 100;
             float critChance = ComputeEffectiveCritChance(iteration) * 100;
 
@@ -148,7 +148,7 @@
         {
             int roll = iteration.random.Next(0, 10000);
             float missChance = ComputeYellowMissChance(iteration) * 100;
-            float dodgeChance = ComputeDodgeChance(iteration) * 100;
+            float dodgeChance = ComputeDodgeChance(iteration, true) * 100;
             float critChance = ComputeEffectiveCritChance(iteration) * 100;
 
             if (roll < missChance)
@@ -170,16 +170,53 @@
         }
         public static float GetNormalizedWeaponSpeed(Weapon weapon)
         {
-            if (weapon.item.weaponType == WeaponType.TwoHand)
+            if (weapon.item.weaponHandedness == WeaponHandedness.TwoHand)
             {
                 return 3.3f;
             }
-            if (weapon.item.weaponType == WeaponType.OneHand)
+            if (weapon.item.weaponHandedness == WeaponHandedness.OneHand)
             {
                 return 2.4f;
             }
             return 1.7f;
         }
+        public static int GetBonusExpertise(Iteration iteration, bool isMainHand)
+        {
+            WeaponType weapontype = WeaponType(isMainHand, iteration.settings.equipmentSettings);
 
+            // Human 1H maces and 2H maces
+            if (iteration.settings.characterSettings.race == Settings.Race.Human
+                && (weapontype == Warrior.WeaponType.OneHandedMace
+                   || weapontype == Warrior.WeaponType.TwoHandedMace))
+            {
+                return 3;
+            }
+            // Human 1H swords and 2H swords
+            if (iteration.settings.characterSettings.race == Settings.Race.Human
+                && (weapontype == Warrior.WeaponType.OneHandedSword
+                   || weapontype == Warrior.WeaponType.TwoHandedSword))
+            {
+                return 3;
+            }
+            // Orcs 1H axes, 2H axes and fist weapons
+            if (iteration.settings.characterSettings.race == Settings.Race.Orc
+                && (weapontype == Warrior.WeaponType.Fist
+                || weapontype == Warrior.WeaponType.OneHandedAxe
+                || weapontype == Warrior.WeaponType.TwoHandedAxe))
+            {
+                return 5;
+            }
+            return 0;
+        }
+
+        public static WeaponType WeaponType(bool isMainHand, Settings.EquipmentSettings settings)
+        {
+            if (isMainHand)
+            {
+                return settings.GetItemBySlot(ItemSlot.MainHand).weaponType;
+            } 
+            return settings.GetItemBySlot(ItemSlot.OffHand).weaponType;
+
+        }
     }
 }

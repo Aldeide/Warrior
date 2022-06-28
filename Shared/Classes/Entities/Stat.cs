@@ -20,6 +20,8 @@ namespace Warrior.Entities
         Armor,
         [Description("Hit Rating")]
         HitRating,
+        [Description("Hit Chance")]
+        HitChance,
         [Description("Critical Rating")]
         CriticalRating,
         [Description("Increased Critical Damage")]

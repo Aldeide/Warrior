@@ -290,6 +290,26 @@
 							}
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-sm-3 buff-column">
+							<h2>Additive Hit Chance</h2>
+							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.HeroicPresence))
+							{
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
+									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
+								</a>
+							}
+						</div>
+						<div class="col-sm-3 buff-column">
+
+						</div>
+						<div class="col-sm-3 buff-column">
+
+						</div>
+						<div class="col-sm-3 buff-column">
+
+						</div>
+					</div>
 				</section>
 
 				<section id="debuffs">

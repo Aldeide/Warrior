@@ -19,6 +19,7 @@
         public List<Ability> abilities = new List<Ability>();
 
         public Bloodthirst? bloodthirst { get; set; }
+        public MortalStrike? mortalStrike { get; set; }
         public Whirlwind whirlwind { get; set; }
         public HeroicStrike heroicStrike { get; set; }
 
@@ -29,13 +30,16 @@
         public Heroism heroism { get; set; }
         public ShatteringThrow shatteringThrow { get; set; }
 
-
         public AbilityManager(Iteration iteration)
         {
             this.iteration = iteration;
             if (iteration.computedConstants.hasBloodthirst)
             {
                 bloodthirst = new Bloodthirst(iteration);
+            }
+            if (iteration.computedConstants.hasMortalStrike)
+            {
+                mortalStrike = new MortalStrike(iteration);
             }
             whirlwind = new Whirlwind(iteration);
             heroicStrike = new HeroicStrike(iteration);
@@ -54,6 +58,7 @@
             deathWish.ApplyTime(d);
             heroism.ApplyTime(d);
             shatteringThrow.ApplyTime(d);
+            mortalStrike?.ApplyTime(d);
         }
 
         public void GetNext()

@@ -19,6 +19,7 @@ namespace Warrior.Settings
         BattleElixir,
         Flask,
         Potion,
+        HeroicPresence
     }
     public class Buff
     {
@@ -73,6 +74,7 @@ namespace Warrior.Settings
             buffs.Add(new Buff(44330, "Elixir of Armor Piercing", BuffGroup.BattleElixir, new List<Effect> { new Effect(EffectType.Additive, Stat.ArmorPenetrationRating, 45) }));
             buffs.Add(new Buff(44331, "Elixir of Lightning Speed", BuffGroup.BattleElixir, new List<Effect> { new Effect(EffectType.Additive, Stat.HasteRating, 45) }));
             buffs.Add(new Buff(40097, "Elixir of Protection", BuffGroup.GuardianElixir, new List<Effect> { new Effect(EffectType.Additive, Stat.Armor, 800) }));
+            buffs.Add(new Buff(28878, "Heroic Presence", BuffGroup.HeroicPresence, new List<Effect> { new Effect(EffectType.Additive, Stat.HitChance, 1) }));
         }
         public void ProcessClick(long button, int id, BuffGroup buffGroup)
         {
