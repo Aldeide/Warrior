@@ -281,6 +281,7 @@
             damageSummary.name = name;
             rageCost = 15 - iteration.settings.talentSettings.FocusedRage.rank;
             castTime = (int)((1.5f - iteration.settings.talentSettings.ImprovedSlam.rank * 0.5f) * Constants.kStepsPerSecond);
+            globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
         }
 
         public override void Use()
@@ -288,7 +289,7 @@
             if (!CanUse() && !isCasting) return;
             
 
-            if (!iteration.auraManager.bloodsurge.active && !isCasting)
+            if (!iteration.auraManager.bloodsurge.active && !isCasting && CanUse())
             {
                 Console.WriteLine("[ " + iteration.currentStep + " ] Casting Slam");
                 endCast = iteration.currentStep + castTime;
@@ -298,8 +299,9 @@
 
             if (iteration.auraManager.bloodsurge.active || (isCasting && endCast == iteration.currentStep))
             {
-                iteration.auraManager.bloodsurge.Reset();
+                iteration.auraManager.bloodsurge.Fade();
                 Console.WriteLine("[ " + iteration.currentStep + " ] Slam Hit");
+                endCast = Int32.MaxValue;
                 isCasting = false;
                 AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
 
@@ -335,6 +337,7 @@
             base.Use();
         }
     }
+
     public class BloodRageAbility : Ability
     {
         public BloodRageAbility(Iteration iteration) : base(iteration)
@@ -373,6 +376,7 @@
             base.Use();
         }
     }
+
     public class Heroism : Ability
     {
         public Heroism(Iteration iteration) : base(iteration)
@@ -401,6 +405,7 @@
             name = "Shattering Throw";
             rageCost = 25 - iteration.settings.talentSettings.FocusedRage.rank;
             damageSummary.name = name;
+            castTime = (int)(1.5f * Constants.kStepsPerSecond);
             cooldown = 600 * Constants.kStepsPerSecond;
             globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
             currentCooldown = 0;
@@ -408,10 +413,23 @@
         }
         public override void Use()
         {
-            if (!CanUse()) return;
-            damageSummary.numCasts += 1;
-            Console.WriteLine("[ " + iteration.currentStep + " ] Applied Heroism");
-            iteration.auraManager.heroism.Trigger(AuraTrigger.Use);
+            if (!CanUse() && !isCasting) return;
+            if (!isCasting && CanUse())
+            {
+                Console.WriteLine("[ " + iteration.currentStep + " ] Casting Shattering Throw");
+                isCasting = true;
+                endCast = iteration.currentStep + castTime;
+                return;
+            }
+            if (isCasting && endCast == iteration.currentStep)
+            {
+                endCast = Int32.MaxValue;
+                isCasting = false;
+                damageSummary.numCasts += 1;
+                Console.WriteLine("[ " + iteration.currentStep + " ] Applied Shattering Throw");
+                iteration.auraManager.shatteringThrow.Trigger(AuraTrigger.Use);
+            }
+
             base.Use();
         }
     }

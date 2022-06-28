@@ -53,6 +53,7 @@
             bloodrage.ApplyTime(d);
             deathWish.ApplyTime(d);
             heroism.ApplyTime(d);
+            shatteringThrow.ApplyTime(d);
         }
 
         public void GetNext()

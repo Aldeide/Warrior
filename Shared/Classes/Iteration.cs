@@ -60,6 +60,8 @@
                 // Main hand and off hand attacks.
                 Attacks();
 
+
+
                 // Abilities.
                 Abilities();
                 if (globalCooldown <= 0)
@@ -78,6 +80,7 @@
                 auraManager.offHandBerserking?.Update();
                 auraManager.heroism?.Update();
                 auraManager.deathWish?.Update();
+                auraManager.shatteringThrow?.Update();
                 auraManager.GetNext();
 
                 int next = nextStep.GetNextStep();
@@ -98,6 +101,7 @@
             // Fading all auras to update final uptime.
             auraManager.flurry?.Fade();
             auraManager.heroism?.Fade();
+            auraManager.shatteringThrow?.Fade();
 
             // Moving the results.
             iterationResults.mainHand = (DamageResults)mainHand.damageSummary.Clone();
@@ -117,6 +121,7 @@
             if (auraManager.bloodRage != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.bloodRage.auraSummary.Clone());
             if (auraManager.heroism != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.heroism.auraSummary.Clone());
             if (auraManager.deathWish != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.deathWish.auraSummary.Clone());
+            if (auraManager.shatteringThrow != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.shatteringThrow.auraSummary.Clone());
             return iterationResults;
         }
 
@@ -161,12 +166,13 @@
             {
                 abilityManager.whirlwind.Use();
             }
+            // Slam.
             if (settings.simulationSettings.useSlam)
             {
-                if (settings.simulationSettings.slamOnlyOnBloodsurge && auraManager.bloodsurge != null && auraManager.bloodsurge.active && settings.talentSettings.Bloodsurge.rank > 0)
+                if (settings.simulationSettings.slamOnlyOnBloodsurge && auraManager.bloodsurge != null
+                    && auraManager.bloodsurge.active && settings.talentSettings.Bloodsurge.rank > 0)
                 {
                     abilityManager.slam.Use();
-                    auraManager.bloodsurge.active = false;
                 }
                 if (!settings.simulationSettings.slamOnlyOnBloodsurge)
                 {
@@ -223,7 +229,21 @@
                     abilityManager.deathWish.Use();
                 }
             }
-		}
+
+            if (settings.simulationSettings.useShatteringThrow && !auraManager.shatteringThrow.active)
+            {
+                if (RemainingTime(currentStep, numSteps) > settings.simulationSettings.shatteringThrowOnLastSeconds + abilityManager.shatteringThrow.cooldown / Constants.kStepsPerSecond)
+                {
+                    abilityManager.shatteringThrow.Use();
+                }
+                if (RemainingTime(currentStep, numSteps) < settings.simulationSettings.shatteringThrowOnLastSeconds)
+                {
+                    abilityManager.shatteringThrow.Use();
+                }
+            }
+
+
+        }
 
         public float RemainingTime(int currentStep, int numSteps)
 		{

@@ -260,6 +260,13 @@ namespace Warrior
                 next = int.MaxValue;
             }
         }
+
+        public void Fade()
+        {
+            active = false;
+            auraSummary.uptime += fade - start;
+            next = int.MaxValue;
+        }
     }
     public class BloodRage 
         : Aura
@@ -491,6 +498,42 @@ namespace Warrior
             manager.iteration.statsManager.UpdateTemporaryDamageMultiplier();
         }
     }
+    public class ShatteringThrowAura : Aura
+    {
+        public ShatteringThrowAura(AuraManager arg) : base(arg)
+        {
+            name = "Shattering Throw";
+            auraSummary.name = name;
+            duration = 10 * Constants.kStepsPerSecond;
+        }
+        public override void Trigger(AuraTrigger trigger)
+        {
+            start = manager.iteration.currentStep;
+            active = true;
+            next = start + duration;
+            auraSummary.procs += 1;
+        }
 
+        public override void Update()
+        {
+            if (manager.iteration.currentStep != next) { return; }
+            if (active)
+            {
+                auraSummary.uptime += (manager.iteration.currentStep - start);
+            }
+            active = false;
+            next = Int32.MaxValue;
+        }
+
+        public void Fade()
+        {
+            if (active)
+            {
+                auraSummary.uptime += (manager.iteration.currentStep - start);
+            }
+            active = false;
+            next = Int32.MaxValue;
+        }
+    }
 }
  

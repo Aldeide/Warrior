@@ -12,7 +12,12 @@ namespace Warrior
             // Using 3.2.2 for now.
             // Considers armor penetration and raid armor debuffs.
             float armor = iteration.settings.simulationSettings.targetArmor;
-            armor *= (100 - iteration.settings.debuffSettings.GetAdditiveStat(Stat.Armor)) / 100.0f;
+            float shatteringthrow = 0;
+            if (iteration.auraManager.shatteringThrow != null && iteration.auraManager.shatteringThrow.active)
+            {
+                shatteringthrow = 0.2f;
+            }
+            armor *= (100 - iteration.settings.debuffSettings.GetAdditiveStat(Stat.Armor) - shatteringthrow) / 100.0f;
             float armorConstant = 400
                 + 85 * iteration.settings.simulationSettings.targetLevel
                 + 4.5f * 85 * (iteration.settings.simulationSettings.targetLevel - 59);

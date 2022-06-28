@@ -17,6 +17,7 @@
         // Cooldowns.
         public HeroismAura? heroism;
         public DeathWishAura? deathWish;
+        public ShatteringThrowAura? shatteringThrow;
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -32,6 +33,7 @@
             // Cooldowns.
             if (iteration.settings.simulationSettings.useHeroism) heroism = new HeroismAura(this);
             if (iteration.settings.simulationSettings.useDeathWish && iteration.settings.talentSettings.DeathWish.rank > 0) deathWish = new DeathWishAura(this);
+            if (iteration.settings.simulationSettings.useShatteringThrow) shatteringThrow = new ShatteringThrowAura(this);
         }
         public void Reset()
         {
@@ -40,6 +42,7 @@
             bloodRage?.Reset();
             heroism?.Reset();
             deathWish?.Reset();
+            shatteringThrow?.Reset();
         }
         public void MeleeCriticalTrigger()
         {
@@ -125,6 +128,7 @@
             if (offHandBerserking != null && offHandBerserking.next < next && offHandBerserking.active) next = offHandBerserking.next;
             if (heroism != null && heroism.next < next && heroism.active) next = heroism.next;
             if (deathWish != null && deathWish.next < next && deathWish.active) next = deathWish.next;
+            if (shatteringThrow != null && shatteringThrow.next < next && shatteringThrow.active) next = shatteringThrow.next;
             iteration.nextStep.auras = next;
         }
     }

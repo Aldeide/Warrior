@@ -190,7 +190,7 @@
 										Uptime
 									</td>
 									<td>
-										Procs
+										Procs / Uses
 									</td>
 									<td>
 										Refreshes
@@ -207,10 +207,10 @@
 										@(auraSummary.uptime / (double)simulation.settings.simulationSettings.numIterations / (double)Constants.kStepsPerSecond) (@(Math.Round(auraSummary.uptime / (double)simulation.settings.simulationSettings.numIterations / (double)Constants.kStepsPerSecond / (double)simulation.settings.simulationSettings.combatLength * 100, 2)) %)
 									</td>
 									<td>
-										@(auraSummary.procs / (float)simulation.settings.simulationSettings.numIterations )
+										@(auraSummary.procs  )
 									</td>
 									<td>
-										@(auraSummary.refreshes / (float)simulation.settings.simulationSettings.numIterations )
+										@(auraSummary.refreshes )
 									</td>
 								</tr>
 							}
