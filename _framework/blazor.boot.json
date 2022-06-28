@@ -46,7 +46,7 @@
       "System.dll": "sha256-qFt7Sn46LEHHeD8406OAazAmy0nu+cf36x6xFLQgpbA=",
       "System.Drawing.dll": "sha256-GEq16b1QpGf9nRMjNYFZBJRePNySgsN3TVyQquf7JT4=",
       "System.Drawing.Primitives.dll": "sha256-TFGPMHLIqS5pw4wp4sjkCgIPzx8wIpuC5XROvd8HIt0=",
-      "System.Linq.dll": "sha256-KAepz9Z7caPaVFBSU6cGyEPJk9EuabEJ6YPMv\/5I1W8=",
+      "System.Linq.dll": "sha256-NnQBz10F+Tzl6UKUIFTj5bnfRIK78dAQ7vBluqYCgjI=",
       "System.Linq.Expressions.dll": "sha256-308uV9UDUsdK8h76ZRsuOVUOrsk3tXVM3gkefQyfGDI=",
       "System.Linq.Queryable.dll": "sha256-uLUyNLcjNVOq1S10wOkfgXCoK+lZ1KK2qrI2WiO+46o=",
       "System.Memory.dll": "sha256-EZW63vwTjgLixjZnaXqM7JeiuPB16Ojo8DtlNKRKegE=",
@@ -74,7 +74,7 @@
       "System.Threading.Tasks.Extensions.dll": "sha256-YhKD5\/r4qecqhTFc6znIwhHTlLwzyhiH4gua6QPfGLA=",
       "System.Threading.Tasks.Parallel.dll": "sha256-SEhsNBazRbJAhRnNfchDTi\/TV4YfJUgYtKqebgLITX8=",
       "System.Threading.ThreadPool.dll": "sha256-zDFd8He\/wEfpV1dW051QwkqfiM5xqqVudlplpCknDc8=",
-      "Warrior.dll": "sha256-hZbFJIDaTTdv39Ji9tcdTR0J9x4QnHEe9blIdu2v9FI="
+      "Warrior.dll": "sha256-PnZ9Keb7THrsi2zM72IJ8KP+1ofAc7evPJNx\/E3TEWw="
     },
     "extensions": null,
     "lazyAssembly": null,
