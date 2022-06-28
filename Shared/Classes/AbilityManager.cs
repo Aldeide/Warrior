@@ -27,6 +27,9 @@
 
         public DeathWish deathWish { get; set; }
         public Heroism heroism { get; set; }
+        public ShatteringThrow shatteringThrow { get; set; }
+
+
         public AbilityManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -40,6 +43,7 @@
             bloodrage = new BloodRageAbility(iteration);
             deathWish = new DeathWish(iteration);
             heroism = new Heroism(iteration);
+            shatteringThrow = new ShatteringThrow(iteration);
         }
         public void ApplyTime(int d)
         {
@@ -53,14 +57,9 @@
 
         public void GetNext()
         {
-            int next = int.MaxValue;
-            if (abilities.Where(a => a.currentCooldown > 0).Count() == 0)
-            {
-                iteration.nextStep.abilities = int.MaxValue;
-            } else
-            {
-                iteration.nextStep.abilities = iteration.currentStep + abilities.Where(a => a.currentCooldown > 0).Min(a => a.currentCooldown);
-            }
+            iteration.nextStep.abilities = int.MaxValue;
+            if (slam.isCasting) iteration.nextStep.abilities = slam.endCast;
+            if (shatteringThrow.isCasting && shatteringThrow.endCast < iteration.nextStep.abilities) iteration.nextStep.abilities = shatteringThrow.endCast;
         }
 
     }

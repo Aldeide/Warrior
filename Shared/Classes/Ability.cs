@@ -8,7 +8,9 @@
         public int cooldown = 0;
         public int currentCooldown = 0;
         public int globalCooldown = 0;
-
+        public int castTime = 0;
+        public int endCast = 0;
+        public bool isCasting = false;
         public bool isQueued { get; set; } = false;
         public DamageResults damageSummary { get; set; }
         public Ability(Iteration iteration)
@@ -48,7 +50,7 @@
         {
             name = "Bloodthirst";
             damageSummary.name = name;
-            rageCost = 20;
+            rageCost = 20 - iteration.settings.talentSettings.FocusedRage.rank;
             cooldown = (int)(4.0f * Constants.kStepsPerSecond);
             globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
             currentCooldown = 0;
@@ -57,7 +59,6 @@
         public override void Use()
         {
             if (!CanUse()) return;
-
             Console.WriteLine("[ " + iteration.currentStep + " ] Casting Bloodthirst");
             AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
             damageSummary.numCasts += 1;
@@ -120,7 +121,7 @@
         {
             name = "Whirlwind";
             damageSummary.name = name;
-            rageCost = 25;
+            rageCost = 25 - iteration.settings.talentSettings.FocusedRage.rank;
             cooldown = iteration.settings.glyphSettings.HasGlyphOfWhirlwind() ? 8 * Constants.kStepsPerSecond : 10 * Constants.kStepsPerSecond;
             globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
             currentCooldown = 0;
@@ -207,7 +208,7 @@
             damageSummary.name = name;
             rageCost = 15
                 - TalentUtils.GetImprovedHeroicStrikeReduction(iteration.settings.talentSettings)
-                - TalentUtils.GetFocusedRageReduction(iteration.settings.talentSettings);
+                - iteration.settings.talentSettings.FocusedRage.rank
             cooldown = 0;
         }
 
@@ -278,42 +279,58 @@
         {
             name = "Slam";
             damageSummary.name = name;
-            rageCost = 15;
-            globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
+            rageCost = 15 - iteration.settings.talentSettings.FocusedRage.rank;
+            castTime = (int)((1.5f - iteration.settings.talentSettings.ImprovedSlam.rank * 0.5f) * Constants.kStepsPerSecond);
         }
 
         public override void Use()
         {
-            if (!CanUse()) return;
-            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Slam");
-            AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
+            if (!CanUse() && !isCasting) return;
             
-            damageSummary.numCasts += 1;
-            if (result == AttackResult.Miss)
+
+            if (!iteration.auraManager.bloodsurge.active && !isCasting)
             {
-                damageSummary.numMiss += 1;
-                base.Use();
+                Console.WriteLine("[ " + iteration.currentStep + " ] Casting Slam");
+                endCast = iteration.currentStep + castTime;
+                isCasting = true;
                 return;
             }
-            if (result == AttackResult.Dodge)
+
+            if (iteration.auraManager.bloodsurge.active || (isCasting && endCast == iteration.currentStep))
             {
-                damageSummary.numDodge += 1;
-                base.Use();
-                return;
-            }
-            int damage = (int)(DamageUtils.AverageWeaponDamage(iteration.mainHand, iteration, 250) * iteration.computedConstants.slamDamageMultiplier);
-            
-            if (result == AttackResult.Hit)
-            {
-                damageSummary.numHit += 1;
-                damageSummary.hitDamage += damage;
-                damageSummary.totalDamage += damage;
-            }
-            if (result == AttackResult.Critical)
-            {
-                damageSummary.numCrit += 1;
-                damageSummary.critDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.settings.talentSettings));
-                damageSummary.totalDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.settings.talentSettings));
+                iteration.auraManager.bloodsurge.Reset();
+                Console.WriteLine("[ " + iteration.currentStep + " ] Slam Hit");
+                isCasting = false;
+                AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
+
+                damageSummary.numCasts += 1;
+                if (result == AttackResult.Miss)
+                {
+                    damageSummary.numMiss += 1;
+                    base.Use();
+                    return;
+                }
+                if (result == AttackResult.Dodge)
+                {
+                    damageSummary.numDodge += 1;
+                    base.Use();
+                    return;
+                }
+                int damage = (int)(DamageUtils.AverageWeaponDamage(iteration.mainHand, iteration, 250) * iteration.computedConstants.slamDamageMultiplier);
+
+                if (result == AttackResult.Hit)
+                {
+                    damageSummary.numHit += 1;
+                    damageSummary.hitDamage += damage;
+                    damageSummary.totalDamage += damage;
+                }
+                if (result == AttackResult.Critical)
+                {
+                    damageSummary.numCrit += 1;
+                    damageSummary.critDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.settings.talentSettings));
+                    damageSummary.totalDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.settings.talentSettings));
+                }
+                
             }
             base.Use();
         }
@@ -335,7 +352,6 @@
             base.Use();
         }
     }
-
     public class DeathWish : Ability
     {
         public DeathWish(Iteration iteration) : base(iteration)
@@ -357,7 +373,6 @@
             base.Use();
         }
     }
-
     public class Heroism : Ability
     {
         public Heroism(Iteration iteration) : base(iteration)
@@ -366,6 +381,28 @@
             damageSummary.name = name;
             cooldown = 600 * Constants.kStepsPerSecond;
             globalCooldown = 0;
+            currentCooldown = 0;
+
+        }
+        public override void Use()
+        {
+            if (!CanUse()) return;
+            damageSummary.numCasts += 1;
+            Console.WriteLine("[ " + iteration.currentStep + " ] Applied Heroism");
+            iteration.auraManager.heroism.Trigger(AuraTrigger.Use);
+            base.Use();
+        }
+    }
+
+    public class ShatteringThrow : Ability
+    {
+        public ShatteringThrow(Iteration iteration) : base(iteration)
+        {
+            name = "Shattering Throw";
+            rageCost = 25 - iteration.settings.talentSettings.FocusedRage.rank;
+            damageSummary.name = name;
+            cooldown = 600 * Constants.kStepsPerSecond;
+            globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
             currentCooldown = 0;
 
         }

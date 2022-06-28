@@ -150,18 +150,31 @@
             if (settings.simulationSettings.useBloodRage && rage < settings.simulationSettings.bloodRageThreshold) abilityManager.bloodrage.Use();
 
             // Bloodthirst.
-            if (abilityManager.bloodthirst != null) {
+            if (abilityManager.bloodthirst != null && settings.simulationSettings.useBloodthirst) {
                 abilityManager.bloodthirst.Use();
             }
             // Whirlwind.
-            abilityManager.whirlwind.Use();
-
+            if (settings.simulationSettings.useWhirlwind)
+            {
+                abilityManager.whirlwind.Use();
+            }
+            if (settings.simulationSettings.useSlam)
+            {
+                if (settings.simulationSettings.slamOnlyOnBloodsurge && auraManager.bloodsurge != null && auraManager.bloodsurge.active && settings.talentSettings.Bloodsurge.rank > 0)
+                {
+                    abilityManager.slam.Use();
+                    auraManager.bloodsurge.active = false;
+                }
+                if (!settings.simulationSettings.slamOnlyOnBloodsurge)
+                {
+                    abilityManager.slam.Use();
+                }
+            }
             if (auraManager.bloodsurge != null && auraManager.bloodsurge.active)
             {
                 if(abilityManager.bloodthirst.currentCooldown > 1.6f)
                 {
-                    abilityManager.slam.Use();
-                    auraManager.bloodsurge.active = false;
+                    
                 }
             }
 

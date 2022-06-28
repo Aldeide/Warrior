@@ -144,7 +144,29 @@
         }
         public void ApplyTime(int delta)  
         {
+            // Swing timers are frozen while slam or shattering throw are being cast.
+            if (iteration.abilityManager.slam.isCasting || iteration.abilityManager.shatteringThrow.isCasting)
+            {
+                if (isMainHand)
+                {
+                    iteration.nextStep.mainHand = iteration.currentStep + swingTimer;
+                }
+                else
+                {
+                    iteration.nextStep.offHand = iteration.currentStep + swingTimer;
+                }
+                return;
+            }
             swingTimer -= delta;
+            if (isMainHand)
+            {
+                iteration.nextStep.mainHand = iteration.currentStep + swingTimer;
+            }
+            else
+            {
+                iteration.nextStep.offHand = iteration.currentStep + swingTimer;
+            }
+            return;
         }
     }
 }
