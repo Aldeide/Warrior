@@ -6,37 +6,57 @@
         public int numSteps { get; set; } = 0;
         public int numIterations { get; set; } = 0;
         public int combatDuration { get; set; } = 0;
-        public int totalDamage { get; set; } = 0;
+        public float totalDamage { get; set; } = 0;
         public RageResults rageSummary { get; set; } = new RageResults();
         public DamageResults mainHand { get; set; } = new DamageResults();
         public DamageResults offHand { get; set; } = new DamageResults();
         public List<AuraResults> auraSummaries { get; set; } = new List<AuraResults>();
         public List<DotDamageResults> dotSummaries { get; set; } = new List<DotDamageResults>();
         public List<DamageResults> abilitySummaries { get; set; } = new List<DamageResults>();
+        public List<RageResults> rageSummaries { get; set; } = new List<RageResults>();
 
         public void Populate(List<IterationResults> results)
 		{
+            foreach(var a in results)
+            {
+                foreach(var b in a.rageSummary.generated)
+                {
+                    rageSummary.generated[b.Key] = b.Value;
+                }
+            }
+            foreach (var a in results)
+            {
+                foreach (var b in a.rageSummary.ticks)
+                {
+                    rageSummary.ticks[b.Key] = b.Value;
+                }
+            }
+
+
+            mainHand.numCasts = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numCasts), 3);
+            mainHand.numHit = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numHit), 3);
+            mainHand.numCrit = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numCrit), 3);
+            mainHand.numMiss = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numMiss), 3);
+            mainHand.numGlancing = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numGlancing), 3);
+            mainHand.numDodge = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numDodge), 3);
+            mainHand.totalDamage = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.totalDamage), 3);
+            totalDamage = (float)Math.Round(mainHand.totalDamage, 3);
+
+            offHand.numCasts = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numCasts), 3);
+            offHand.numHit = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numHit), 3);
+            offHand.numCrit = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numCrit), 3);
+            offHand.numMiss = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numMiss), 3);
+            offHand.numGlancing = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numGlancing), 3);
+            offHand.numDodge = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numDodge), 3);
+
+            offHand.totalDamage = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.totalDamage), 3);
+            totalDamage += (float)Math.Round(offHand.totalDamage, 3);
+
             foreach (IterationResults a in results)
             {
                 numSteps += a.numSteps;
-                mainHand.numCasts += a.mainHand.numCasts;
-                mainHand.numHit += a.mainHand.numHit;
-                mainHand.numCrit += a.mainHand.numCrit;
-                mainHand.numMiss += a.mainHand.numMiss;
-                mainHand.numGlancing += a.mainHand.numGlancing;
-                mainHand.numDodge += a.mainHand.numDodge;
-                mainHand.totalDamage += a.mainHand.totalDamage;
-                totalDamage += a.mainHand.totalDamage;
 
-                offHand.numCasts += a.offHand.numCasts;
-                offHand.numHit += a.offHand.numHit;
-                offHand.numCrit += a.offHand.numCrit;
-                offHand.numMiss += a.offHand.numMiss;
-                offHand.numGlancing += a.offHand.numGlancing;
-                offHand.numDodge += a.offHand.numDodge;
 
-                offHand.totalDamage += a.offHand.totalDamage;
-                totalDamage += a.offHand.totalDamage;
 
                 foreach (AuraResults auraSummary in a.auraSummaries)
                 {
@@ -101,9 +121,6 @@
                         totalDamage += c.totalDamage;
                     }
                 }
-
-                rageSummary.rageGenerated += a.rageSummary.rageGenerated;
-                rageSummary.wastedRage += a.rageSummary.wastedRage;
 
             }
             

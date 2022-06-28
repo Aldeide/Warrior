@@ -7,6 +7,7 @@
 
         public Flurry? flurry;
         public DeepWounds? deepWounds;
+        public RendAura? rend;
         public Bloodsurge? bloodsurge;
         public BloodRage? bloodRage;
 
@@ -30,6 +31,7 @@
             this.iteration = iteration;
             if (TalentUtils.HasFlurry(iteration.settings.talentSettings)) flurry = new Flurry(this);
             if (TalentUtils.HasDeepWounds(iteration.settings.talentSettings)) deepWounds = new DeepWounds(this);
+            rend = new RendAura(this);
             if (iteration.computedConstants.hasBloodsurge) bloodsurge = new Bloodsurge(this);
             bloodRage = new BloodRage(this);
 
@@ -63,6 +65,7 @@
         public void Reset()
         {
             deepWounds?.Reset();
+            rend?.Reset();
             flurry?.Reset();
             bloodRage?.Reset();
             heroism?.Reset();
@@ -170,7 +173,7 @@
             if (bloodFury != null && bloodFury.next < next && bloodFury.active) next = bloodFury.next;
             if (berserking != null && berserking.next < next && berserking.active) next = berserking.next;
             if (wreckingCrew != null && wreckingCrew.next < next && wreckingCrew.active) next = wreckingCrew.next;
-
+            if (rend != null && rend.next < next && rend.active) next = rend.next;
             iteration.nextStep.auras = next;
         }
     }

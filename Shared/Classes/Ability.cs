@@ -488,7 +488,7 @@
         public override void Use()
         {
             if (!CanUse()) return;
-            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Rend");
+            iteration.auraManager.rend?.Trigger(AuraTrigger.Use);
             base.Use();
         }
     }

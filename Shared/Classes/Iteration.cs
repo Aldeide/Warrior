@@ -206,6 +206,24 @@
         public void IncrementRage(int value, string source)
         {
             iterationResults.rageSummary.rageGenerated += value;
+
+            if (iterationResults.rageSummary.generated.TryGetValue(source, out var val))
+            {
+                iterationResults.rageSummary.generated[source] += value;
+            } else
+            {
+                iterationResults.rageSummary.generated.Add(source, value);
+            }
+
+            if (iterationResults.rageSummary.ticks.TryGetValue(source, out var val2))
+            {
+                iterationResults.rageSummary.ticks[source] += 1;
+            }
+            else
+            {
+                iterationResults.rageSummary.ticks.Add(source, 1);
+            }
+
             if (rage + value > 100)
             {
                 iterationResults.rageSummary.wastedRage += rage + value - 100;
@@ -266,7 +284,6 @@
 
 
         }
-
         public float RemainingTime(int currentStep, int numSteps)
 		{
             return (numSteps - currentStep) / Constants.kStepsPerSecond;

@@ -3,16 +3,16 @@
     public class DamageResults : ICloneable
     {
         public string name { get; set; } = "";
-        public int totalDamage { get; set; } = 0;
-        public int hitDamage { get; set; } = 0;
-        public int critDamage { get; set; } = 0;
-        public int glancingDamage { get; set; } = 0;
-        public int numCasts { get; set; } = 0;
-        public int numHit { get; set; } = 0;
-        public int numCrit { get; set; } = 0;
-        public int numDodge { get; set; } = 0;
-        public int numMiss { get; set; } = 0;
-        public int numGlancing { get; set; } = 0;
+        public float totalDamage { get; set; } = 0;
+        public float hitDamage { get; set; } = 0;
+        public float critDamage { get; set; } = 0;
+        public float glancingDamage { get; set; } = 0;
+        public float numCasts { get; set; } = 0;
+        public float numHit { get; set; } = 0;
+        public float numCrit { get; set; } = 0;
+        public float numDodge { get; set; } = 0;
+        public float numMiss { get; set; } = 0;
+        public float numGlancing { get; set; } = 0;
 
         public object Clone()
         {
@@ -73,6 +73,9 @@
         public int wastedRage { get; set; } = 0;
         public int rageGenerated { get; set; } = 0;
         public int rageStarved { get; set; } = 0;
+
+        public Dictionary<string, int> generated { get;set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> ticks { get; set; } = new Dictionary<string, int>();
     }
     public class DotDamageResults : ICloneable
     {

@@ -58,30 +58,30 @@
 									Melee (Main Hand)
 								</td>
 								<td>
-									@(simulation.simulationResults.mainHand.totalDamage / (float)simulation.settings.simulationSettings.numIterations / (float)simulation.settings.simulationSettings.combatLength)
+									@(simulation.simulationResults.mainHand.totalDamage / (float)simulation.settings.simulationSettings.combatLength)
 								</td>
-								<td>@(simulation.simulationResults.mainHand.totalDamage / (float)simulation.settings.simulationSettings.numIterations)</td>
+								<td>@(simulation.simulationResults.mainHand.totalDamage)</td>
 								<td>
-									@(simulation.simulationResults.mainHand.numCasts / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.mainHand.numCasts)
 								</td>
 								<td>
-									@(simulation.simulationResults.mainHand.numHit / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.mainHand.numHit)
 									(@(Math.Round(simulation.simulationResults.mainHand.numHit / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
 								</td>
 								<td>
-									@(simulation.simulationResults.mainHand.numCrit / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.mainHand.numCrit)
 									(@(Math.Round(simulation.simulationResults.mainHand.numCrit / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
 								</td>
 								<td>
-									@(simulation.simulationResults.mainHand.numGlancing / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.mainHand.numGlancing)
 									(@(Math.Round(simulation.simulationResults.mainHand.numGlancing / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
 								</td>
 								<td>
-									@(simulation.simulationResults.mainHand.numMiss / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.mainHand.numMiss)
 									(@(Math.Round(simulation.simulationResults.mainHand.numMiss / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
 								</td>
 								<td>
-									@(simulation.simulationResults.mainHand.numDodge / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.mainHand.numDodge)
 									(@(Math.Round(simulation.simulationResults.mainHand.numDodge / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
 								</td>
 							</tr>
@@ -90,35 +90,36 @@
 									Melee (Off Hand)
 								</td>
 								<td>
-									@(simulation.simulationResults.offHand.totalDamage / (float)simulation.settings.simulationSettings.numIterations / (float)simulation.settings.simulationSettings.combatLength)
+									@(simulation.simulationResults.offHand.totalDamage / (float)simulation.settings.simulationSettings.combatLength)
 								</td>
-								<td>@(simulation.simulationResults.offHand.totalDamage / (float)simulation.settings.simulationSettings.numIterations)</td>
+								<td>@(simulation.simulationResults.offHand.totalDamage)</td>
 								<td>
-									@(simulation.simulationResults.offHand.numCasts / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.offHand.numCasts)
 								</td>
 								<td>
-									@(simulation.simulationResults.offHand.numHit / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.offHand.numHit)
 									(@(Math.Round(simulation.simulationResults.offHand.numHit / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
 								</td>
 								<td>
-									@(simulation.simulationResults.offHand.numCrit / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.offHand.numCrit)
 									(@(Math.Round(simulation.simulationResults.offHand.numCrit / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
 								</td>
 								<td>
-									@(simulation.simulationResults.offHand.numGlancing / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.offHand.numGlancing)
 									(@(Math.Round(simulation.simulationResults.offHand.numGlancing / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
 								</td>
 								<td>
-									@(simulation.simulationResults.offHand.numMiss / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.offHand.numMiss)
 									(@(Math.Round(simulation.simulationResults.offHand.numMiss / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
 								</td>
 								<td>
-									@(simulation.simulationResults.offHand.numDodge / (float)simulation.settings.simulationSettings.numIterations)
+									@(simulation.simulationResults.offHand.numDodge)
 									(@(Math.Round(simulation.simulationResults.offHand.numDodge / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
 								</td>
 							</tr>
 
 						</table>
+
 
 						<h3>Abilities</h3>
 						<table>
@@ -285,6 +286,36 @@
 
 						Generated Rage (Average): @(simulation.simulationResults.rageSummary.rageGenerated / (float)simulation.settings.simulationSettings.numIterations) <br />
 						Wasted Rage (Average): @(simulation.simulationResults.rageSummary.wastedRage / (float)simulation.settings.simulationSettings.numIterations)
+												<table>
+							<thead>
+								<tr>
+									<td>
+										Source
+									</td>
+									<td>
+										Rage
+									</td>
+									<td>
+										Ticks
+									</td>
+								</tr>
+							</thead>
+							@foreach (var rage in simulation.simulationResults.rageSummary.generated)
+							{
+								<tr>
+									<td>
+										@rage.Key
+									</td>
+									<td>
+										@rage.Value
+									</td>
+									<td>
+										@simulation.simulationResults.rageSummary.ticks[rage.Key]
+									</td>
+								</tr>
+							}
+						</table>
+
 					</section>
 				</div>
 			</div>

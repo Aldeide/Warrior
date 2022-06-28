@@ -40,22 +40,27 @@ namespace Warrior
             multiplicativeCharacterStats.strength =
                 iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AllBase)
                 * (1 + iteration.settings.talentSettings.StrengthOfArms.rank * 0.02f);
+
             additiveCharacterStats.agility = (int)(113
                 + Constants.bonusStatsPerRace["Agility"][iteration.settings.characterSettings.race]
                 + iteration.settings.equipmentSettings.ComputeGearAgility()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.Agility)
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.AllBase));
             multiplicativeCharacterStats.agility = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AllBase);
+
             additiveCharacterStats.armor = (int)(69 + (additiveCharacterStats.agility * multiplicativeCharacterStats.agility) * 2
                 + iteration.settings.equipmentSettings.ComputeGearArmor()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.Armor));
             multiplicativeCharacterStats.armor = 1.0f;
+
             additiveCharacterStats.attackPower = (int)(iteration.settings.equipmentSettings.ComputeGearAP()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.AttackPower));
             multiplicativeCharacterStats.attackPower = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AttackPower);
+
             additiveCharacterStats.hasteRating = iteration.settings.equipmentSettings.ComputeGearHasteRating()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.HasteRating);
             multiplicativeCharacterStats.hasteRating = 1.0f;
+
             additiveCharacterStats.hitRating = iteration.settings.equipmentSettings.ComputeGearHitRating()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.HitRating);
             multiplicativeCharacterStats.hitRating = 1.0f;
@@ -160,7 +165,9 @@ namespace Warrior
         }
         public float GetEffectiveDamageMultiplier()
         {
-            return multiplicativeCharacterStats.damageMultiplier * tempMultiplicativeCharacterStats.damageMultiplier * iteration.settings.debuffSettings.GetMultiplicativeStat(Stat.MeleeDamage);
+            return multiplicativeCharacterStats.damageMultiplier
+                * tempMultiplicativeCharacterStats.damageMultiplier
+                * iteration.settings.debuffSettings.GetMultiplicativeStat(Stat.MeleeDamage);
         }
         public float GetEffectiveCritChanceBeforeSuppression()
         {

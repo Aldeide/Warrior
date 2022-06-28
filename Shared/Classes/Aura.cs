@@ -169,7 +169,6 @@ namespace Warrior
             }
 
         }
-
         public void Fade()
         {
             damage = 0;
@@ -177,7 +176,6 @@ namespace Warrior
             next = int.MaxValue;
             dotSummary.uptime += (manager.iteration.currentStep - start);
         }
-
         public float DeepWoundsDamage(AuraTrigger trigger)
         {
             float dmg = 0;
@@ -564,7 +562,6 @@ namespace Warrior
                 tickSize = (int)(damage * tickInterval / (float)duration);
                 dotSummary.refreshes += 1;
             }
-
             next = manager.iteration.currentStep + 1 * Constants.kStepsPerSecond;
             currentDuration = duration;
         }
@@ -579,22 +576,32 @@ namespace Warrior
                 return;
             }
             damage -= tickSize;
-            currentDuration -= 1 * Constants.kStepsPerSecond;
-            next = manager.iteration.currentStep + 1 * Constants.kStepsPerSecond;
+            currentDuration -= tickInterval;
+            next = manager.iteration.currentStep + tickInterval;
+            dotSummary.totalDamage += tickSize;
+            dotSummary.ticks += 1;
             if (currentDuration <= 0)
             {
                 damage = 0;
                 active = false;
                 next = int.MaxValue;
+                dotSummary.uptime += (manager.iteration.currentStep - start);
             }
-            dotSummary.uptime += 1 * Constants.kStepsPerSecond;
-            dotSummary.totalDamage += tickSize;
-            dotSummary.ticks += 1;
+
+        }
+        public void Fade()
+        {
+            damage = 0;
+            active = false;
+            next = int.MaxValue;
+            dotSummary.uptime += (manager.iteration.currentStep - start);
         }
         public float RendDamage()
         {
+            // TODO: extra damage when target over 75% health.
             int damage = (int)(DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0) + 380
-                * manager.iteration.computedConstants.rendDamageMultiplier);
+                * manager.iteration.computedConstants.rendDamageMultiplier
+                * manager.iteration.statsManager.GetEffectiveDamageMultiplier());
             return damage;
         }
         public override int GetNext()
