@@ -18,6 +18,10 @@
         public HeroismAura? heroism;
         public DeathWishAura? deathWish;
         public ShatteringThrowAura? shatteringThrow;
+
+        // Racial abilities.
+        public BloodFuryAura? bloodFury;
+        public BerserkingAura? berserking;
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -34,6 +38,18 @@
             if (iteration.settings.simulationSettings.useHeroism) heroism = new HeroismAura(this);
             if (iteration.settings.simulationSettings.useDeathWish && iteration.settings.talentSettings.DeathWish.rank > 0) deathWish = new DeathWishAura(this);
             if (iteration.settings.simulationSettings.useShatteringThrow) shatteringThrow = new ShatteringThrowAura(this);
+
+            // Racial abilities.
+            if (iteration.settings.characterSettings.race == Settings.Race.Orc
+                && iteration.settings.simulationSettings.useBloodFury)
+            {
+                bloodFury = new BloodFuryAura(this);
+            }
+            if (iteration.settings.characterSettings.race == Settings.Race.Troll
+                && iteration.settings.simulationSettings.useBerserking)
+            {
+                berserking = new BerserkingAura(this);
+            }
         }
         public void Reset()
         {
@@ -43,6 +59,8 @@
             heroism?.Reset();
             deathWish?.Reset();
             shatteringThrow?.Reset();
+            bloodFury?.Reset();
+            berserking?.Reset();
         }
         public void MeleeCriticalTrigger()
         {
@@ -129,6 +147,8 @@
             if (heroism != null && heroism.next < next && heroism.active) next = heroism.next;
             if (deathWish != null && deathWish.next < next && deathWish.active) next = deathWish.next;
             if (shatteringThrow != null && shatteringThrow.next < next && shatteringThrow.active) next = shatteringThrow.next;
+            if (bloodFury != null && bloodFury.next < next && bloodFury.active) next = bloodFury.next;
+            if (berserking != null && berserking.next < next && berserking.active) next = berserking.next;
             iteration.nextStep.auras = next;
         }
     }

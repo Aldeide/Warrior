@@ -500,4 +500,39 @@
             base.Use();
         }
     }
+
+    public class BloodFury : Ability
+    {
+        public BloodFury(Iteration iteration) : base(iteration)
+        {
+            name = "Blood Fury";
+            cooldown = (int)(120f * Constants.kStepsPerSecond);
+            damageSummary.name = name;
+        }
+        public override void Use()
+        {
+            if (!CanUse()) return;
+            if (iteration.settings.characterSettings.race != Settings.Race.Orc) return;
+            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Blood Fury");
+            iteration.auraManager.bloodFury.Trigger(AuraTrigger.Use);
+            base.Use();
+        }
+    }
+    public class Berserking : Ability
+    {
+        public Berserking(Iteration iteration) : base(iteration)
+        {
+            name = "Berserking";
+            cooldown = (int)(180f * Constants.kStepsPerSecond);
+            damageSummary.name = name;
+        }
+        public override void Use()
+        {
+            if (!CanUse()) return;
+            if (iteration.settings.characterSettings.race != Settings.Race.Troll) return;
+            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Berserking");
+            iteration.auraManager.berserking.Trigger(AuraTrigger.Use);
+            base.Use();
+        }
+    }
 }

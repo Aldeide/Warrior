@@ -165,7 +165,33 @@
 									<p class="rotation-option">In last <InputNumber @bind-Value="simulation.settings.simulationSettings.heroismOnLastSeconds" class="inline-number"></InputNumber> seconds</p>
 								}
 								<br />
-
+								@if(simulation.settings.characterSettings.race == Race.Orc)
+								{
+									<label for="useBloodFury" class="rotation-label">Use Blood Fury</label>
+									<InputCheckbox name="useHeroism" @bind-Value="simulation.settings.simulationSettings.useBloodFury" class="checkbox" />
+									<img src="data/icons/rotations/bloodfury.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useBloodFury)" />
+							
+									<div style="clear:both"></div>
+									@if(simulation.settings.simulationSettings.useBloodFury)
+									{
+										<p class="rotation-option">In last <InputNumber @bind-Value="simulation.settings.simulationSettings.bloodFuryOnLastSeconds" class="inline-number"></InputNumber> seconds</p>
+									}
+									<br />
+								}
+								
+								@if(simulation.settings.characterSettings.race == Race.Troll)
+								{
+									<label for="useBerserking" class="rotation-label">Use Berserking</label>
+									<InputCheckbox name="useHeroism" @bind-Value="simulation.settings.simulationSettings.useBerserking" class="checkbox" />
+									<img src="data/icons/rotations/berserking.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useBerserking)" />
+							
+									<div style="clear:both"></div>
+									@if(simulation.settings.simulationSettings.useBerserking)
+									{
+										<p class="rotation-option">In last <InputNumber @bind-Value="simulation.settings.simulationSettings.berserkingOnLastSeconds" class="inline-number"></InputNumber> seconds</p>
+									}
+									<br />
+								}
 							</div>
 
 							</div>

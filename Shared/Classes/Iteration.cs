@@ -81,6 +81,8 @@
                 auraManager.heroism?.Update();
                 auraManager.deathWish?.Update();
                 auraManager.shatteringThrow?.Update();
+                auraManager.bloodFury?.Update();
+                auraManager.berserking?.Update();
                 auraManager.GetNext();
 
                 int next = nextStep.GetNextStep();
@@ -102,6 +104,8 @@
             auraManager.flurry?.Fade();
             auraManager.heroism?.Fade();
             auraManager.shatteringThrow?.Fade();
+            auraManager.bloodFury?.Fade();
+            auraManager.berserking?.Fade();
 
             // Moving the results.
             iterationResults.mainHand = (DamageResults)mainHand.damageSummary.Clone();
@@ -122,6 +126,8 @@
             if (auraManager.heroism != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.heroism.auraSummary.Clone());
             if (auraManager.deathWish != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.deathWish.auraSummary.Clone());
             if (auraManager.shatteringThrow != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.shatteringThrow.auraSummary.Clone());
+            if (auraManager.berserking != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.berserking.auraSummary.Clone());
+            if (auraManager.bloodFury != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.bloodFury.auraSummary.Clone());
             return iterationResults;
         }
 
@@ -212,12 +218,30 @@
 
         public void Cooldowns(int currentStep, int numSteps)
 		{
+            // Heroism.
             if (settings.simulationSettings.useHeroism && RemainingTime(currentStep, numSteps) < settings.simulationSettings.heroismOnLastSeconds && !auraManager.heroism.active)
 			{
                 abilityManager.heroism?.Use();
                 Console.WriteLine("[ " + currentStep + " ] Buff: Heroism Applied");
             }
 
+            // Blood Fury.
+            if (settings.simulationSettings.useBloodFury
+                && settings.characterSettings.race == Settings.Race.Orc
+                && abilityManager.bloodFury.CanUse()
+                && RemainingTime(currentStep, numSteps) <= settings.simulationSettings.bloodFuryOnLastSeconds)
+            {
+                abilityManager.bloodFury?.Use();
+            }
+
+            // Berserking.
+            if (settings.simulationSettings.useBerserking
+                && settings.characterSettings.race == Settings.Race.Troll
+                && abilityManager.berserking.CanUse()
+                && RemainingTime(currentStep, numSteps) <= settings.simulationSettings.berserkingOnLastSeconds)
+            {
+                abilityManager.berserking?.Use();
+            }
             if (settings.simulationSettings.useDeathWish && !auraManager.deathWish.active)
             {
                 if (RemainingTime(currentStep, numSteps) > settings.simulationSettings.deathWishOnLastSeconds + abilityManager.deathWish.cooldown / Constants.kStepsPerSecond && abilityManager.deathWish.CanUse())

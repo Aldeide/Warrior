@@ -26,6 +26,12 @@
         public int bloodRageThreshold { get; set; } = 80;
         public bool maintainRend { get; set; } = false;
 
+        // Racial abilities.
+        public bool useBloodFury { get; set; } = false;
+        public bool useBerserking { get; set; } = false;
+        public float bloodFuryOnLastSeconds { get; set; } = 16;
+        public float berserkingOnLastSeconds { get; set; } = 11;
+
         public SimulationSettings()
         {
 

@@ -204,6 +204,11 @@ namespace Warrior
                 value *= iteration.auraManager.heroism.effects[0].value;
             }
 
+            if (iteration.auraManager.berserking != null && iteration.auraManager.berserking.active)
+            {
+                value *= iteration.auraManager.heroism.effects[0].value;
+            }
+
             tempMultiplicativeCharacterStats.hasteFactor = value;
             iteration.mainHand.UpdateWeaponSpeed();
             iteration.offHand.UpdateWeaponSpeed();
@@ -222,6 +227,10 @@ namespace Warrior
             if (iteration.auraManager.offHandBerserking != null && iteration.auraManager.offHandBerserking.active)
             {
                 value += 400;
+            }
+            if (iteration.auraManager.bloodFury != null && iteration.auraManager.bloodFury.active)
+            {
+                value += 326;
             }
             tempAdditiveCharacterStats.attackPower = value;
         }

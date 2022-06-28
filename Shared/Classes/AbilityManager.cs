@@ -30,6 +30,10 @@
         public Heroism heroism { get; set; }
         public ShatteringThrow shatteringThrow { get; set; }
 
+        // Racial abilities
+        public Berserking? berserking { get; set; }
+        public BloodFury? bloodFury { get; set; }
+
         public AbilityManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -48,6 +52,17 @@
             deathWish = new DeathWish(iteration);
             heroism = new Heroism(iteration);
             shatteringThrow = new ShatteringThrow(iteration);
+            if (iteration.settings.characterSettings.race == Settings.Race.Orc
+                && iteration.settings.simulationSettings.useBloodFury)
+            {
+                bloodFury = new BloodFury(iteration);
+            }
+            if (iteration.settings.characterSettings.race == Settings.Race.Troll
+                && iteration.settings.simulationSettings.useBerserking)
+            {
+                berserking = new Berserking(iteration);
+            }
+
         }
         public void ApplyTime(int d)
         {
@@ -59,6 +74,8 @@
             heroism.ApplyTime(d);
             shatteringThrow.ApplyTime(d);
             mortalStrike?.ApplyTime(d);
+            bloodFury?.ApplyTime(d);
+            berserking?.ApplyTime(d);
         }
 
         public void GetNext()
