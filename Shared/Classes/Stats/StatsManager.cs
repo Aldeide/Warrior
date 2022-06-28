@@ -38,12 +38,6 @@ namespace Warrior
                 + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.Strength)
                 );
             multiplicativeCharacterStats.strength = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AllBase);
-            if (iteration.settings.stanceSettings.IsInBerserkerStance())
-			{
-                multiplicativeCharacterStats.strength *=
-                    TalentUtils.GetImprovedBerserkerStanceStrengthMultiplier(iteration.settings.talentSettings);
-
-            }
             additiveCharacterStats.agility = (int)(113
                 + Constants.bonusStatsPerRace["Agility"][iteration.settings.characterSettings.race]
                 + iteration.settings.equipmentSettings.ComputeGearAgility()
@@ -54,8 +48,7 @@ namespace Warrior
                 + iteration.settings.equipmentSettings.ComputeGearArmor()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.Armor));
             multiplicativeCharacterStats.armor = 1.0f;
-            additiveCharacterStats.attackPower = (int)(additiveCharacterStats.strength * multiplicativeCharacterStats.strength * 2
-                + iteration.settings.equipmentSettings.ComputeGearAP()
+            additiveCharacterStats.attackPower = (int)(iteration.settings.equipmentSettings.ComputeGearAP()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.AttackPower));
             multiplicativeCharacterStats.attackPower = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AttackPower);
             additiveCharacterStats.hasteRating = iteration.settings.equipmentSettings.ComputeGearHasteRating()
@@ -81,6 +74,19 @@ namespace Warrior
             multiplicativeCharacterStats.damageMultiplier = 1.0f
                 * TalentUtils.GetTitansDamageReductionMultiplier(iteration.settings.talentSettings, iteration.settings.equipmentSettings)
                 * iteration.settings.buffSettings.GetMultiplicativeStat(Stat.Damage);
+        }
+        public int GetEffectiveStrength()
+        {
+            float value = (int)((additiveCharacterStats.strength
+                + tempAdditiveCharacterStats.strength)
+                * multiplicativeCharacterStats.strength
+                * tempMultiplicativeCharacterStats.strength);
+            if (iteration.stanceManager.IsInBerserkerStance())
+            {
+                value *=
+                    TalentUtils.GetImprovedBerserkerStanceStrengthMultiplier(iteration.settings.talentSettings);
+            }
+            return (int)value;
         }
         public int GetEffectiveAgility()
         {
@@ -139,7 +145,7 @@ namespace Warrior
             Console.WriteLine("Computed Attack Power: " + (int)((
                 additiveCharacterStats.attackPower
                 + tempAdditiveCharacterStats.attackPower
-                + tempAdditiveCharacterStats.strength * 2
+                + GetEffectiveStrength() * 2
                 + TalentUtils.GetArmoredToTheTeethAPBonus(iteration.settings.talentSettings) * GetEffectiveArmor() / 108.0f)
                 * multiplicativeCharacterStats.attackPower * tempMultiplicativeCharacterStats.attackPower
                 ));
@@ -147,7 +153,7 @@ namespace Warrior
             return (int)((
                 additiveCharacterStats.attackPower
                 + tempAdditiveCharacterStats.attackPower
-                + tempAdditiveCharacterStats.strength * 2
+                + GetEffectiveStrength() * 2
                 + tempAdditiveCharacterStats.armor
                 * TalentUtils.GetArmoredToTheTeethAPBonus(iteration.settings.talentSettings) * GetEffectiveArmor() / 108.0f)
                 * multiplicativeCharacterStats.attackPower * tempMultiplicativeCharacterStats.attackPower
@@ -160,7 +166,7 @@ namespace Warrior
         public float GetEffectiveDamageMultiplier()
         {
             Console.WriteLine("[ Info ] Damage Multiplier: " + multiplicativeCharacterStats.damageMultiplier * tempMultiplicativeCharacterStats.damageMultiplier);
-            return multiplicativeCharacterStats.damageMultiplier * tempMultiplicativeCharacterStats.damageMultiplier;
+            return multiplicativeCharacterStats.damageMultiplier * tempMultiplicativeCharacterStats.damageMultiplier * iteration.settings.debuffSettings.GetMultiplicativeStat(Stat.MeleeDamage);
         }
         public float GetEffectiveCritChanceBeforeSuppression()
         {
@@ -169,7 +175,8 @@ namespace Warrior
                 + TalentUtils.GetCrueltyBonus(iteration.settings.talentSettings)
                 + GetEffectiveCriticalStrikeRating() / Constants.kCritRatingPerPercent
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.Critical)
-                + (iteration.settings.stanceSettings.IsInBerserkerStance() ? 3 : 0), 2);
+                + iteration.settings.debuffSettings.GetAdditiveStat(Stat.Critical)
+                + (iteration.stanceManager.IsInBerserkerStance() ? 3 : 0), 2);
         }
         public float GetEffectiveCritChanceAfterSuppression()
         {

@@ -20,7 +20,10 @@ namespace Warrior
             Console.WriteLine("ArmorPenCap: " + armorPenetrationCap);
             float armorPenetrationPercent = iteration.statsManager.GetEffectiveArmorPenetrationRating()
                 / Constants.kArmorPenetrationPerPercent;
-
+            if (iteration.stanceManager.IsInBattleStance())
+            {
+                armorPenetrationPercent += 10;
+            }
             float armorReduction = Math.Min(iteration.settings.simulationSettings.targetArmor, armorPenetrationCap) * armorPenetrationPercent / 100;
             Console.WriteLine("ArmorReduction: " + armorReduction);
             //TODO(replace targetArmor by armor after debuffs)

@@ -19,6 +19,8 @@
         // Temporary buffs and procs.
         public StatsManager statsManager { get; set; }
         public AuraManager auraManager { get; set; }
+        public StanceManager stanceManager { get; set; }
+
 
         // Main simulation methods.
         public Iteration(Settings.Settings settings, ComputedConstants computedConstants)
@@ -28,6 +30,7 @@
             this.abilityManager = new AbilityManager(this);
             this.auraManager = new AuraManager(this);
             this.statsManager = new StatsManager(this);
+            this.stanceManager = new StanceManager(this);
             this.iterationResults = new IterationResults();
             Setup();
         }

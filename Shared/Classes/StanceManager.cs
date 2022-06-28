@@ -39,5 +39,17 @@ namespace Warrior
                 currentGCD = 0;
             }
         }
+        public bool IsInBerserkerStance()
+        {
+            return stance.id == 2458;
+        }
+        public bool IsInBattleStance()
+        {
+            return stance.id == 2457;
+        }
+        public bool IsInDefensiveStance()
+        {
+            return stance.id == 71;
+        }
     }
 }

@@ -168,7 +168,10 @@ namespace Warrior.Stats
             float armorPenetrationCap = (armor + armorConstant) / 3;
             float armorPenetrationPercent = DisplayArmorPenetrationRating(settings)
                 / Constants.kArmorPenetrationPerPercent;
-
+            if (settings.stanceSettings.IsInBattleStance())
+            {
+                armorPenetrationPercent += 10;
+            }
             float armorReduction = Math.Min(settings.simulationSettings.targetArmor, armorPenetrationCap) * armorPenetrationPercent / 100;
             float effectiveArmor = armor - armorReduction;
             return effectiveArmor;
