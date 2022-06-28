@@ -355,6 +355,7 @@
             base.Use();
         }
     }
+
     public class DeathWish : Ability
     {
         public DeathWish(Iteration iteration) : base(iteration)
@@ -431,6 +432,55 @@
             }
 
             base.Use();
+        }
+    }
+
+    public class MortalStrike : Ability
+    {
+        public MortalStrike(Iteration iteration) : base(iteration)
+        {
+            name = "Mortal Strike";
+            rageCost = 25 - iteration.settings.talentSettings.FocusedRage.rank;
+            damageSummary.name = name;
+            castTime = (int)(1.5f * Constants.kStepsPerSecond);
+            cooldown = 600 * Constants.kStepsPerSecond;
+            globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
+            currentCooldown = 0;
+        }
+        public override void Use()
+        {
+            if (!CanUse()) return;
+            Console.WriteLine("[ " + iteration.currentStep + " ] Casting Mortal Strike");
+            AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
+            damageSummary.numCasts++;
+            if (result == AttackResult.Miss)
+            {
+                damageSummary.numMiss++;
+                return;
+            }
+            if (result == AttackResult.Dodge)
+            {
+                damageSummary.numDodge++;
+                return;
+            }
+            if (result == AttackResult.Hit)
+            {
+                damageSummary.numHit++;
+            }
+            if (result == AttackResult.Critical)
+            {
+                damageSummary.numCrit++;
+            }
+            damageSummary.totalDamage += ComputeDamage(result);
+
+            base.Use();
+        }
+
+        private int ComputeDamage(AttackResult result)
+        {
+            return (int)(
+                DamageUtils.WeaponDamage(result, iteration.mainHand, iteration, 380)
+                * TalentUtils.GetImprovedMortalStrikeMultiplier(iteration.settings.talentSettings));
         }
     }
 }

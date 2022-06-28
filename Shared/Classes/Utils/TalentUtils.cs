@@ -109,5 +109,13 @@ namespace Warrior
         {
             return 1 + talents.ImprovedBerserkerStance.rank * 0.04f;
         }
+
+        public static float GetImprovedMortalStrikeMultiplier(TalentsSettings talents)
+        {
+            if (talents.ImprovedMortalStrike.rank == 1) return 1.03f;
+            if (talents.ImprovedMortalStrike.rank == 2) return 1.06f;
+            if (talents.ImprovedMortalStrike.rank == 3) return 1.10f;
+            return 1;
+        }
     }
 }
