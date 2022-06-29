@@ -84,6 +84,7 @@
                 auraManager.bloodFury?.Update();
                 auraManager.berserking?.Update();
                 auraManager.wreckingCrew?.Update();
+                auraManager.sunderArmor?.Update();
                 auraManager.GetNext();
 
                 int next = nextStep.GetNextStep();
@@ -108,6 +109,8 @@
             auraManager.berserking?.Fade();
             auraManager.deepWounds?.Fade();
             auraManager.wreckingCrew?.Fade();
+            auraManager.sunderArmor?.Fade();
+
             // Moving the results.
             iterationResults.mainHand = (DamageResults)mainHand.damageSummary.Clone();
             iterationResults.offHand = (DamageResults)offHand.damageSummary.Clone();
@@ -130,6 +133,7 @@
             if (auraManager.berserking != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.berserking.auraSummary.Clone());
             if (auraManager.bloodFury != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.bloodFury.auraSummary.Clone());
             if (auraManager.wreckingCrew != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.wreckingCrew.auraSummary.Clone());
+            if (auraManager.sunderArmor != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.sunderArmor.auraSummary.Clone());
             return iterationResults;
         }
 
@@ -164,6 +168,28 @@
             // Bloodrage.
             if (settings.simulationSettings.useBloodRage && rage < settings.simulationSettings.bloodRageThreshold) abilityManager.bloodrage.Use();
 
+            // Sunder Armor.
+            if (settings.simulationSettings.useSunderArmor)
+            {
+                if (settings.simulationSettings.useBloodthirst && abilityManager.bloodthirst != null && abilityManager.bloodthirst?.currentCooldown < 1.5f * Constants.kStepsPerSecond)
+                {
+                    goto NoSunder;
+                }
+                if (settings.simulationSettings.useWhirlwind && abilityManager.whirlwind != null && abilityManager.whirlwind?.currentCooldown < 1.5f * Constants.kStepsPerSecond)
+                {
+                    goto NoSunder;
+                }
+                if (settings.simulationSettings.useMortalStrike && abilityManager.mortalStrike != null && abilityManager.mortalStrike?.currentCooldown < 1.5f * Constants.kStepsPerSecond)
+                {
+                    goto NoSunder;
+                }
+                if ((auraManager.sunderArmor?.next - currentStep) > 4.5f * Constants.kStepsPerSecond && auraManager.sunderArmor?.stacks == 5)
+                {
+                    goto NoSunder;
+                }
+                abilityManager.sunderArmor?.Use();
+            }
+            NoSunder:
             // Bloodthirst.
             if (abilityManager.bloodthirst != null && settings.simulationSettings.useBloodthirst) {
                 abilityManager.bloodthirst.Use();
@@ -174,23 +200,24 @@
                 abilityManager.whirlwind.Use();
             }
             // Slam.
-            if (settings.simulationSettings.useSlam)
+            if (abilityManager.slam.isCasting)
+            {
+                abilityManager.slam.Use();
+            }
+            if (settings.simulationSettings.useSlam && GCDAvailable())
             {
                 if (settings.simulationSettings.slamOnlyOnBloodsurge && auraManager.bloodsurge != null
                     && auraManager.bloodsurge.active && settings.talentSettings.Bloodsurge.rank > 0)
                 {
                     abilityManager.slam.Use();
-                }
-                if (!settings.simulationSettings.slamOnlyOnBloodsurge)
+                } else
                 {
-                    abilityManager.slam.Use();
-                }
-            }
-            if (auraManager.bloodsurge != null && auraManager.bloodsurge.active)
-            {
-                if (abilityManager.bloodthirst?.currentCooldown > 1.6f)
-                {
-                    
+                    // Use slam as filler.
+                    if (!settings.simulationSettings.slamOnlyOnBloodsurge
+                        && abilityManager.bloodthirst?.currentCooldown > 1.5f * Constants.kStepsPerSecond)
+                    {
+                        abilityManager.slam.Use();
+                    }
                 }
             }
 
@@ -207,6 +234,7 @@
         {
             iterationResults.rageSummary.rageGenerated += value;
 
+            // TODO: add losses per source.
             if (iterationResults.rageSummary.generated.TryGetValue(source, out var val))
             {
                 iterationResults.rageSummary.generated[source] += value;
@@ -227,12 +255,14 @@
             if (rage + value > 100)
             {
                 iterationResults.rageSummary.wastedRage += rage + value - 100;
+
+
+
                 rage = 100;
                 return;
             }
             rage += value;
         }
-
         public void Cooldowns(int currentStep, int numSteps)
 		{
             // Heroism.
@@ -288,5 +318,10 @@
 		{
             return (numSteps - currentStep) / Constants.kStepsPerSecond;
 		}
+
+        public bool GCDAvailable()
+        {
+            return globalCooldown <= 0;
+        }
     }
 }

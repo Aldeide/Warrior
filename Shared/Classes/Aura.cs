@@ -753,5 +753,62 @@ namespace Warrior
             manager.iteration.statsManager.UpdateTemporaryDamageMultiplier();
         }
     }
+
+    public class SunderArmorAura : Aura
+    {
+        public SunderArmorAura(AuraManager arg) : base(arg)
+        {
+            name = "Sunder Armor";
+            auraSummary.name = name;
+            duration = 30 * Constants.kStepsPerSecond;
+        }
+        public override void Trigger(AuraTrigger trigger)
+        {
+            if (active && stacks < 5)
+            {
+                stacks++;
+                Console.WriteLine("[" + manager.iteration.currentStep + "] Applied Sunder Armor, stacks: " + stacks);
+                next = manager.iteration.currentStep + duration;
+                auraSummary.refreshes += 1;
+                return;
+            }
+            if (stacks == 5)
+            {
+                Console.WriteLine("[" + manager.iteration.currentStep + "] Applied Sunder Armor, stacks: " + stacks);
+                next = manager.iteration.currentStep + duration;
+                auraSummary.refreshes += 1;
+                return;
+            }
+            Console.WriteLine("[" + manager.iteration.currentStep + "] Applied Sunder Armor");
+            start = manager.iteration.currentStep;
+            active = true;
+            next = start + duration;
+            stacks = 1;
+            auraSummary.procs += 1;
+        }
+
+        public override void Update()
+        {
+            if (manager.iteration.currentStep != next) { return; }
+            if (active)
+            {
+                auraSummary.uptime += (manager.iteration.currentStep - start);
+            }
+            active = false;
+            stacks = 0;
+            next = Int32.MaxValue;
+        }
+
+        public void Fade()
+        {
+            if (active)
+            {
+                auraSummary.uptime += (manager.iteration.currentStep - start);
+            }
+            active = false;
+            stacks = 0;
+            next = Int32.MaxValue;
+        }
+    }
 }
  

@@ -22,7 +22,6 @@
         public void Reset()
         {
             currentCooldown = 0;
-            castTime = 0;
             endCast = 0;
             isCasting = false;
             isQueued = false;
@@ -287,16 +286,26 @@
         {
             if (!CanUse() && !isCasting) return;
             
-
             if (!iteration.auraManager.bloodsurge.active && !isCasting && CanUse())
             {
                 endCast = iteration.currentStep + castTime;
                 isCasting = true;
+                base.Use();
+                return;
+            }
+
+            if (isCasting && endCast != iteration.currentStep)
+            {
                 return;
             }
 
             if (iteration.auraManager.bloodsurge.active || (isCasting && endCast == iteration.currentStep))
             {
+                if (iteration.auraManager.bloodsurge.active)
+                {
+                    Console.WriteLine("[" + iteration.currentStep + "] Slam Instant");
+                }
+                Console.WriteLine("[" + iteration.currentStep + "] Slam Hit");
                 iteration.auraManager.bloodsurge.Fade();
                 endCast = Int32.MaxValue;
                 isCasting = false;
@@ -329,9 +338,9 @@
                     damageSummary.critDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.settings.talentSettings));
                     damageSummary.totalDamage += (int)(damage * DamageUtils.EffectiveCritCoefficient(iteration.settings.talentSettings));
                 }
-                
+                base.Use();
             }
-            base.Use();
+            
         }
     }
 
@@ -413,6 +422,7 @@
             {
                 isCasting = true;
                 endCast = iteration.currentStep + castTime;
+                base.Use();
                 return;
             }
             if (isCasting && endCast == iteration.currentStep)
@@ -423,7 +433,7 @@
                 iteration.auraManager.shatteringThrow?.Trigger(AuraTrigger.Use);
             }
 
-            base.Use();
+            
         }
     }
 
@@ -523,6 +533,48 @@
             if (!CanUse()) return;
             if (iteration.settings.characterSettings.race != Settings.Race.Troll) return;
             iteration.auraManager.berserking?.Trigger(AuraTrigger.Use);
+            base.Use();
+        }
+    }
+
+    public class SunderArmor : Ability
+    {
+        public SunderArmor(Iteration iteration) : base(iteration)
+        {
+            name = "Sunder Armor";
+            damageSummary.name = name;
+            rageCost = 15
+                - iteration.settings.talentSettings.Puncture.rank
+                - iteration.settings.talentSettings.FocusedRage.rank;
+            globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
+            cooldown = 0;
+        }
+
+        public override void Use()
+        {
+            if (!CanUse()) return;
+            iteration.auraManager.sunderArmor?.Trigger(AuraTrigger.Use);
+            base.Use();
+        }
+    }
+
+    public class Execute : Ability
+    {
+        public Execute(Iteration iteration) : base(iteration)
+        {
+            name = "Execute";
+            damageSummary.name = name;
+            rageCost = 15
+                - iteration.settings.talentSettings.Puncture.rank
+                - iteration.settings.talentSettings.FocusedRage.rank;
+            globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
+            cooldown = 0;
+        }
+
+        public override void Use()
+        {
+            if (!CanUse()) return;
+            iteration.auraManager.sunderArmor?.Trigger(AuraTrigger.Use);
             base.Use();
         }
     }

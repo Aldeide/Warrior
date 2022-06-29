@@ -32,6 +32,14 @@
         public float bloodFuryOnLastSeconds { get; set; } = 16;
         public float berserkingOnLastSeconds { get; set; } = 11;
 
+        // Execute phase
+
+        public bool useExecute { get; set; } = true;
+        public bool prioritizeBloodthirst { get; set; } = true;
+        public bool prioritizeWhirlwind { get; set; } = true;
+        public bool prioritizeSlamOnBloodsurge { get; set; } = true;
+        public bool useExecuteHeroicStrike { get; set; } = true;
+        public int executeHeroicStrikeRagethreshold { get; set; } = 30;
         public SimulationSettings()
         {
 

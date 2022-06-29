@@ -34,6 +34,8 @@
         public Berserking? berserking { get; set; }
         public BloodFury? bloodFury { get; set; }
 
+        public SunderArmor? sunderArmor { get; set; }
+
         public AbilityManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -62,6 +64,7 @@
             {
                 berserking = new Berserking(iteration);
             }
+            if (iteration.settings.simulationSettings.useSunderArmor) sunderArmor = new SunderArmor(iteration);
 
         }
         public void ApplyTime(int d)
@@ -98,6 +101,7 @@
             shatteringThrow.Reset();
             berserking?.Reset();
             bloodFury?.Reset();
+            sunderArmor?.Reset();
         }
 
     }

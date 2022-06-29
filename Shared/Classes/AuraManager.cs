@@ -26,6 +26,8 @@
 
         // Talents
         public WreckingCrew? wreckingCrew;
+
+        public SunderArmorAura? sunderArmor;
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -61,6 +63,10 @@
             {
                 wreckingCrew = new WreckingCrew(this);
             }
+            if (iteration.settings.simulationSettings.useSunderArmor)
+            {
+                sunderArmor = new SunderArmorAura(this);
+            }
         }
         public void Reset()
         {
@@ -74,6 +80,7 @@
             bloodFury?.Reset();
             berserking?.Reset();
             wreckingCrew?.Reset();
+            sunderArmor?.Reset();
         }
         public void MeleeCriticalTrigger()
         {
@@ -174,6 +181,7 @@
             if (berserking != null && berserking.next < next && berserking.active) next = berserking.next;
             if (wreckingCrew != null && wreckingCrew.next < next && wreckingCrew.active) next = wreckingCrew.next;
             if (rend != null && rend.next < next && rend.active) next = rend.next;
+            if (sunderArmor != null && sunderArmor.next < next && sunderArmor.active) next = sunderArmor.next;
             iteration.nextStep.auras = next;
         }
     }
