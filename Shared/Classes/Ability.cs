@@ -611,7 +611,10 @@
         private int Damage(AttackResult result, int extraRage)
         {
             float damage = 0;
-
+            if (iteration.settings.glyphSettings.HasGlyphOfExecution())
+            {
+                extraRage += 10;
+            }
             // Affected by:
             // Two-Handed Weapon Specialization.
             // Titan's Grip.
