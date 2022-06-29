@@ -16,16 +16,14 @@
     public class AbilityManager
     {
         public Iteration iteration;
-        public List<Ability> abilities = new List<Ability>();
 
         public Bloodthirst? bloodthirst { get; set; }
         public MortalStrike? mortalStrike { get; set; }
         public Whirlwind whirlwind { get; set; }
         public HeroicStrike heroicStrike { get; set; }
-
+        public Execute execute { get; set; }
         public Slam slam { get; set; }
         public BloodRageAbility bloodrage { get; set; }
-
         public DeathWish deathWish { get; set; }
         public Heroism heroism { get; set; }
         public ShatteringThrow shatteringThrow { get; set; }
@@ -33,7 +31,6 @@
         // Racial abilities
         public Berserking? berserking { get; set; }
         public BloodFury? bloodFury { get; set; }
-
         public SunderArmor? sunderArmor { get; set; }
 
         public AbilityManager(Iteration iteration)
@@ -48,6 +45,7 @@
                 mortalStrike = new MortalStrike(iteration);
             }
             whirlwind = new Whirlwind(iteration);
+            execute = new Execute(iteration);
             heroicStrike = new HeroicStrike(iteration);
             slam = new Slam(iteration);
             bloodrage = new BloodRageAbility(iteration);
@@ -67,6 +65,7 @@
             if (iteration.settings.simulationSettings.useSunderArmor) sunderArmor = new SunderArmor(iteration);
 
         }
+
         public void ApplyTime(int d)
         {
             bloodthirst?.ApplyTime(d);
@@ -79,6 +78,7 @@
             mortalStrike?.ApplyTime(d);
             bloodFury?.ApplyTime(d);
             berserking?.ApplyTime(d);
+            execute?.ApplyTime(d);
         }
 
         public void GetNext()
@@ -102,6 +102,7 @@
             berserking?.Reset();
             bloodFury?.Reset();
             sunderArmor?.Reset();
+            execute?.Reset();
         }
 
     }

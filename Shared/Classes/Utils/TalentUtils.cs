@@ -117,5 +117,11 @@ namespace Warrior
             if (talents.ImprovedMortalStrike.rank == 3) return 1.10f;
             return 1;
         }
+        public static int GetImprovedExecuteCostReduction(TalentsSettings talents)
+        {
+            if (talents.ImprovedExecute.rank == 1) return 2;
+            if (talents.ImprovedExecute.rank == 2) return 5;
+            return 0;
+        }
     }
 }

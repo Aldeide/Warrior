@@ -565,17 +565,73 @@
             name = "Execute";
             damageSummary.name = name;
             rageCost = 15
-                - iteration.settings.talentSettings.Puncture.rank
+                - TalentUtils.GetImprovedExecuteCostReduction(iteration.settings.talentSettings)
                 - iteration.settings.talentSettings.FocusedRage.rank;
             globalCooldown = (int)(1.5f * Constants.kStepsPerSecond);
-            cooldown = 0;
         }
 
         public override void Use()
         {
             if (!CanUse()) return;
-            iteration.auraManager.sunderArmor?.Trigger(AuraTrigger.Use);
+
+            int extraRage = iteration.rage - rageCost;
+            if (extraRage > 30) extraRage = 30;
+
+            AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);
+            damageSummary.numCasts += 1;
+            if (result == AttackResult.Miss)
+            {
+                damageSummary.numMiss += 1;
+                base.Use();
+                return;
+            }
+            if (result == AttackResult.Dodge)
+            {
+                damageSummary.numDodge += 1;
+                base.Use();
+                return;
+            }
+
+            int damage = Damage(result, extraRage);
+            damageSummary.totalDamage += damage;
+            if (result == AttackResult.Hit)
+            {
+                damageSummary.numHit += 1;
+                damageSummary.hitDamage += damage;
+            }
+            if (result == AttackResult.Critical)
+            {
+                damageSummary.numCrit += 1;
+                damageSummary.critDamage += damage;
+            }
+            iteration.rage -= extraRage;
             base.Use();
+        }
+
+        private int Damage(AttackResult result, int extraRage)
+        {
+            float damage = 0;
+
+            // Affected by:
+            // Two-Handed Weapon Specialization.
+            // Titan's Grip.
+            // Unending Fury.
+            damage = (1456 + 0.20f
+                * iteration.statsManager.GetEffectiveAttackPower() + extraRage * 38)
+                * iteration.computedConstants.unendingFuryDamageMultiplier
+                * DamageUtils.EffectiveDamageCoefficient(iteration) * 1.06f;
+
+            if (result == AttackResult.Critical)
+            {
+                damage *= DamageUtils.EffectiveCritCoefficient(iteration.settings.talentSettings);
+                // TODO: add execute trigger.
+                iteration.auraManager.BloodthirstCriticalTrigger();
+            }
+            else
+            {
+                iteration.auraManager.BloodthirstTrigger();
+            }
+            return (int)damage;
         }
     }
 }
