@@ -51,6 +51,11 @@
             // Main simulation loop.
             while (currentStep < numSteps)
             {
+                // Stance.
+                if (!stanceManager.IsInDefaultStance() && stanceManager.CanChangeStance())
+                {
+                    stanceManager.DefaultStance();
+                }
                 // Passive ticks such as anger management.
                 PassiveTicks();
 
@@ -214,6 +219,10 @@
                 ((abilityManager.whirlwind != null && abilityManager.whirlwind.currentCooldown >= 3.0f * Constants.kStepsPerSecond) || !settings.simulationSettings.useWhirlwind)
                 && abilityManager.rend.CanUse())
             {
+                if (!stanceManager.IsInBattleStance() && stanceManager.CanChangeStance())
+                {
+                    stanceManager.ChangeStance(new Entities.Stance() { id = 2457 });
+                }
                 abilityManager.rend.Use();
             }
 
@@ -251,7 +260,8 @@
                 }
             }
 
-            if (settings.simulationSettings.useHeroicStrike)
+            // Heroic Strike.
+            if (settings.simulationSettings.useHeroicStrike && stanceManager.IsInDefaultStance())
 			{
                 if (rage >= settings.simulationSettings.heroicStrikeRagethreshold && !abilityManager.heroicStrike.isQueued)
                 {

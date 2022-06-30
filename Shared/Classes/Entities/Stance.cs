@@ -19,32 +19,6 @@
             new Stance() {name = "Defensive Stance", id = 71, isActive = false}
         };
 
-        public event EventHandler StanceChanged;
-
-        public void ChangeStance(Stance stance)
-        {
-            this.currentStance = stance;
-            OnStanceChanged(EventArgs.Empty);
-        }
-
-        public bool IsInBattleStance()
-        {
-            return currentStance.id == 2457;
-        }
-        public bool IsInBerserkerStance()
-        {
-            return currentStance.id == 2458;
-        }
-        public bool IsInDefensiveStance()
-        {
-            return currentStance.id == 71;
-        }
-
-        protected virtual void OnStanceChanged(EventArgs e)
-        {
-            StanceChanged?.Invoke(this, e);
-        }
-
         public void ProcessClick(long button, int id)
         {
             if (button == 0)
@@ -56,10 +30,7 @@
                 stances.Single(s => s.id == currentStance.id).isActive = false;
                 stances.Single(s => s.id == id).isActive = true;
                 currentStance = stances.Single(s => s.id == id);
-                Stance stance = stances.Single(s => s.id == id);
-                OnStanceChanged(EventArgs.Empty);
             }
-
         }
     }
 

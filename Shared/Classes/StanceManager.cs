@@ -8,7 +8,7 @@ namespace Warrior
         Stance stance;
         Stance defaultStance;
 
-        float stanceGCD = 1.5f * Constants.kStepsPerSecond;
+        float stanceGCD = 1.0f * Constants.kStepsPerSecond;
         float currentGCD = 0;
 
         public StanceManager(Iteration iteration)
@@ -25,15 +25,17 @@ namespace Warrior
         {
             if (!CanChangeStance()) return;
             stance = newStance;
+            currentGCD = stanceGCD;
+            iteration.rage = RageCap(iteration.rage);
         }
         public void DefaultStance()
         {
             if (!CanChangeStance()) return;
-            stance = defaultStance;
+            ChangeStance(defaultStance);
         }
-        public void ApplyTime(int steps)
+        public void ApplyTime(int d)
         {
-            currentGCD -= steps;
+            currentGCD -= d;
             if (currentGCD < 0)
             {
                 currentGCD = 0;
@@ -50,6 +52,18 @@ namespace Warrior
         public bool IsInDefensiveStance()
         {
             return stance.id == 71;
+        }
+        public bool IsInDefaultStance()
+        {
+            return stance == defaultStance;
+        }
+        public int RageCap(int currentRage)
+        {
+            if (currentRage > 10 + iteration.settings.talentSettings.TacticalMastery.rank * 5)
+            {
+                return 10 + iteration.settings.talentSettings.TacticalMastery.rank * 5;
+            }
+            return 10;
         }
     }
 }
