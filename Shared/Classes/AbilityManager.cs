@@ -28,6 +28,8 @@
         public Heroism heroism { get; set; }
         public ShatteringThrow shatteringThrow { get; set; }
 
+        public Rend rend { get; set; }
+
         // Racial abilities
         public Berserking? berserking { get; set; }
         public BloodFury? bloodFury { get; set; }
@@ -52,6 +54,7 @@
             deathWish = new DeathWish(iteration);
             heroism = new Heroism(iteration);
             shatteringThrow = new ShatteringThrow(iteration);
+            rend = new Rend(iteration);
             if (iteration.settings.characterSettings.race == Settings.Race.Orc
                 && iteration.settings.simulationSettings.useBloodFury)
             {
@@ -79,6 +82,7 @@
             bloodFury?.ApplyTime(d);
             berserking?.ApplyTime(d);
             execute?.ApplyTime(d);
+            rend?.ApplyTime(d);
         }
 
         public void GetNext()
@@ -103,6 +107,7 @@
             bloodFury?.Reset();
             sunderArmor?.Reset();
             execute?.Reset();
+            rend?.Reset();
         }
 
     }

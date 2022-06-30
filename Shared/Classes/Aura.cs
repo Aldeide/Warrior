@@ -549,7 +549,7 @@ namespace Warrior
             if (!active)
             {
                 active = true;
-                auraSummary.procs += 1;
+                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Applied Rend.");
                 start = manager.iteration.currentStep;
                 damage = (int)RendDamage();
                 tickSize = (int)(damage * tickInterval / (float)duration);
@@ -557,7 +557,6 @@ namespace Warrior
             }
             else
             {
-                auraSummary.refreshes += 1;
                 damage += (int)RendDamage();
                 tickSize = (int)(damage * tickInterval / (float)duration);
                 dotSummary.refreshes += 1;
@@ -576,6 +575,7 @@ namespace Warrior
                 return;
             }
             damage -= tickSize;
+            Console.WriteLine("[ " + manager.iteration.currentStep + " ] Rend tick: " + tickSize);
             currentDuration -= tickInterval;
             next = manager.iteration.currentStep + tickInterval;
             dotSummary.totalDamage += tickSize;

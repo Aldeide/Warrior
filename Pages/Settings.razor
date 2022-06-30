@@ -63,7 +63,7 @@
 						<section id="rotation">
 							<h1>Rotation and Cooldowns</h1>
 							<div class="row">
-							<div class="col-sm-4">
+							<div class="col-sm-3">
 
 
 							@if(simulation.settings.talentSettings.Bloodthirst.rank == 1)
@@ -121,12 +121,36 @@
 							<InputCheckbox name="useSunder" @bind-Value="simulation.settings.simulationSettings.useSunderArmor" class="checkbox" />
 							<img src="data/icons/rotations/sunderarmor.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useSunderArmor)" />
 
+							
 							<div style="clear:both"></div>
+							<br />
+							<label for="useRend" class="rotation-label">Use Rend</label>
+							<InputCheckbox name="useSunder" @bind-Value="simulation.settings.simulationSettings.useRend" class="checkbox" />
+							<img src="data/icons/rotations/rend.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useRend)" />
 
+							<div style="clear:both"></div>
 
 							
 							</div>
-							<div class="col-sm-4">
+
+							<div class="col-sm-3">
+								<label for="useExecute" class="rotation-label">Use Execute</label>
+							<InputCheckbox name="useDW" @bind-Value="simulation.settings.simulationSettings.useExecute" class="checkbox" />
+							<img src="data/icons/rotations/execute.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useExecute)" />
+							
+							<div style="clear:both"></div>
+							@if(simulation.settings.simulationSettings.useExecute)
+							{
+								<p class="rotation-option"><label for="execBT" class="rotation-label">Prioritise BT / MS</label>
+								<InputCheckbox name="execBT" @bind-Value="simulation.settings.simulationSettings.prioritizeBloodthirst" class="checkbox" /></p>
+
+								<p class="rotation-option"><label for="execBT" class="rotation-label">Prioritise Slam on Bloodsurge</label>
+								<InputCheckbox name="execBT" @bind-Value="simulation.settings.simulationSettings.prioritizeSlamOnBloodsurge" class="checkbox" /></p>
+							}
+							<br />
+							</div>
+
+							<div class="col-sm-3">
 							<label for="useDW" class="rotation-label">Use Death Wish</label>
 							<InputCheckbox name="useDW" @bind-Value="simulation.settings.simulationSettings.useDeathWish" class="checkbox" />
 							<img src="data/icons/rotations/deathwish.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useDeathWish)" />
@@ -159,7 +183,7 @@
 							<br />
 							</div>
 
-							<div class="col-sm-4">
+							<div class="col-sm-3">
 								<label for="useHeroism" class="rotation-label">Heroism / Bloodlust</label>
 								<InputCheckbox name="useHeroism" @bind-Value="simulation.settings.simulationSettings.useHeroism" class="checkbox" />
 								<img src="data/icons/rotations/heroism.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useHeroism)" />

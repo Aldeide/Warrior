@@ -24,7 +24,7 @@
         public int shatteringThrowOnLastSeconds { get; set; } = 33;
         public bool useBloodRage { get; set; } = true;
         public int bloodRageThreshold { get; set; } = 80;
-        public bool maintainRend { get; set; } = false;
+        public bool useRend { get; set; } = false;
 
         // Racial abilities.
         public bool useBloodFury { get; set; } = false;

@@ -17,26 +17,32 @@
             if (passiveTicks < nextStep)
             {
                 nextStep = passiveTicks;
+                Console.WriteLine("[ NextStep: PassiveTicks ] " + nextStep);
             }
             if (auras < nextStep)
             {
                 nextStep = auras;
+                Console.WriteLine("[ NextStep: Auras ] " + nextStep);
             }
             if (mainHand < nextStep)
             {
                 nextStep = mainHand;
+                Console.WriteLine("[ NextStep: MainHand ] " + nextStep);
             }
             if (offHand < nextStep)
             {
                 nextStep = offHand;
+                Console.WriteLine("[ NextStep: OffHand ] " + nextStep);
             }
             if (globalCooldown < nextStep)
             {
                 nextStep = globalCooldown;
+                Console.WriteLine("[ NextStep: GCD ] " + nextStep);
             }
             if (abilities < nextStep)
             {
                 nextStep = abilities;
+                Console.WriteLine("[ NextStep: Abilities ] " + nextStep);
             }
             return nextStep;
         }

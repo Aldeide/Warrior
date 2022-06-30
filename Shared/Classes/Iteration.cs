@@ -60,10 +60,9 @@
                 // Main hand and off hand attacks.
                 Attacks();
 
-
-
                 // Abilities.
                 Abilities();
+
                 if (globalCooldown <= 0)
                 {
                     nextStep.globalCooldown = numSteps;
@@ -85,6 +84,7 @@
                 auraManager.berserking?.Update();
                 auraManager.wreckingCrew?.Update();
                 auraManager.sunderArmor?.Update();
+                auraManager.rend?.Update();
                 auraManager.GetNext();
 
                 int next = nextStep.GetNextStep();
@@ -110,18 +110,22 @@
             auraManager.deepWounds?.Fade();
             auraManager.wreckingCrew?.Fade();
             auraManager.sunderArmor?.Fade();
+            auraManager.rend?.Fade();
 
             // Moving the results.
             iterationResults.mainHand = (DamageResults)mainHand.damageSummary.Clone();
             iterationResults.offHand = (DamageResults)offHand.damageSummary.Clone();
             auraManager.auras.ForEach(aura => iterationResults.auraSummaries.Add(aura.auraSummary));
-            abilityManager.abilities.ForEach(ability => iterationResults.abilitySummaries.Add(ability.damageSummary));
+            
 
             if (abilityManager.bloodthirst != null) iterationResults.abilitySummaries.Add(abilityManager.bloodthirst.damageSummary);
             iterationResults.abilitySummaries.Add(abilityManager.whirlwind.damageSummary);
             iterationResults.abilitySummaries.Add(abilityManager.heroicStrike.damageSummary);
             iterationResults.abilitySummaries.Add(abilityManager.slam.damageSummary);
+
             if (auraManager.deepWounds != null) iterationResults.dotDamageSummaries.Add((DotDamageResults)auraManager.deepWounds.dotSummary.Clone());
+            if (auraManager.rend != null) iterationResults.dotDamageSummaries.Add((DotDamageResults)auraManager.rend.dotSummary.Clone());
+
             if (auraManager.flurry != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.flurry.auraSummary.Clone());
             if (auraManager.bloodsurge != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.bloodsurge.auraSummary.Clone());
             if (auraManager.mainHandBerserking != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.mainHandBerserking.auraSummary.Clone());
@@ -165,8 +169,7 @@
         }
         public void Abilities()
         {
-            // Bloodrage.
-            if (settings.simulationSettings.useBloodRage && rage < settings.simulationSettings.bloodRageThreshold) abilityManager.bloodrage.Use();
+            if (!GCDAvailable() && !abilityManager.slam.isCasting) return;
 
             // Sunder Armor.
             if (settings.simulationSettings.useSunderArmor)
@@ -190,31 +193,58 @@
                 abilityManager.sunderArmor?.Use();
             }
             NoSunder:
+
             // Bloodthirst.
-            if (abilityManager.bloodthirst != null && settings.simulationSettings.useBloodthirst) {
+            if (abilityManager.bloodthirst != null
+                && settings.simulationSettings.useBloodthirst
+                && abilityManager.bloodthirst.CanUse()) {
                 abilityManager.bloodthirst.Use();
             }
+
             // Whirlwind.
-            if (settings.simulationSettings.useWhirlwind)
+            if (settings.simulationSettings.useWhirlwind
+                && abilityManager.whirlwind != null
+                && abilityManager.whirlwind.CanUse())
             {
                 abilityManager.whirlwind.Use();
             }
+
+            // Rend.
+            if (settings.simulationSettings.useRend &&
+                ((abilityManager.whirlwind != null && abilityManager.whirlwind.currentCooldown >= 3.0f * Constants.kStepsPerSecond) || !settings.simulationSettings.useWhirlwind)
+                && abilityManager.rend.CanUse())
+            {
+                abilityManager.rend.Use();
+            }
+
             // Slam.
-            if (abilityManager.slam.isCasting)
+            if (abilityManager.slam.isCasting && currentStep == abilityManager.slam.endCast)
             {
                 abilityManager.slam.Use();
             }
-            if (settings.simulationSettings.useSlam && GCDAvailable())
+
+            if (settings.simulationSettings.useSlam)
             {
-                if (settings.simulationSettings.slamOnlyOnBloodsurge && auraManager.bloodsurge != null
-                    && auraManager.bloodsurge.active && settings.talentSettings.Bloodsurge.rank > 0)
+                if (settings.simulationSettings.slamOnlyOnBloodsurge
+                    && auraManager.bloodsurge != null
+                    && auraManager.bloodsurge.active
+                    && settings.talentSettings.Bloodsurge.rank > 0
+                    // Never delay BT / WW (TODO: make it more subtle)
+                    && (abilityManager.bloodthirst == null
+                        || abilityManager.bloodthirst?.currentCooldown > 1.5f * Constants.kStepsPerSecond
+                        || !settings.simulationSettings.useBloodthirst)
+                    && (abilityManager.whirlwind == null
+                        || abilityManager.whirlwind.currentCooldown > 1.5f * Constants.kStepsPerSecond
+                        || !settings.simulationSettings.useWhirlwind))
                 {
                     abilityManager.slam.Use();
                 } else
                 {
                     // Use slam as filler.
                     if (!settings.simulationSettings.slamOnlyOnBloodsurge
-                        && abilityManager.bloodthirst?.currentCooldown > 1.5f * Constants.kStepsPerSecond)
+                        && (abilityManager.bloodthirst == null
+                            || abilityManager.bloodthirst?.currentCooldown > 1.5f * Constants.kStepsPerSecond
+                            || !settings.simulationSettings.useBloodthirst))
                     {
                         abilityManager.slam.Use();
                     }
@@ -265,6 +295,9 @@
         }
         public void Cooldowns(int currentStep, int numSteps)
 		{
+            // Bloodrage.
+            if (settings.simulationSettings.useBloodRage && rage < settings.simulationSettings.bloodRageThreshold) abilityManager.bloodrage.Use();
+
             // Heroism.
             if (settings.simulationSettings.useHeroism && RemainingTime(currentStep, numSteps) < settings.simulationSettings.heroismOnLastSeconds && !auraManager.heroism.active)
 			{
