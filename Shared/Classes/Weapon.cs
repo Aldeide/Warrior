@@ -95,7 +95,6 @@
             {
                 damageSummary.numCrit += 1;
                 damageSummary.critDamage += damage;
-                iteration.auraManager.MeleeCriticalTrigger();
                 if (isMainHand)
                 {
                     iteration.auraManager.MainHandCriticalTrigger();

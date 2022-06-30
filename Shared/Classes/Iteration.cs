@@ -331,6 +331,8 @@
             {
                 abilityManager.berserking?.Use();
             }
+
+            // Death Wish.
             if (settings.simulationSettings.useDeathWish && !auraManager.deathWish.active)
             {
                 if (RemainingTime(currentStep, numSteps) > settings.simulationSettings.deathWishOnLastSeconds + abilityManager.deathWish.cooldown / Constants.kStepsPerSecond && abilityManager.deathWish.CanUse())
@@ -343,14 +345,16 @@
                 }
             }
 
+            // Shattering Throw.
             if (settings.simulationSettings.useShatteringThrow && !auraManager.shatteringThrow.active)
             {
-                if (RemainingTime(currentStep, numSteps) > settings.simulationSettings.shatteringThrowOnLastSeconds + abilityManager.shatteringThrow.cooldown / Constants.kStepsPerSecond)
+                if (RemainingTime(currentStep, numSteps) > settings.simulationSettings.shatteringThrowOnLastSeconds + abilityManager.shatteringThrow.cooldown / Constants.kStepsPerSecond
+                    || RemainingTime(currentStep, numSteps) < settings.simulationSettings.shatteringThrowOnLastSeconds)
                 {
-                    abilityManager.shatteringThrow.Use();
-                }
-                if (RemainingTime(currentStep, numSteps) < settings.simulationSettings.shatteringThrowOnLastSeconds)
-                {
+                    if (!stanceManager.IsInBattleStance() && stanceManager.CanChangeStance())
+                    {
+                        stanceManager.ChangeStance(new Entities.Stance() { id = 2457 });
+                    }
                     abilityManager.shatteringThrow.Use();
                 }
             }
