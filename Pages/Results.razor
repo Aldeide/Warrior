@@ -68,23 +68,23 @@
 								</td>
 								<td>
 									@(simulation.simulationResults.mainHand.numHit)
-									(@(Math.Round(simulation.simulationResults.mainHand.numHit / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
+									<span class="lowlight">(@(Math.Round(simulation.simulationResults.mainHand.numHit / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)</span>
 								</td>
 								<td>
 									@(simulation.simulationResults.mainHand.numCrit)
-									(@(Math.Round(simulation.simulationResults.mainHand.numCrit / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
+									<span class="lowlight">(@(Math.Round(simulation.simulationResults.mainHand.numCrit / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)</span>
 								</td>
 								<td>
 									@(simulation.simulationResults.mainHand.numGlancing)
-									(@(Math.Round(simulation.simulationResults.mainHand.numGlancing / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
+									<span class="lowlight">(@(Math.Round(simulation.simulationResults.mainHand.numGlancing / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)</span>
 								</td>
 								<td>
 									@(simulation.simulationResults.mainHand.numMiss)
-									(@(Math.Round(simulation.simulationResults.mainHand.numMiss / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
+									<span class="lowlight">(@(Math.Round(simulation.simulationResults.mainHand.numMiss / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)</span>
 								</td>
 								<td>
 									@(simulation.simulationResults.mainHand.numDodge)
-									(@(Math.Round(simulation.simulationResults.mainHand.numDodge / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)
+									<span class="lowlight">(@(Math.Round(simulation.simulationResults.mainHand.numDodge / (double)simulation.simulationResults.mainHand.numCasts * 100, 2)) %)</span>
 								</td>
 							</tr>
 							<tr>
@@ -100,23 +100,23 @@
 								</td>
 								<td>
 									@(simulation.simulationResults.offHand.numHit)
-									(@(Math.Round(simulation.simulationResults.offHand.numHit / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
+									<span class="lowlight">(@(Math.Round(simulation.simulationResults.offHand.numHit / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)</span>
 								</td>
 								<td>
 									@(simulation.simulationResults.offHand.numCrit)
-									(@(Math.Round(simulation.simulationResults.offHand.numCrit / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
+									<span class="lowlight">(@(Math.Round(simulation.simulationResults.offHand.numCrit / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)</span>
 								</td>
 								<td>
 									@(simulation.simulationResults.offHand.numGlancing)
-									(@(Math.Round(simulation.simulationResults.offHand.numGlancing / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
+									<span class="lowlight">(@(Math.Round(simulation.simulationResults.offHand.numGlancing / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)</span>
 								</td>
 								<td>
 									@(simulation.simulationResults.offHand.numMiss)
-									(@(Math.Round(simulation.simulationResults.offHand.numMiss / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
+									<span class="lowlight">(@(Math.Round(simulation.simulationResults.offHand.numMiss / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)</span>
 								</td>
 								<td>
 									@(simulation.simulationResults.offHand.numDodge)
-									(@(Math.Round(simulation.simulationResults.offHand.numDodge / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)
+									<span class="lowlight">(@(Math.Round(simulation.simulationResults.offHand.numDodge / (double)simulation.simulationResults.offHand.numCasts * 100, 2)) %)</span>
 								</td>
 							</tr>
 
@@ -159,7 +159,7 @@
 										@abilitySummary.name
 									</td>
 									<td>
-										@(abilitySummary.totalDamage / (float)simulation.settings.simulationSettings.numIterations / (float)simulation.settings.simulationSettings.combatLength )
+										@(Math.Round(abilitySummary.totalDamage / (float)simulation.settings.simulationSettings.numIterations / (float)simulation.settings.simulationSettings.combatLength, 2) )
 									</td>
 									<td>
 										@(abilitySummary.totalDamage / (float)simulation.settings.simulationSettings.numIterations )
@@ -190,7 +190,7 @@
 									<td>
 									</td>
 									<td>
-										Uptime
+										Uptime (s)
 									</td>
 									<td>
 										Procs / Uses
@@ -207,7 +207,7 @@
 										@auraSummary.name
 									</td>
 									<td>
-										@(auraSummary.uptime / (double)simulation.settings.simulationSettings.numIterations / (double)Constants.kStepsPerSecond) (@(Math.Round(auraSummary.uptime / (double)simulation.settings.simulationSettings.numIterations / (double)Constants.kStepsPerSecond / (double)simulation.settings.simulationSettings.combatLength * 100, 2)) %)
+										@(Math.Round(auraSummary.uptime / (double)simulation.settings.simulationSettings.numIterations / (double)Constants.kStepsPerSecond, 2)) (@(Math.Round(auraSummary.uptime / (double)simulation.settings.simulationSettings.numIterations / (double)Constants.kStepsPerSecond / (double)simulation.settings.simulationSettings.combatLength * 100, 2)) %)
 									</td>
 									<td>
 										@(auraSummary.procs  )
@@ -258,10 +258,10 @@
 										@(Math.Round((double)(summary.totalDamage / (float)simulation.settings.simulationSettings.numIterations / (double)simulation.settings.simulationSettings.combatLength), 2))
 									</td>
 									<td>
-										@(summary.totalDamage / (float)simulation.settings.simulationSettings.numIterations )
+										@(Math.Round(summary.totalDamage / (float)simulation.settings.simulationSettings.numIterations, 2))
 									</td>
 									<td>
-										@(summary.uptime / (float)simulation.settings.simulationSettings.numIterations / Constants.kStepsPerSecond)  (@(Math.Round((double)(summary.uptime / (float)simulation.settings.simulationSettings.numIterations / Constants.kStepsPerSecond / (double)simulation.settings.simulationSettings.combatLength * 100), 2)) %)
+										@(Math.Round(summary.uptime / (float)simulation.settings.simulationSettings.numIterations / Constants.kStepsPerSecond, 2))  (@(Math.Round((double)(summary.uptime / (float)simulation.settings.simulationSettings.numIterations / Constants.kStepsPerSecond / (double)simulation.settings.simulationSettings.combatLength * 100), 2)) %)
 									</td>
 									<td>
 										@(summary.ticks / (float)simulation.settings.simulationSettings.numIterations)
@@ -286,7 +286,7 @@
 										
 									</td>
 									<td>
-										Uptime
+										Uptime (s)
 									</td>
 								</tr>
 							</thead>
@@ -295,7 +295,7 @@
 										@simulation.simulationResults.battleStanceResults.name
 									</td>
 									<td>
-										@simulation.simulationResults.battleStanceResults.uptime
+										@Math.Round(simulation.simulationResults.battleStanceResults.uptime / 1000d, 2)
 									</td>
 								</tr>
 								<tr>
@@ -303,7 +303,7 @@
 										@simulation.simulationResults.berserkerStanceResults.name
 									</td>
 									<td>
-										@simulation.simulationResults.berserkerStanceResults.uptime
+										@Math.Round(simulation.simulationResults.berserkerStanceResults.uptime / 1000d, 2)
 									</td>
 								</tr>
 								<tr>
@@ -311,7 +311,7 @@
 										@simulation.simulationResults.defensiveStanceResults.name
 									</td>
 									<td>
-										@simulation.simulationResults.defensiveStanceResults.uptime
+										@Math.Round(simulation.simulationResults.defensiveStanceResults.uptime / 1000d, 2)
 									</td>
 								</tr>
 						</table>

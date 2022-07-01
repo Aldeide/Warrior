@@ -6,6 +6,8 @@
         public int combatLength { get; set; } = 120;
         public int targetLevel { get; set; } = 83;
         public int targetArmor { get; set; } = 10643;
+        public float executePercent { get; set; } = 19;
+        public int initialRage { get; set; } = 0;
 
         public bool useBloodthirst { get; set; } = true;
         public bool useWhirlwind { get; set; } = true;

@@ -171,7 +171,7 @@
             abilityManager.Reset();
             mainHand = new Weapon(this, ItemSlot.MainHand, settings.equipmentSettings.GetItemBySlot(ItemSlot.MainHand));
             offHand = new Weapon(this, ItemSlot.OffHand, settings.equipmentSettings.GetItemBySlot(ItemSlot.OffHand));
-            rage = 0;
+            rage = settings.initialRage;
             globalCooldown = 0;
         }
         public void PassiveTicks()
@@ -292,6 +292,12 @@
 
             abilityManager.GetNext();
         }
+
+        public void ExecuteAbilities()
+        {
+            return;
+        }
+
         public void IncrementRage(int value, string source)
         {
             iterationResults.rageSummary.rageGenerated += value;

@@ -181,7 +181,7 @@
             ImprovedDefensiveStance = new Talent() { name = "Improved Defensive Stance", talentTree = TalentTree.Protection, maxRank = 2, spellIds = new int[] { 29593, 29594 }, currentSpellId = 29593 };
             Vigilance = new Talent() { name = "Vigilance", talentTree = TalentTree.Protection, maxRank = 1, spellIds = new int[] { 50720 }, currentSpellId = 50720 };
             FocusedRage = new Talent() { name = "Focused Rage", talentTree = TalentTree.Protection, maxRank = 3, spellIds = new int[] { 29787, 29790, 29792 }, currentSpellId = 29787 };
-            Vitality = new Talent() { name = "Vitality", talentTree = TalentTree.Protection, maxRank = 3, spellIds = new int[] { 29149, 29143, 29144 }, currentSpellId = 29149 };
+            Vitality = new Talent() { name = "Vitality", talentTree = TalentTree.Protection, maxRank = 3, spellIds = new int[] { 29140, 29143, 29144 }, currentSpellId = 29140 };
             Safeguard = new Talent() { name = "Safeguard Rage", talentTree = TalentTree.Protection, maxRank = 2, spellIds = new int[] { 46945, 46949 }, currentSpellId = 46945 };
             Warbringer = new Talent() { name = "Warbringer", talentTree = TalentTree.Protection, maxRank = 1, spellIds = new int[] { 57499 }, currentSpellId = 57499 };
             Devastate = new Talent() { name = "Devastate", talentTree = TalentTree.Protection, maxRank = 1, spellIds = new int[] { 20243 }, currentSpellId = 20243 };
