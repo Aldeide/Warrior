@@ -168,7 +168,7 @@ namespace Warrior.Databases
             {
                 new Enchant()
                 {
-                    id = 38374,
+                    id = 60582,
                     name = "Icescale Leg Armor",
                     slot = ItemSlot.Legs,
                     effects = new List<Effect>()

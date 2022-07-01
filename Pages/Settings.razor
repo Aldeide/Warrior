@@ -62,8 +62,7 @@
 
 				</div>
 
-				<div class="row">
-										
+				<div class="row">			
 						<section id="rotation">
 							<h1>Rotation and Cooldowns</h1>
 							<div class="row">
@@ -148,6 +147,10 @@
 
 								<p class="rotation-option"><label for="execBT" class="rotation-label">Prioritise Slam on Bloodsurge</label>
 								<InputCheckbox name="execBT" @bind-Value="simulation.settings.simulationSettings.prioritizeSlamOnBloodsurge" class="checkbox" /></p>
+
+								<p class="rotation-option"><label for="execHS" class="rotation-label">Heroic Strike above <InputNumber @bind-Value="simulation.settings.simulationSettings.executeHeroicStrikeRagethreshold" class="inline-number"></InputNumber> rage</label>
+								<InputCheckbox name="execBT" @bind-Value="simulation.settings.simulationSettings.useExecuteHeroicStrike" class="checkbox" /></p>
+
 							}
 							<br />
 							</div>

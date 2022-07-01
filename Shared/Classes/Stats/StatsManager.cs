@@ -34,8 +34,11 @@ namespace Warrior
                 + Constants.bonusStatsPerRace["Strength"][iteration.settings.characterSettings.race]
                 + iteration.settings.equipmentSettings.ComputeGearStrength()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.Strength)
+                + iteration.settings.enchantSettings.GetAdditiveStat(Stat.Strength)
+                + iteration.settings.enchantSettings.GetAdditiveStat(Stat.AllBase)
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.AllBase)
                 + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.Strength)
+                + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.AllBase)
                 );
             multiplicativeCharacterStats.strength =
                 iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AllBase)
@@ -45,7 +48,11 @@ namespace Warrior
                 + Constants.bonusStatsPerRace["Agility"][iteration.settings.characterSettings.race]
                 + iteration.settings.equipmentSettings.ComputeGearAgility()
                 + iteration.settings.buffSettings.GetAdditiveStat(Stat.Agility)
-                + iteration.settings.buffSettings.GetAdditiveStat(Stat.AllBase));
+                + iteration.settings.enchantSettings.GetAdditiveStat(Stat.Agility)
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.AllBase)
+                + iteration.settings.enchantSettings.GetAdditiveStat(Stat.AllBase)
+                + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.Agility)
+                + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.AllBase));
             multiplicativeCharacterStats.agility = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AllBase);
 
             additiveCharacterStats.armor = (int)(69 + (additiveCharacterStats.agility * multiplicativeCharacterStats.agility) * 2
@@ -54,23 +61,29 @@ namespace Warrior
             multiplicativeCharacterStats.armor = 1.0f;
 
             additiveCharacterStats.attackPower = (int)(iteration.settings.equipmentSettings.ComputeGearAP()
-                + iteration.settings.buffSettings.GetAdditiveStat(Stat.AttackPower));
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.AttackPower)
+                + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.AttackPower));
             multiplicativeCharacterStats.attackPower = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.AttackPower);
 
             additiveCharacterStats.hasteRating = iteration.settings.equipmentSettings.ComputeGearHasteRating()
-                + iteration.settings.buffSettings.GetAdditiveStat(Stat.HasteRating);
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.HasteRating)
+                + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.HasteRating);
             multiplicativeCharacterStats.hasteRating = 1.0f;
 
             additiveCharacterStats.hitRating = iteration.settings.equipmentSettings.ComputeGearHitRating()
-                + iteration.settings.buffSettings.GetAdditiveStat(Stat.HitRating);
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.HitRating)
+                + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.HitRating);
             multiplicativeCharacterStats.hitRating = 1.0f;
 
             additiveCharacterStats.criticalStrikeRating = iteration.settings.equipmentSettings.ComputeGearCritRating()
-                + iteration.settings.buffSettings.GetAdditiveStat(Stat.CriticalRating);
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.CriticalRating)
+                + iteration.settings.enchantSettings.GetAdditiveStat(Stat.CriticalRating)
+                + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.CriticalRating);
             multiplicativeCharacterStats.criticalStrikeRating = 1.0f;
 
             additiveCharacterStats.expertiseRating = iteration.settings.equipmentSettings.ComputeGearExpertiseRating()
-                + iteration.settings.buffSettings.GetAdditiveStat(Stat.ExpertiseRating);
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.ExpertiseRating)
+                + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.ExpertiseRating);
             multiplicativeCharacterStats.expertiseRating = 1.0f;
 
             additiveCharacterStats.offHandExpertiseRating = iteration.settings.equipmentSettings.ComputeGearExpertiseRating()
@@ -78,7 +91,8 @@ namespace Warrior
             multiplicativeCharacterStats.offHandExpertiseRating = 1.0f;
 
             additiveCharacterStats.armorPenetrationRating = iteration.settings.equipmentSettings.ComputeGearArmorPenetrationRating()
-                + iteration.settings.buffSettings.GetAdditiveStat(Stat.ArmorPenetrationRating);
+                + iteration.settings.buffSettings.GetAdditiveStat(Stat.ArmorPenetrationRating)
+                + Stats.DisplayStats.GetGemStats(iteration.settings, Stat.ArmorPenetrationRating);
             multiplicativeCharacterStats.armorPenetrationRating = 1.0f;
 
             multiplicativeCharacterStats.hasteFactor = iteration.settings.buffSettings.GetMultiplicativeStat(Stat.Haste)

@@ -6,7 +6,7 @@ namespace Warrior.Databases
 	{
 		public static List<Gem> gems = new List<Gem>()
 		{
-			new Gem() { id = 0, name = "None" },
+			new Gem() { id = 0, name = "None", color = Color.None },
 			new Gem() { id = 36766, name = "Bright Dragon's Eye", color = Color.Red, effects = new List<Effect>() {new Effect(EffectType.Additive, Stat.AttackPower, 68)} },
 			new Gem() { id = 40111, name = "Bold Cardinal Ruby", color = Color.Red, effects = new List<Effect>() {new Effect(EffectType.Additive, Stat.Strength, 20)} },
 			new Gem() { id = 40112, name = "Delicate Cardinal Ruby", color = Color.Red, effects = new List<Effect>() {new Effect(EffectType.Additive, Stat.Agility, 20)} },

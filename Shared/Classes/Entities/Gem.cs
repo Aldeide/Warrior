@@ -2,6 +2,7 @@
 {
 	public enum Color
 	{
+		None,
 		Red,
 		Blue,
 		Yellow,
@@ -25,7 +26,7 @@
 			{
 				output += "+";
 				output += effect.value.ToString() + " ";
-				output += Utils.EnumUtils.GetDescription(effect.stat);
+				output += Utils.EnumUtils.GetDescription(effect.stat) + " ";
 			}
 			return output;
 		}

@@ -99,6 +99,18 @@ namespace Warrior
             }
             return 10;
         }
+        public void SwitchToBattleStance()
+        {
+            ChangeStance(new Stance { id = 2457 });
+        }
+        public void SwitchToBerserkerStance()
+        {
+            ChangeStance(new Stance { id = 2458 });
+        }
+        public void SwitchToDefensiveStance()
+        {
+            ChangeStance(new Stance { id = 71 });
+        }
 
         public void Fade()
         {

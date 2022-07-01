@@ -63,13 +63,13 @@
 												{
 													@foreach(Entities.Gem gem in Databases.GemDatabase.gems.Where(g => g.color == Entities.Color.Meta)) {
 												
-												<option value="@gem.id">@gem.name</option>
+												<option value="@gem.id">@gem.Description() [@gem.color.ToString()]</option>
 											}	
 												} else
 												{
 													@foreach(Entities.Gem gem in Databases.GemDatabase.gems.Where(g => g.color != Entities.Color.Meta)) {
 												
-												<option value="@gem.id">@gem.name</option>
+												<option value="@gem.id">@gem.Description() [@gem.color.ToString()]</option>
 											}	
 												}
 												
@@ -87,7 +87,7 @@
 
 													@foreach(Entities.Gem gem in Databases.GemDatabase.gems.Where(g => g.color != Entities.Color.Meta)) {
 												
-												<option value="@gem.id">@gem.name</option>
+												<option value="@gem.id">@gem.Description() [@gem.color.ToString()]</option>
 											}	
 
 												
@@ -97,12 +97,22 @@
 									}
 									@if(Stats.DisplayStats.HasGems(simulation.settings, slot))
 									{
-										var test = Stats.DisplayStats.GetSocketBonus(simulation.settings, slot);
-										if (test != null)
+										var socketBonus = Stats.DisplayStats.GetSocketBonus(simulation.settings, slot);
+										if (socketBonus != null)
 										{
-											<p class="socket @SocketIsActive(Stats.DisplayStats.SocketBonusIsActive(simulation.settings, slot))">Socket bonus: +@test.Item2 @test.Item1.ToString()</p>
+											<p class="socket @SocketIsActive(Stats.DisplayStats.SocketBonusIsActive(simulation.settings, slot))">Socket bonus: +@socketBonus.Item2 @socketBonus.Item1.ToString()</p>
 										}
-										
+									}
+									@if(slot == ItemSlot.Head && Stats.DisplayStats.HasMetaGem(simulation.settings))
+									{
+										if (Stats.DisplayStats.MetaGemActive(simulation.settings))
+										{
+											<p class="socket @SocketIsActive(true)">Meta gem active</p>
+										} else
+										{
+											<p class="socket">Meta gem inactive</p>
+										}
+
 									}
 									
 									<br /><br />

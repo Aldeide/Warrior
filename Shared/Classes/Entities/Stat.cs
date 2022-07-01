@@ -3,20 +3,29 @@ namespace Warrior.Entities
 {
     public enum Stat
     {
+        [Description("All Stats")]
         AllBase,
         [Description("Strength")]
         Strength,
+        [Description("Intellect")]
         Intellect,
+        [Description("Stamina")]
         Stamina,
+        [Description("Spirit")]
         Spirit,
         [Description("Agility")]
         Agility,
         [Description("Attack Power")]
         AttackPower,
+        [Description("Damage")]
         Damage,
+        [Description("Haste")]
         Haste,
+        [Description("Critical")]
         Critical,
+        [Description("Melee Haste")]
         MeleeHaste,
+        [Description("Armor")]
         Armor,
         [Description("Hit Rating")]
         HitRating,
@@ -33,8 +42,11 @@ namespace Warrior.Entities
         ArmorPenetration,
         [Description("Haste Rating")]
         HasteRating,
+        [Description("Bleed Damage")]
         BleedDamage,
+        [Description("Melee Damage")]
         MeleeDamage,
+        [Description("Resilience")]
         Resilience
     }
 }

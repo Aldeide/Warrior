@@ -15,7 +15,10 @@ namespace Warrior.Stats
                 + settings.equipmentSettings.ComputeGearStrength()
                 + settings.buffSettings.GetAdditiveStat(Stat.Strength)
                 + settings.buffSettings.GetAdditiveStat(Stat.AllBase)
-                + GetGemStats(settings, Stat.Strength))
+                + settings.enchantSettings.GetAdditiveStat(Stat.Strength)
+                + settings.enchantSettings.GetAdditiveStat(Stat.AllBase)
+                + GetGemStats(settings, Stat.Strength)
+                + GetGemStats(settings, Stat.AllBase))
                 * settings.buffSettings.GetMultiplicativeStat(Stat.AllBase)
                 * berserkerStancemultiplier
                 * (1 + settings.talentSettings.StrengthOfArms.rank * 0.02f));
@@ -26,6 +29,10 @@ namespace Warrior.Stats
                 + Constants.bonusStatsPerRace["Agility"][settings.characterSettings.race]
                 + settings.equipmentSettings.ComputeGearAgility()
                 + settings.buffSettings.GetAdditiveStat(Stat.Agility)
+                + settings.enchantSettings.GetAdditiveStat(Stat.Agility)
+                + settings.enchantSettings.GetAdditiveStat(Stat.AllBase)
+                + GetGemStats(settings, Stat.Agility)
+                + GetGemStats(settings, Stat.AllBase)
                 + settings.buffSettings.GetAdditiveStat(Stat.AllBase)) * settings.buffSettings.GetMultiplicativeStat(Stat.AllBase));
         }
         public static int DisplayStamina(Settings.Settings settings)
@@ -34,7 +41,9 @@ namespace Warrior.Stats
                 + Constants.bonusStatsPerRace["Stamina"][settings.characterSettings.race]
                 + settings.equipmentSettings.ComputeGearStamina()
                 + settings.buffSettings.GetAdditiveStat(Stat.Stamina)
-                + settings.buffSettings.GetAdditiveStat(Stat.AllBase))
+                + settings.buffSettings.GetAdditiveStat(Stat.AllBase)
+                + GetGemStats(settings, Stat.Stamina)
+                + GetGemStats(settings, Stat.AllBase))
                 * settings.buffSettings.GetMultiplicativeStat(Stat.AllBase)
                 * (1 + settings.talentSettings.StrengthOfArms.rank * 0.02f));
         }
@@ -54,31 +63,39 @@ namespace Warrior.Stats
             return (int)((DisplayStrength(settings) * 2
                 + settings.equipmentSettings.ComputeGearAP()
                 + settings.buffSettings.GetAdditiveStat(Stat.AttackPower)
+                + settings.enchantSettings.GetAdditiveStat(Stat.AttackPower)
+                + GetGemStats(settings, Stat.AttackPower)
                 + TalentUtils.GetArmoredToTheTeethAPBonus(settings.talentSettings) * DisplayArmor(settings) / 108.0f) * settings.buffSettings.GetMultiplicativeStat(Stat.AttackPower));
         }
         public static int DisplayArmorPenetrationRating(Settings.Settings settings)
         {
             return settings.equipmentSettings.ComputeGearArmorPenetrationRating()
+                + GetGemStats(settings, Stat.ArmorPenetrationRating)
                 + settings.buffSettings.GetAdditiveStat(Stat.ArmorPenetrationRating);
         }
         public static int DisplayHasteRating(Settings.Settings settings)
         {
             return settings.equipmentSettings.ComputeGearHasteRating()
+                + GetGemStats(settings, Stat.HasteRating)
                 + settings.buffSettings.GetAdditiveStat(Stat.HasteRating);
         }
         public static int DisplayHitRating(Settings.Settings settings)
         {
             return settings.equipmentSettings.ComputeGearHitRating()
+                + GetGemStats(settings, Stat.HitRating)
                 + settings.buffSettings.GetAdditiveStat(Stat.HitRating);
         }
         public static int DisplayCriticalStrikeRating(Settings.Settings settings)
         {
             return settings.equipmentSettings.ComputeGearCritRating()
-                + settings.buffSettings.GetAdditiveStat(Stat.CriticalRating);
+                + settings.buffSettings.GetAdditiveStat(Stat.CriticalRating)
+                + GetGemStats(settings, Stat.CriticalRating)
+                + settings.enchantSettings.GetAdditiveStat(Stat.CriticalRating);
         }
         public static int DisplayExpertiseRating(Settings.Settings settings)
         {
             return settings.equipmentSettings.ComputeGearExpertiseRating()
+                + GetGemStats(settings, Stat.ExpertiseRating)
                 + settings.buffSettings.GetAdditiveStat(Stat.ExpertiseRating);
         }
         public static float DisplayCriticalChance(Settings.Settings settings)
@@ -161,8 +178,8 @@ namespace Warrior.Stats
         }
         public static float DisplayArmorPenetration(Settings.Settings settings)
 		{
-            return DisplayArmorPenetrationRating(settings)
-                / Constants.kArmorPenetrationPerPercent;
+            return (float)Math.Round(DisplayArmorPenetrationRating(settings)
+                / Constants.kArmorPenetrationPerPercent, 2);
         }
         public static float DisplayEnemyEffectiveArmor(Settings.Settings settings)
 		{
@@ -195,6 +212,10 @@ namespace Warrior.Stats
             foreach(var item in settings.equipmentSettings.items)
             {
                 output += settings.gemSettings.GetItemGemStats(Utils.MiscUtils.CombineItemAndSlot(item.Value.id, item.Key), stat);
+                if (GetSocketBonus(settings, item.Key) != null && GetSocketBonus(settings, item.Key).Item1 == stat && SocketBonusIsActive(settings, item.Key))
+                {
+                    output += GetSocketBonus(settings, item.Key).Item2;
+                }
             }
             return output;
         }
@@ -247,6 +268,111 @@ namespace Warrior.Stats
             if (socket == Color.Red && (gem == Color.Red || gem == Color.Orange || gem == Color.Purple)) return true;
             if (socket == Color.Blue && (gem == Color.Blue || gem == Color.Purple || gem == Color.Green)) return true;
             if (socket == Color.Yellow && (gem == Color.Yellow || gem == Color.Orange || gem == Color.Green)) return true;
+            return false;
+        }
+        public static bool HasMetaGem(Settings.Settings settings)
+        {
+            Console.WriteLine("META");
+            var item = settings.equipmentSettings.GetItemBySlot(ItemSlot.Head);
+            Console.WriteLine("META Item");
+            if (item == null) return false;
+            var gems = settings.gemSettings.GetGemsByItemId(Utils.MiscUtils.CombineItemAndSlot(item.id, ItemSlot.Head));
+            Console.WriteLine("gems:" + gems.Count);
+            if (gems == null) return false;
+            foreach (var gem in gems)
+            {
+                Console.WriteLine(gem.color.ToString());
+                Gem actualgem = Databases.GemDatabase.gems.Single(s => s.id == gem.id);
+                if (actualgem.color == Color.Meta)
+                {
+                    
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static bool MetaGemActive(Settings.Settings settings)
+        {
+            if (!HasMetaGem(settings)) return false;
+
+            int numBlue = 0;
+            int numRed = 0;
+            int numYellow = 0;
+
+            foreach(var item in settings.equipmentSettings.items)
+            {
+                var gems = settings.gemSettings.GetGemsByItemId(Utils.MiscUtils.CombineItemAndSlot(item.Value.id, item.Key));
+
+                foreach(var gem in gems)
+                {
+                    Gem actualgem = Databases.GemDatabase.gems.Single(s => s.id == gem.id);
+                    if (actualgem.color == Color.Prismatic)
+                    {
+                        numBlue++;
+                        numRed++;
+                        numYellow++;
+                        continue;
+                    }
+                    if (actualgem.color == Color.Red)
+                    {
+                        numRed++;
+                        continue;
+                    }
+                    if (actualgem.color == Color.Blue)
+                    {
+                        numBlue++;
+                        continue;
+                    }
+                    if (actualgem.color == Color.Yellow)
+                    {
+                        numYellow++;
+                        continue;
+                    }
+                    if (actualgem.color == Color.Purple)
+                    {
+                        numRed++;
+                        numBlue++;
+                        continue;
+                    }
+                    if (actualgem.color == Color.Orange)
+                    {
+                        numRed++;
+                        numYellow++;
+                        continue;
+                    }
+                    if (actualgem.color == Color.Green)
+                    {
+                        numYellow++;
+                        numBlue++;
+                        continue;
+                    }
+                }
+            }
+
+            var head = settings.equipmentSettings.GetItemBySlot(ItemSlot.Head);
+            if (head == null) return false;
+            var headgems = settings.gemSettings.GetGemsByItemId(Utils.MiscUtils.CombineItemAndSlot(head.id, ItemSlot.Head));
+            Gem metagem = new Gem();
+            if (headgems == null) return false;
+            foreach (var gem in headgems)
+            {
+                Gem actualgem = Databases.GemDatabase.gems.Single(s => s.id == gem.id);
+                if (actualgem.color == Color.Meta)
+                {
+                    metagem = actualgem;
+                }
+            }
+            
+            // Chaotic Skyflare Diamond
+            if (metagem.id == 41266 && numBlue >= 2)
+            {
+                return true;
+            }
+            // Swifth Skyflare Diamond
+            if (metagem.id == 41339 && numYellow >= 2 && numRed >= 1)
+            {
+                return true;
+            }
             return false;
         }
     }

@@ -15,7 +15,7 @@ namespace Warrior.Settings
 			enchants[ItemSlot.Wrist] = EnchantDatabase.GetEnchantById(44575);
 			enchants[ItemSlot.Hands] = EnchantDatabase.GetEnchantById(60668);
 			enchants[ItemSlot.Waist] = EnchantDatabase.GetEnchantById(55655);
-			enchants[ItemSlot.Legs] = EnchantDatabase.GetEnchantById(38374);
+			enchants[ItemSlot.Legs] = EnchantDatabase.GetEnchantById(60582);
 			enchants[ItemSlot.Boots] = EnchantDatabase.GetEnchantById(60763);
 			enchants[ItemSlot.Ring1] = EnchantDatabase.GetEnchantById(0);
 			enchants[ItemSlot.Ring2] = EnchantDatabase.GetEnchantById(0);
@@ -31,6 +31,23 @@ namespace Warrior.Settings
 		public Enchant GetEnchant(ItemSlot slot)
 		{
 			return enchants[slot];
+		}
+
+		public int GetAdditiveStat(Entities.Stat stat)
+		{
+			int output = 0;
+			foreach (var e in enchants)
+			{
+				if (e.Value == null || e.Value.effects == null) continue;
+				foreach (var effect in e.Value.effects)
+				{
+					if (effect.stat == stat && effect.type == Entities.EffectType.Additive)
+					{
+						output += (int)effect.value;
+					}
+				}
+			}
+			return output;
 		}
 	}
 }

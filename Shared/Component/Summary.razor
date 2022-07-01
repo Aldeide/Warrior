@@ -194,19 +194,37 @@ Debug
 
 
 <br /><br />
+
+<div style="text-align:center;">
 <EditForm EditContext="@editContext" OnValidSubmit="@Simulate">
 	<button type="submit" class="btn btn-primary" value="Save">Simulate</button>
 </EditForm>
+<br />
+<span class="highlight">@dps</span>
+</div>
+
+
 
 @code {
 	[Parameter]
 	public EditContext? editContext { get; set; }
+
+	[CascadingParameter]
+	public Warrior.Pages.Results _Parent { get; set; }
+
+	public string dps { get; set; }
+
 	protected override void OnInitialized()
 	{
 		base.OnInitialized();
 	}
 
-	private void Simulate() {
+	private async Task Simulate() {
 		simulation.Simulate();
+		dps = Math.Round(simulation.simulationResults.totalDamage / simulation.settings.simulationSettings.combatLength).ToString();
+		if (_Parent != null)
+		{
+			_Parent.RefreshState();
+		}
 	}
 }

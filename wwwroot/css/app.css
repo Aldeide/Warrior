@@ -11,7 +11,7 @@ header {
 }
 
 form {
-    display:flex;
+
     width: 100%;
 }
 
@@ -46,9 +46,17 @@ a, .btn-link {
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: #47a0ff;
+    border-color: #47a0ff;
+    width: 150px;
+    height: 35px;
+    line-height: 15px;
 }
+
+    .btn-primary:hover {
+        background-color: #47a0ff;
+        border-color: #47a0ff;
+    }
 
 .sidebar {
     background-color: #fff;
@@ -107,6 +115,15 @@ a, .btn-link {
     #items .main .content .container-fluid {
         padding-right: 0;
     }
+
+#results thead tr td:first-child,
+#results tr td:first-child {
+    width: 20em;
+    min-width: 20em;
+    max-width: 20em;
+    word-break: break-all;
+}
+
 #items td {
     height: 30px;
     font-size: 12px;
@@ -123,11 +140,20 @@ a, .btn-link {
         color: #000;
     }
 
+    #items table > tr:hover > td > a {
+        background-color: #fff;
+        color: #000;
+    }
+
     #items table > tr {
         border-bottom: 1px solid #fff;
     }
         #items table > tr.equipped {
-            background-color: #aac7fb;
+            background-color: #fff;
+            color: #000;
+        }
+        #items table > tr.equipped > td > a {
+            color: #000;
         }
 .rowlink::before {
     
@@ -291,7 +317,9 @@ select option:hover  {
     width: 40px;
     text-align: center;
     font-weight: 600;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #fff;
+    color: #fff;
+    background-color: transparent;
 }
 
 input.inline-number::-webkit-outer-spin-button,
@@ -332,3 +360,52 @@ input[type=number].inline-number {
 .lowlight {
     color: #53546b;
 }
+
+.draw-border {
+    box-shadow: inset 0 0 0 4px #58afd1;
+    color: #58afd1;
+    transition: color 0.25s 0.0833333333s;
+    position: relative;
+}
+
+    .draw-border::before, .draw-border::after {
+        border: 0 solid transparent;
+        box-sizing: border-box;
+        content: "";
+        pointer-events: none;
+        position: absolute;
+        width: 0;
+        height: 0;
+        bottom: 0;
+        right: 0;
+    }
+
+    .draw-border::before {
+        border-bottom-width: 4px;
+        border-left-width: 4px;
+    }
+
+    .draw-border::after {
+        border-top-width: 4px;
+        border-right-width: 4px;
+    }
+
+    .draw-border:hover {
+        color: #ffe593;
+    }
+
+        .draw-border:hover::before, .draw-border:hover::after {
+            border-color: #ffe593;
+            transition: border-color 0s, width 0.25s, height 0.25s;
+            width: 100%;
+            height: 100%;
+        }
+
+        .draw-border:hover::before {
+            transition-delay: 0s, 0s, 0.25s;
+        }
+
+        .draw-border:hover::after {
+            transition-delay: 0s, 0.25s, 0s;
+        }
+

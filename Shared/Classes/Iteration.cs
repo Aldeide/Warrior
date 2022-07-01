@@ -39,13 +39,17 @@
         {
             // Resetting what needs to be reset between iterations, namely temporary auras.
             Setup();
-
+            
             // Preparing the results of the iteration.
             iterationResults = new IterationResults();
             iterationResults.combatLength = settings.simulationSettings.combatLength;
 
             // TODO: add variability of combat length.
             int numSteps = settings.simulationSettings.combatLength * Constants.kStepsPerSecond;
+            int executeStep = (int)(numSteps * (1 - settings.simulationSettings.executePercent));
+
+            Console.WriteLine("Execute step: " + executeStep);
+
             currentStep = 0;
 
             // Main simulation loop.
@@ -66,16 +70,35 @@
                 // Main hand and off hand attacks.
                 Attacks();
 
-                // Abilities.
-                Abilities();
+                if (currentStep > executeStep)
+                {
+                    // Execution Abilities.
+                    Console.WriteLine("Execute abilities");
+                    ExecuteAbilities();
+                } else
+                {
+                    // Abilities.
+                    Abilities();
+                }
+                
 
                 // Heroic Strike.
                 if (settings.simulationSettings.useHeroicStrike && stanceManager.IsInDefaultStance())
                 {
-                    if (rage >= settings.simulationSettings.heroicStrikeRagethreshold && !abilityManager.heroicStrike.isQueued)
+                    if (currentStep > executeStep && settings.simulationSettings.useExecuteHeroicStrike)
                     {
-                        abilityManager.heroicStrike.Use();
+                        if (rage >= settings.simulationSettings.executeHeroicStrikeRagethreshold && !abilityManager.heroicStrike.isQueued)
+                        {
+                            abilityManager.heroicStrike.Use();
+                        }
+                    } else
+                    {
+                        if (rage >= settings.simulationSettings.heroicStrikeRagethreshold && !abilityManager.heroicStrike.isQueued)
+                        {
+                            abilityManager.heroicStrike.Use();
+                        }
                     }
+                    
                 }
 
                 if (globalCooldown <= 0)
@@ -140,6 +163,8 @@
             iterationResults.abilitySummaries.Add((DamageResults)abilityManager.whirlwind.damageSummary.Clone());
             iterationResults.abilitySummaries.Add((DamageResults)abilityManager.heroicStrike.damageSummary.Clone());
             iterationResults.abilitySummaries.Add((DamageResults)abilityManager.slam.damageSummary.Clone());
+            iterationResults.abilitySummaries.Add((DamageResults)abilityManager.execute.damageSummary.Clone());
+            if (abilityManager.mortalStrike != null) iterationResults.abilitySummaries.Add((DamageResults)abilityManager.mortalStrike.damageSummary.Clone());
 
             if (auraManager.deepWounds != null) iterationResults.dotDamageSummaries.Add((DotDamageResults)auraManager.deepWounds.dotSummary.Clone());
             if (auraManager.rend != null) iterationResults.dotDamageSummaries.Add((DotDamageResults)auraManager.rend.dotSummary.Clone());
@@ -171,7 +196,7 @@
             abilityManager.Reset();
             mainHand = new Weapon(this, ItemSlot.MainHand, settings.equipmentSettings.GetItemBySlot(ItemSlot.MainHand));
             offHand = new Weapon(this, ItemSlot.OffHand, settings.equipmentSettings.GetItemBySlot(ItemSlot.OffHand));
-            rage = settings.initialRage;
+            rage = settings.simulationSettings.initialRage;
             globalCooldown = 0;
         }
         public void PassiveTicks()
@@ -231,9 +256,19 @@
                 && abilityManager.whirlwind != null
                 && abilityManager.whirlwind.CanUse())
             {
-                abilityManager.whirlwind.Use();
-                abilityManager.GetNext();
-                return;
+                if (settings.simulationSettings.useWhirlwind && abilityManager.whirlwind.CanUse())
+                {
+                    if (!stanceManager.IsInBerserkerStance() && stanceManager.CanChangeStance())
+                    {
+                        stanceManager.ChangeStance(new Entities.Stance() { id = 2458 });
+                    }
+                    if (stanceManager.IsInBerserkerStance())
+                    {
+                        abilityManager.whirlwind.Use();
+                        abilityManager.GetNext();
+                        return;
+                    }
+                }
             }
 
             // Rend.
@@ -247,7 +282,11 @@
                 {
                     stanceManager.ChangeStance(new Entities.Stance() { id = 2457 });
                 }
-                abilityManager.rend.Use();
+                if (stanceManager.IsInBattleStance())
+                {
+                    abilityManager.rend.Use();
+                }
+                
                 return;
             }
 
@@ -295,6 +334,49 @@
 
         public void ExecuteAbilities()
         {
+            if (!GCDAvailable()) return;
+
+            // Whirlwind hits more than execute.
+            if (settings.simulationSettings.useWhirlwind && abilityManager.whirlwind.CanUse())
+            {
+                if (!stanceManager.IsInBerserkerStance() && stanceManager.CanChangeStance())
+                {
+                    stanceManager.ChangeStance(new Entities.Stance() { id = 2458 });
+                    
+                }
+                if (stanceManager.IsInBerserkerStance())
+                {
+                    abilityManager.whirlwind.Use();
+                    Console.WriteLine("Execute WW");
+                }
+            }
+
+            // Depending on gear, bloodthirst may hit more than execute.
+            // TODO: compute actual AP threshold and add as option.
+            if (settings.simulationSettings.prioritizeBloodthirst
+                && settings.simulationSettings.useBloodthirst
+                && abilityManager.bloodthirst != null
+                && abilityManager.bloodthirst.CanUse())
+            {
+                abilityManager.bloodthirst.Use();
+                Console.WriteLine("Execute BT");
+            }
+
+            // TODO: check what the story is with Mortal Strike.
+
+            // Depending on gear, slam on bloodthirst may be better than execute. 
+            if (settings.simulationSettings.prioritizeSlamOnBloodsurge
+                && auraManager.bloodsurge.active)
+            {
+                Console.WriteLine("Execute Slam");
+                abilityManager.slam.Use();
+            }
+
+            // Execute.
+            // TODO: look into delaying execute if rage is too low.
+            Console.WriteLine("Execute Exec");
+            abilityManager.execute.Use();
+            abilityManager.GetNext();
             return;
         }
 
