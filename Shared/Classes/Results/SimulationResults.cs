@@ -14,9 +14,14 @@
         public List<DotDamageResults> dotSummaries { get; set; } = new List<DotDamageResults>();
         public List<DamageResults> abilitySummaries { get; set; } = new List<DamageResults>();
         public List<RageResults> rageSummaries { get; set; } = new List<RageResults>();
+        public StanceResults battleStanceResults { get; set; } = new StanceResults();
+        public StanceResults berserkerStanceResults { get; set; } = new StanceResults();
+        public StanceResults defensiveStanceResults { get; set; } = new StanceResults();
 
         public void Populate(List<IterationResults> results)
 		{
+            numIterations = results.Count;
+
             foreach(var a in results)
             {
                 foreach(var b in a.rageSummary.generated)
@@ -31,7 +36,6 @@
                     rageSummary.ticks[b.Key] = b.Value;
                 }
             }
-
 
             mainHand.numCasts = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numCasts), 3);
             mainHand.numHit = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numHit), 3);
@@ -52,11 +56,12 @@
             offHand.totalDamage = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.totalDamage), 3);
             totalDamage += (float)Math.Round(offHand.totalDamage, 3);
 
+
+
+
             foreach (IterationResults a in results)
             {
                 numSteps += a.numSteps;
-
-
 
                 foreach (AuraResults auraSummary in a.auraSummaries)
                 {
@@ -84,14 +89,22 @@
                         s.applications += summary.applications;
                         s.refreshes += summary.refreshes;
                         s.totalDamage += summary.totalDamage;
-                        totalDamage += summary.totalDamage;
                     }
                     else
                     {
                         var d = (DotDamageResults)summary.Clone();
                         dotSummaries.Add(d);
-                        totalDamage += d.totalDamage;
                     }
+                }
+
+                foreach (DotDamageResults summary in a.dotDamageSummaries)
+                {
+                    summary.totalDamage /= numIterations;
+                    summary.ticks /= numIterations;
+                    summary.applications /= numIterations;
+                    summary.refreshes /= numIterations;
+                    summary.uptime /= numIterations;
+                    totalDamage += summary.totalDamage;
                 }
 
                 foreach (DamageResults abilitySummary in a.abilitySummaries)
@@ -111,19 +124,36 @@
                         summary.totalDamage += abilitySummary.totalDamage;
                         summary.hitDamage += abilitySummary.hitDamage;
                         summary.critDamage += abilitySummary.critDamage;
-
-                        totalDamage += abilitySummary.totalDamage;
                     }
                     else
                     {
                         var c = (DamageResults)abilitySummary.Clone();
                         abilitySummaries.Add(c);
-                        totalDamage += c.totalDamage;
                     }
                 }
 
+                foreach (DamageResults abilitySummary in a.abilitySummaries)
+                {
+                    abilitySummary.numCasts /= numIterations;
+                    abilitySummary.numHit /= numIterations;
+                    abilitySummary.numCrit /= numIterations;
+                    abilitySummary.numMiss /= numIterations;
+                    abilitySummary.numDodge /= numIterations;
+                    abilitySummary.totalDamage /= numIterations;
+                    abilitySummary.hitDamage /= numIterations;
+                    abilitySummary.critDamage /= numIterations;
+                    totalDamage += abilitySummary.totalDamage;
+                }
+
             }
-            
+
+            battleStanceResults.name = results.First().battleStanceResults.name;
+            berserkerStanceResults.name = results.First().berserkerStanceResults.name;
+            defensiveStanceResults.name = results.First().defensiveStanceResults.name;
+
+            battleStanceResults.uptime = (int)Math.Round(results.Select(r => r.battleStanceResults).Average(x => x.uptime), 3);
+            berserkerStanceResults.uptime = (int)Math.Round(results.Select(r => r.berserkerStanceResults).Average(x => x.uptime), 3);
+            defensiveStanceResults.uptime = (int)Math.Round(results.Select(r => r.defensiveStanceResults).Average(x => x.uptime), 3);
         }
     }
 }

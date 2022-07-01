@@ -9,7 +9,7 @@
 @inject Simulation simulation;
 
 <EditForm EditContext="@editContext">
-	<div class="sidebar summary" style="min-width: 300px; background-color: #eee; background-image: none;">
+	<div class="sidebar summary" style="min-width: 300px; background-color: #20222e; background-image: none;">
 		<Warrior.Shared.Component.Summary editContext=@editContext />
 	</div>
 	<div class="main" style="width: 100%;">
@@ -64,8 +64,6 @@
 							<h1>Rotation and Cooldowns</h1>
 							<div class="row">
 							<div class="col-sm-3">
-
-
 							@if(simulation.settings.talentSettings.Bloodthirst.rank == 1)
 							{
 							<label for="useBT" class="rotation-label">Use Bloodthirst</label>
@@ -355,10 +353,22 @@
 							}
 						</div>
 						<div class="col-sm-3 buff-column">
-
+							<h2>Devotion Aura</h2>
+							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.DevotionAura))
+							{
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
+									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
+								</a>
+							}
 						</div>
 						<div class="col-sm-3 buff-column">
-
+							<h2>Stoneskin Totem</h2>
+							@foreach (Buff aura in simulation.settings.buffSettings.buffs.Where<Buff>(s => s.buffGroup == BuffGroup.Stoneskin))
+							{
+								<a rel="?spell=@aura.id" oncontextmenu="return false;" @onclick:preventDefault @onmouseup="args => { simulation.settings.buffSettings.ProcessClick(args.Button, aura.id, aura.buffGroup); UpdateLocalStorage();}" @onmouseup:preventDefault>
+									<div class="buff-icon @BuffGrayscaleIcon(aura.isActive)" oncontextmenu="return false;" style="background-image: url('data/icons/auras/@(aura.id).jpg'); background-size: 40px"></div>
+								</a>
+							}
 						</div>
 						<div class="col-sm-3 buff-column">
 

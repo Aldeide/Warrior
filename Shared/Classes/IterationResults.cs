@@ -10,6 +10,9 @@
         public List<AuraResults> auraSummaries { get; set; } = new List<AuraResults>();
         public List<DamageResults> abilitySummaries { get; set; } = new List<DamageResults>();
         public List<DotDamageResults> dotDamageSummaries { get; set; } = new List<DotDamageResults>();
+        public StanceResults battleStanceResults { get; set; } = new StanceResults();
+        public StanceResults berserkerStanceResults { get; set; } = new StanceResults();
+        public StanceResults defensiveStanceResults { get; set; } = new StanceResults();
 
     }
 }

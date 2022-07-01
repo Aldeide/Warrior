@@ -2,6 +2,8 @@
 
 html, body {
     font-family: 'Red Hat Display', sans-serif;
+    background-color: #212330;
+    color: #fff;
 }
 
 header {
@@ -49,9 +51,9 @@ a, .btn-link {
 }
 
 .sidebar {
-    background-color: #1861ac;
+    background-color: #fff;
     width: 350px;
-    height:100vh;
+    height: 100vh;
     position: fixed;
 }
 
@@ -75,22 +77,22 @@ a, .btn-link {
 }
 
 #items h2 {
-    color: #000;
+    color: #fff;
     margin-bottom: 20px;
 }
 
 #items table {
     width: 100%;
-    color: #000;
+    color: #fff;
 }
 
     #items table > thead > tr > td {
         height: 40px;
         font-size: 14px;
-        color: #000;
+        color: #fff;
         margin: 10px;
-        border-bottom: 2px solid #000;
-        border-top: 2px solid #000;
+        border-bottom: 2px solid #fff;
+        border-top: 2px solid #fff;
     }
     #items .main {
         padding-left: 338px;
@@ -112,16 +114,17 @@ a, .btn-link {
 }
 
     #items td > a {
-        color: #000;
+        color: #fff;
         text-decoration: none;
     }
 
     #items table > tr:hover {
-        background-color: #aac7fb;
+        background-color: #fff;
+        color: #000;
     }
 
     #items table > tr {
-        border-bottom: 1px solid #000;
+        border-bottom: 1px solid #fff;
     }
         #items table > tr.equipped {
             background-color: #aac7fb;
@@ -136,12 +139,17 @@ a, .btn-link {
 
 .nav {
     height: 100vh;
-    background-color: #eee;
+    background-color: #20222e;
 }
+
+.nav-link {
+    color: #3a3d4e;
+}
+
 .align-items-start {
     width: 100%;
     height: 100vh;
-    background: #fff;
+    background: #222431;
 }
 .tab-content {
     width: 100%;
@@ -155,8 +163,8 @@ button.nav-link, button.nav-link.active {
 }
 
 .nav-pills > button.nav-link.active {
-    background-color: #fff;
-    color: #000;
+    background-color: #222431;
+    color: #fff;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -217,11 +225,33 @@ button.nav-link, button.nav-link.active {
     float: right;
     width: 120px;
     text-align: right;
+    background-color: transparent;
+    color: #fff;
 }
+
+select option {
+    float: right;
+    width: 120px;
+    text-align: right;
+    background-color: #1f222e;
+    color: #fff;
+}
+
+select option:hover  {
+    float: right;
+    width: 120px;
+    text-align: right;
+    background-color: #fff;
+    color: #fff;
+}
+
 .settings-item > input {
     float: right;
     width: 80px;
     text-align: right;
+    background-color: transparent;
+    color: #fff;
+    padding-right: 5px;
 }
 
 .buff-column {
@@ -280,4 +310,25 @@ input[type=number].inline-number {
 
 .socket-active {
     color: #26b050;
+}
+
+.input-group-text {
+    background-color: #20222e;
+    border: 1px solid #20222e;
+    color: #fff;
+    min-width: 100px;
+}
+
+.highlight {
+    color: #47a0ff;
+    font-size: 35px;
+}
+
+    .highlight > span {
+        color: #53546b;
+        font-size: 20px;
+    }
+
+.lowlight {
+    color: #53546b;
 }

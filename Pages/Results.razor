@@ -2,7 +2,7 @@
 
 @page "/results"
 <EditForm EditContext="@editContext">
-<div class="sidebar summary" style="min-width: 300px; background-color: #eee; background-image: none;">
+<div class="sidebar summary" style="min-width: 300px; background-color: #20222e; background-image: none;">
 	<Warrior.Shared.Component.Summary editContext=@editContext />
 </div>
 <div class="main" style="width: 100%;">
@@ -14,13 +14,15 @@
 
 						<h3>Results</h3>
 
-						DPS:
+						
 						@if (simulation.simulationResults.combatDuration > 0)
 						{
-							@(simulation.simulationResults.totalDamage / (simulation.simulationResults.combatDuration * simulation.settings.simulationSettings.numIterations))
-						}
-						Num Steps: @simulation.simulationResults.numSteps
-						<br />
+							<p class="highlight"><span>DPS</span><br />
+								@(Math.Round(simulation.simulationResults.totalDamage / simulation.simulationResults.combatDuration, 2))
+								</p>
+							<p class="highlight"><span>Total Damage</span><br />
+								@(Math.Round(simulation.simulationResults.totalDamage, 0))
+								</p>
 						<h3>Melee Attacks</h3>
 						<table>
 							<thead>
@@ -276,17 +278,46 @@
 								</tr>
 							}
 						</table>
-
-						@foreach (var auraSummary in simulation.simulationResults.auraSummaries)
-						{
-							 
-							<br />
-						}
+						<h3>Stances</h3>
+						<table>
+							<thead>
+								<tr>
+									<td>
+										
+									</td>
+									<td>
+										Uptime
+									</td>
+								</tr>
+							</thead>
+								<tr>
+									<td>
+										@simulation.simulationResults.battleStanceResults.name
+									</td>
+									<td>
+										@simulation.simulationResults.battleStanceResults.uptime
+									</td>
+								</tr>
+								<tr>
+									<td>
+										@simulation.simulationResults.berserkerStanceResults.name
+									</td>
+									<td>
+										@simulation.simulationResults.berserkerStanceResults.uptime
+									</td>
+								</tr>
+								<tr>
+									<td>
+										@simulation.simulationResults.defensiveStanceResults.name
+									</td>
+									<td>
+										@simulation.simulationResults.defensiveStanceResults.uptime
+									</td>
+								</tr>
+						</table>
 						<h3>Rage Management</h3>
 
-						Generated Rage (Average): @(simulation.simulationResults.rageSummary.rageGenerated / (float)simulation.settings.simulationSettings.numIterations) <br />
-						Wasted Rage (Average): @(simulation.simulationResults.rageSummary.wastedRage / (float)simulation.settings.simulationSettings.numIterations)
-												<table>
+						<table>
 							<thead>
 								<tr>
 									<td>
@@ -315,6 +346,11 @@
 								</tr>
 							}
 						</table>
+
+						} else {
+							<p>No Results to display.</p>
+						}
+
 
 					</section>
 				</div>

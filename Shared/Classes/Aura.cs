@@ -557,7 +557,7 @@ namespace Warrior
             }
             else
             {
-                damage += (int)RendDamage();
+                damage = (int)RendDamage();
                 tickSize = (int)(damage * tickInterval / (float)duration);
                 dotSummary.refreshes += 1;
             }

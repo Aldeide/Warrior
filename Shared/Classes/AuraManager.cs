@@ -84,7 +84,7 @@
         }
         public void MeleeCriticalTrigger()
         {
-            flurry?.Trigger(AuraTrigger.AllMeleeCritical);
+            
             
         }
         public void MeleeNonCriticalTrigger()
@@ -98,13 +98,14 @@
         public void MainHandNonCriticalTrigger()
 		{
             mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
+
         }
         public void MainHandCriticalTrigger()
         {
             deepWounds?.Trigger(AuraTrigger.MainHandCritical);
             mainHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
             wreckingCrew?.Trigger(AuraTrigger.MainHandCritical);
-            MeleeNonCriticalTrigger();
+            flurry?.Trigger(AuraTrigger.AllMeleeCritical);
         }
         public void OffHandNonCriticalTrigger()
         {
@@ -116,6 +117,7 @@
             deepWounds?.Trigger(AuraTrigger.OffHandCritical);
             offHandBerserking?.Trigger(AuraTrigger.MainHandCritical);
             wreckingCrew?.Trigger(AuraTrigger.MainHandCritical);
+            flurry?.Trigger(AuraTrigger.AllMeleeCritical);
         }
         public void BloodthirstTrigger()
         {
@@ -159,7 +161,7 @@
 
             if (iteration.settings.glyphSettings.HasGlyphOfHeroicStrike())
             {
-                iteration.IncrementRage(10, "Glyph of heroic Strike");
+                iteration.IncrementRage(10, "Glyph of Heroic Strike");
             }
         }
         public void ApplyTime(int d)

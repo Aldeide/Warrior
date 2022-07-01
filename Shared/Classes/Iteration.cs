@@ -56,6 +56,7 @@
                 {
                     stanceManager.DefaultStance();
                 }
+                nextStep.stance = stanceManager.next;
                 // Passive ticks such as anger management.
                 PassiveTicks();
 
@@ -67,6 +68,15 @@
 
                 // Abilities.
                 Abilities();
+
+                // Heroic Strike.
+                if (settings.simulationSettings.useHeroicStrike && stanceManager.IsInDefaultStance())
+                {
+                    if (rage >= settings.simulationSettings.heroicStrikeRagethreshold && !abilityManager.heroicStrike.isQueued)
+                    {
+                        abilityManager.heroicStrike.Use();
+                    }
+                }
 
                 if (globalCooldown <= 0)
                 {
@@ -101,6 +111,8 @@
                 globalCooldown -= delta;
                 abilityManager.ApplyTime(delta);
                 auraManager.ApplyTime(delta);
+                stanceManager.ApplyTime(delta);
+
                 // Next Step.
                 currentStep = next;
                 iterationResults.numSteps += 1;
@@ -116,17 +128,18 @@
             auraManager.wreckingCrew?.Fade();
             auraManager.sunderArmor?.Fade();
             auraManager.rend?.Fade();
+            stanceManager.Fade();
 
             // Moving the results.
             iterationResults.mainHand = (DamageResults)mainHand.damageSummary.Clone();
             iterationResults.offHand = (DamageResults)offHand.damageSummary.Clone();
-            auraManager.auras.ForEach(aura => iterationResults.auraSummaries.Add(aura.auraSummary));
+            //auraManager.auras.ForEach(aura => iterationResults.auraSummaries.Add(aura.auraSummary));
             
 
-            if (abilityManager.bloodthirst != null) iterationResults.abilitySummaries.Add(abilityManager.bloodthirst.damageSummary);
-            iterationResults.abilitySummaries.Add(abilityManager.whirlwind.damageSummary);
-            iterationResults.abilitySummaries.Add(abilityManager.heroicStrike.damageSummary);
-            iterationResults.abilitySummaries.Add(abilityManager.slam.damageSummary);
+            if (abilityManager.bloodthirst != null) iterationResults.abilitySummaries.Add((DamageResults)abilityManager.bloodthirst.damageSummary.Clone());
+            iterationResults.abilitySummaries.Add((DamageResults)abilityManager.whirlwind.damageSummary.Clone());
+            iterationResults.abilitySummaries.Add((DamageResults)abilityManager.heroicStrike.damageSummary.Clone());
+            iterationResults.abilitySummaries.Add((DamageResults)abilityManager.slam.damageSummary.Clone());
 
             if (auraManager.deepWounds != null) iterationResults.dotDamageSummaries.Add((DotDamageResults)auraManager.deepWounds.dotSummary.Clone());
             if (auraManager.rend != null) iterationResults.dotDamageSummaries.Add((DotDamageResults)auraManager.rend.dotSummary.Clone());
@@ -143,6 +156,11 @@
             if (auraManager.bloodFury != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.bloodFury.auraSummary.Clone());
             if (auraManager.wreckingCrew != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.wreckingCrew.auraSummary.Clone());
             if (auraManager.sunderArmor != null) iterationResults.auraSummaries.Add((AuraResults)auraManager.sunderArmor.auraSummary.Clone());
+
+            iterationResults.battleStanceResults = (StanceResults)stanceManager.battleStanceResults.Clone();
+            iterationResults.berserkerStanceResults = (StanceResults)stanceManager.berserkerStanceResults.Clone();
+            iterationResults.defensiveStanceResults = (StanceResults)stanceManager.defensiveStanceResults.Clone();
+
             return iterationResults;
         }
 
@@ -174,7 +192,7 @@
         }
         public void Abilities()
         {
-            if (!GCDAvailable() && !abilityManager.slam.isCasting) return;
+            if (!GCDAvailable() && !abilityManager.slam.isCasting && !abilityManager.shatteringThrow.isCasting) return;
 
             // Sunder Armor.
             if (settings.simulationSettings.useSunderArmor)
@@ -204,6 +222,8 @@
                 && settings.simulationSettings.useBloodthirst
                 && abilityManager.bloodthirst.CanUse()) {
                 abilityManager.bloodthirst.Use();
+                abilityManager.GetNext();
+                return;
             }
 
             // Whirlwind.
@@ -212,18 +232,23 @@
                 && abilityManager.whirlwind.CanUse())
             {
                 abilityManager.whirlwind.Use();
+                abilityManager.GetNext();
+                return;
             }
 
             // Rend.
             if (settings.simulationSettings.useRend &&
                 ((abilityManager.whirlwind != null && abilityManager.whirlwind.currentCooldown >= 3.0f * Constants.kStepsPerSecond) || !settings.simulationSettings.useWhirlwind)
-                && abilityManager.rend.CanUse())
+                && abilityManager.rend.CanUse()
+                && (auraManager.bloodsurge == null || !auraManager.bloodsurge.active)
+                && (auraManager.rend.currentDuration <= 1.0f * Constants.kStepsPerSecond || !auraManager.rend.active))
             {
                 if (!stanceManager.IsInBattleStance() && stanceManager.CanChangeStance())
                 {
                     stanceManager.ChangeStance(new Entities.Stance() { id = 2457 });
                 }
                 abilityManager.rend.Use();
+                return;
             }
 
             // Slam.
@@ -247,6 +272,8 @@
                         || !settings.simulationSettings.useWhirlwind))
                 {
                     abilityManager.slam.Use();
+                    abilityManager.GetNext();
+                    return;
                 } else
                 {
                     // Use slam as filler.
@@ -256,18 +283,13 @@
                             || !settings.simulationSettings.useBloodthirst))
                     {
                         abilityManager.slam.Use();
+                        abilityManager.GetNext();
+                        return;
                     }
                 }
             }
 
-            // Heroic Strike.
-            if (settings.simulationSettings.useHeroicStrike && stanceManager.IsInDefaultStance())
-			{
-                if (rage >= settings.simulationSettings.heroicStrikeRagethreshold && !abilityManager.heroicStrike.isQueued)
-                {
-                    abilityManager.heroicStrike.Use();
-                }
-            }
+
             abilityManager.GetNext();
         }
         public void IncrementRage(int value, string source)
@@ -346,7 +368,7 @@
             }
 
             // Shattering Throw.
-            if (settings.simulationSettings.useShatteringThrow && !auraManager.shatteringThrow.active)
+            if ((settings.simulationSettings.useShatteringThrow && !auraManager.shatteringThrow.active && abilityManager.shatteringThrow.CanUse()) || abilityManager.shatteringThrow.endCast == currentStep)
             {
                 if (RemainingTime(currentStep, numSteps) > settings.simulationSettings.shatteringThrowOnLastSeconds + abilityManager.shatteringThrow.cooldown / Constants.kStepsPerSecond
                     || RemainingTime(currentStep, numSteps) < settings.simulationSettings.shatteringThrowOnLastSeconds)
@@ -356,6 +378,7 @@
                         stanceManager.ChangeStance(new Entities.Stance() { id = 2457 });
                     }
                     abilityManager.shatteringThrow.Use();
+                    abilityManager.GetNext();
                 }
             }
 
@@ -365,7 +388,6 @@
 		{
             return (numSteps - currentStep) / Constants.kStepsPerSecond;
 		}
-
         public bool GCDAvailable()
         {
             return globalCooldown <= 0;

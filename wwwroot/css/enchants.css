@@ -19,7 +19,9 @@ select {
         border-radius: 4px;
         outline: none;
         padding-left: 10px;
-        border: 1px solid #ced4da
+        border: 3px solid #20222e;
+        background-color: #222431;
+        color: #fff;
     }
 
 select.enchants > option {

@@ -11,6 +11,8 @@
 
         public int abilities { get; set; } = 0;
 
+        public int stance { get; set; } = int.MaxValue;
+
         public int GetNextStep()
         {
             int nextStep = int.MaxValue;
@@ -43,6 +45,11 @@
             {
                 nextStep = abilities;
                 Console.WriteLine("[ NextStep: Abilities ] " + nextStep);
+            }
+            if (stance < nextStep)
+            {
+                nextStep = stance;
+                Console.WriteLine("[ NextStep: Stance ] " + nextStep);
             }
             return nextStep;
         }

@@ -19,7 +19,9 @@ namespace Warrior.Settings
         BattleElixir,
         Flask,
         Potion,
-        HeroicPresence
+        HeroicPresence,
+        DevotionAura,
+        Stoneskin
     }
     public class Buff
     {
@@ -75,6 +77,10 @@ namespace Warrior.Settings
             buffs.Add(new Buff(44331, "Elixir of Lightning Speed", BuffGroup.BattleElixir, new List<Effect> { new Effect(EffectType.Additive, Stat.HasteRating, 45) }));
             buffs.Add(new Buff(40097, "Elixir of Protection", BuffGroup.GuardianElixir, new List<Effect> { new Effect(EffectType.Additive, Stat.Armor, 800) }));
             buffs.Add(new Buff(28878, "Heroic Presence", BuffGroup.HeroicPresence, new List<Effect> { new Effect(EffectType.Additive, Stat.HitChance, 1) }));
+            buffs.Add(new Buff(48942, "Devotion Aura", BuffGroup.DevotionAura, new List<Effect> { new Effect(EffectType.Additive, Stat.Armor, 1205) }));
+            // TODO: check armor value rounding.
+            buffs.Add(new Buff(20140, "Improved Devotion Aura", BuffGroup.DevotionAura, new List<Effect> { new Effect(EffectType.Additive, Stat.Armor, 1807) }));
+            buffs.Add(new Buff(58753, "Stoneskin Totem", BuffGroup.Stoneskin, new List<Effect> { new Effect(EffectType.Additive, Stat.Armor, 1150) }));
         }
         public void ProcessClick(long button, int id, BuffGroup buffGroup)
         {

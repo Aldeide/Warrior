@@ -109,6 +109,24 @@
             ticks = 0;
         }
     }
+    public class StanceResults : ICloneable
+    {
+        public string name { get; set; } = "";
+        public int uptime { get; set; } = 0;
 
+        public object Clone()
+        {
+            var item = new StanceResults()
+            {
+                name = name,
+                uptime = uptime,
+            };
+            return item;
+        }
 
+        public void Reset()
+        {
+            uptime = 0;
+        }
+    }
 }
