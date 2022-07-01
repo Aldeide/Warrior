@@ -10,7 +10,7 @@ main[b-q2ustq7127] {
 }
 
 .sidebar[b-q2ustq7127] {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    
 }
 
 .top-row[b-q2ustq7127] {
@@ -123,15 +123,15 @@ main[b-q2ustq7127] {
         line-height: 3rem;
     }
 
-.nav-item[b-9mjbqj2lyg]  a.active {
-    background-color: rgba(255,255,255,0.25);
-    color: white;
-}
+        .nav-item[b-9mjbqj2lyg]  a.active {
+            background-color: rgba(255,255,255,0.25);
+            color: #20222e;
+        }
 
-.nav-item[b-9mjbqj2lyg]  a:hover {
-    background-color: rgba(255,255,255,0.1);
-    color: white;
-}
+        .nav-item[b-9mjbqj2lyg]  a:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: #20222e;
+        }
 
 @media (min-width: 641px) {
     .navbar-toggler[b-9mjbqj2lyg] {
