@@ -11,30 +11,16 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 namespace Warrior
 {
-    public class WeaponResults
+    public class SimulationProgress
     {
-        public int hitCount { get; set; }
-        public int missesCount { get; set; }
-        public int glancesCount { get; set; }
-        public int critCount { get; set; }
-        public int dodgeCount { get; set; }
-
-        public int normalHitDamage { get; set; }
-        public int minNormalHitDamage { get; set; }
-        public int maxNormalHitDamage { get; set; }
-
-        public int glancingDamage { get; set; }
-        public int minGlancingDamage { get; set; }
-        public int maxGlancingDamage { get; set; }
-
-        public int critDamage { get; set; }
-        public int minCritDamage { get; set; }
-        public int maxCritDamage { get; set; }
+        public float dps { get; set; }
+        public int progress { get; set; }
     }
 
     [KnownType(typeof(Settings.Settings))]
     public class Simulation : IDisposable
     {
+        public EventHandler <SimulationProgress> Progress;
         public Settings.Settings settings { get; set; }
         public ComputedConstants computedConstants {get;set;}
         public SimulationResults simulationResults { get; set; } = new SimulationResults();
@@ -92,6 +78,7 @@ namespace Warrior
                 {
                     damage += results.Damage();
                     numResults++;
+                    Progress.Invoke(this, new SimulationProgress() { dps = damage / numResults / settings.simulationSettings.combatLength, progress = 10 * (numResults - 1) / iterations * 100 });
                 }
                 iterationsResults.Add(results);
             }
