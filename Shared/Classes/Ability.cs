@@ -303,9 +303,9 @@
             {
                 if (iteration.auraManager.bloodsurge != null && iteration.auraManager.bloodsurge.active)
                 {
-                    Console.WriteLine("[" + iteration.currentStep + "] Slam Instant");
+                    Utils.MiscUtils.Log(iteration, "Slam Instant");
                 }
-                Console.WriteLine("[" + iteration.currentStep + "] Slam Hit");
+                Utils.MiscUtils.Log(iteration, "Slam Hit");
                 iteration.auraManager.bloodsurge?.Fade();
                 endCast = Int32.MaxValue;
                 isCasting = false;

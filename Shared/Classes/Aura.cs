@@ -549,7 +549,7 @@ namespace Warrior
             if (!active)
             {
                 active = true;
-                Console.WriteLine("[ " + manager.iteration.currentStep + " ] Applied Rend.");
+                Utils.MiscUtils.Log(manager.iteration, "Rend Applied");
                 start = manager.iteration.currentStep;
                 damage = (int)RendDamage();
                 tickSize = (int)(damage * tickInterval / (float)duration);
@@ -575,7 +575,7 @@ namespace Warrior
                 return;
             }
             damage -= tickSize;
-            Console.WriteLine("[ " + manager.iteration.currentStep + " ] Rend tick: " + tickSize);
+            Utils.MiscUtils.Log(manager.iteration, "Rend tick: " + tickSize);
             currentDuration -= tickInterval;
             next = manager.iteration.currentStep + tickInterval;
             dotSummary.totalDamage += tickSize;
@@ -767,19 +767,19 @@ namespace Warrior
             if (active && stacks < 5)
             {
                 stacks++;
-                Console.WriteLine("[" + manager.iteration.currentStep + "] Applied Sunder Armor, stacks: " + stacks);
+                Utils.MiscUtils.Log(manager.iteration, "Applied Sunder Armor: " + stacks);
                 next = manager.iteration.currentStep + duration;
                 auraSummary.refreshes += 1;
                 return;
             }
             if (stacks == 5)
             {
-                Console.WriteLine("[" + manager.iteration.currentStep + "] Applied Sunder Armor, stacks: " + stacks);
+                Utils.MiscUtils.Log(manager.iteration, "Applied Sunder Armor: " + stacks);
                 next = manager.iteration.currentStep + duration;
                 auraSummary.refreshes += 1;
                 return;
             }
-            Console.WriteLine("[" + manager.iteration.currentStep + "] Applied Sunder Armor");
+            Utils.MiscUtils.Log(manager.iteration, "Applied Sunder Armor: " + stacks);
             start = manager.iteration.currentStep;
             active = true;
             next = start + duration;

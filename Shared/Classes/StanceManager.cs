@@ -55,7 +55,7 @@ namespace Warrior
             if (stance != defaultStance)
             {
                 next = iteration.currentStep + (int)(stanceGCD);
-                Console.WriteLine("[ " + iteration.currentStep + " ] Schedule stance change: " + next + " (Current: " + iteration.currentStep + ")");
+                Utils.MiscUtils.Log(iteration, "Schedule stance change: " + next + " (Current: " + iteration.currentStep + ")");
             } else
             {
                 next = int.MaxValue;

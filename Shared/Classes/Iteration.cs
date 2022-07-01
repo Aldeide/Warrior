@@ -51,7 +51,7 @@
             int numSteps = settings.simulationSettings.combatLength * Constants.kStepsPerSecond;
             int executeStep = (int)(numSteps * (1 - settings.simulationSettings.executePercent / 100.0f));
 
-            Console.WriteLine("Execute step: " + executeStep);
+            Utils.MiscUtils.Log(this, "Execute step: " + executeStep);
 
             currentStep = 0;
 
@@ -76,7 +76,7 @@
                 if (currentStep > executeStep && settings.simulationSettings.useExecute)
                 {
                     // Execution Abilities.
-                    Console.WriteLine("Execute abilities");
+                    
                     ExecuteAbilities();
                 } else
                 {
@@ -355,7 +355,7 @@
                 if (stanceManager.IsInBerserkerStance())
                 {
                     abilityManager.whirlwind.Use();
-                    Console.WriteLine("Execute WW");
+                    Utils.MiscUtils.Log(this, "Execute WW");
                 }
             }
 
@@ -367,7 +367,7 @@
                 && abilityManager.bloodthirst.CanUse())
             {
                 abilityManager.bloodthirst.Use();
-                Console.WriteLine("Execute BT");
+                Utils.MiscUtils.Log(this, "Execute BT");
             }
 
             // TODO: check what the story is with Mortal Strike.
@@ -376,13 +376,12 @@
             if (settings.simulationSettings.prioritizeSlamOnBloodsurge
                 && (auraManager.bloodsurge!= null && auraManager.bloodsurge.active))
             {
-                Console.WriteLine("Execute Slam");
+                Utils.MiscUtils.Log(this, "Execute Slam");
                 abilityManager.slam.Use();
             }
 
             // Execute.
             // TODO: look into delaying execute if rage is too low.
-            Console.WriteLine("Execute Exec");
             abilityManager.execute.Use();
             abilityManager.GetNext();
             return;
