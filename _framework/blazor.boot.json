@@ -10,7 +10,7 @@
       "AutoMapper.dll": "sha256-uNYyaL9rpjmA2uF9zP55k5t9afAfIQUk0oArKTAeAS0=",
       "Blazored.LocalStorage.dll": "sha256-6RRoYeDP3d0xabXmcCMF66wXeJlXVPem28Trs8sQiis=",
       "KeudellCoding.Blazor.AdvancedBlazorSelect2.dll": "sha256-IZeSLh+Di5FujWfamw+YGRu9XsM\/8dguz3oW6JvC8eo=",
-      "Microsoft.AspNetCore.Components.dll": "sha256-0XdIeGpFUcvduMcTAj64dYqttlkzMbmfsDC8Z5imPFM=",
+      "Microsoft.AspNetCore.Components.dll": "sha256-lngbZOwwmjoxBhy65s+DifbzQ2kAUvIL79rOl6n2k0Q=",
       "Microsoft.AspNetCore.Components.Forms.dll": "sha256-88WSM8XH\/2M+QBqhyo9Ihw5Q8XgoPM3ZIQQoZ+WhpdM=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-aUSxlMDGpp3ftoAgztT4UbaC3yfEN0oWJpWc99kj1yQ=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-OfawION\/UfFO75U4pMPDVhHt71EbKuF3qxDeiPFGqKo=",
@@ -74,7 +74,7 @@
       "System.Threading.Tasks.Extensions.dll": "sha256-YhKD5\/r4qecqhTFc6znIwhHTlLwzyhiH4gua6QPfGLA=",
       "System.Threading.Tasks.Parallel.dll": "sha256-SEhsNBazRbJAhRnNfchDTi\/TV4YfJUgYtKqebgLITX8=",
       "System.Threading.ThreadPool.dll": "sha256-zDFd8He\/wEfpV1dW051QwkqfiM5xqqVudlplpCknDc8=",
-      "Warrior.dll": "sha256-+NA91hdTZW33aP7p\/1H9IoRdmFY9v4bcuMguyq7MsAM="
+      "Warrior.dll": "sha256-ZwWhgV\/aj4v9u9mvuqsSekfoK3\/UJhooaAVjKnMZVfQ="
     },
     "extensions": null,
     "lazyAssembly": null,
