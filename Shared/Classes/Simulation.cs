@@ -7,10 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.Runtime.Serialization;
-
+using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace Warrior
 {
-
     public class WeaponResults
     {
         public int hitCount { get; set; }
@@ -74,9 +74,10 @@ namespace Warrior
             simulationResults.dps = simulationResults.totalDamage / simulationResults.combatDuration;
             return;
         }
-        /*
-        public SimulationResults Simulate()
+        
+        public SimulationResults SimulateWithSettings(string k)
         {
+            settings = JsonSerializer.Deserialize<Settings.Settings>(k);
             Setup();
             simulationResults = new SimulationResults();
 
@@ -100,7 +101,7 @@ namespace Warrior
             simulationResults.dps = simulationResults.totalDamage / simulationResults.combatDuration;
             return simulationResults;
         }
-        */
+        
         public float GetDPSUpdate()
         {
             return damage / (numResults * settings.simulationSettings.combatLength);
@@ -112,8 +113,6 @@ namespace Warrior
         }
         public void Setup()
         {
-
-
             // Computing what can be computed to avoid doing it for each iteration.
             // Damage.
             

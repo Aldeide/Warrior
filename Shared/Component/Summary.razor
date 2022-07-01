@@ -1,6 +1,8 @@
 ﻿@using BlazorWorker.Core
 @using Warrior.Stats
 @using BlazorWorker.BackgroundServiceFactory
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
 
 @inject Simulation simulation;
 @inject IWorkerFactory workerFactory
@@ -223,11 +225,43 @@ Debug
 	protected override void OnInitialized() => base.OnInitialized();
 
 	private async Task Simulate() {
+
+		// Create worker.
+		var worker = await workerFactory.CreateAsync();
+
+		// Create service reference. For most scenarios, it's safe (and best) to keep this 
+		// reference around somewhere to avoid the startup cost.
+		var service = await worker.CreateBackgroundServiceAsync<Simulation>( options => options
+					.AddAssemblies("Warrior.dll")
+					.AddAssemblies("System.Text.Json.dll")
+					.AddAssemblies("System.Text.Encodings.Web.dll")
+		); 
+
+		// Reference that live outside of the current scope should not be passed into the expression.
+		// To circumvent this, create a scope-local variable like this, and pass the local variable.
+		Settings.Settings settings = this.simulation.settings;
+
+		string jsonString = JsonSerializer.Serialize(settings);
+		Console.WriteLine(jsonString);
+
+		Settings.Settings settings2 = JsonSerializer.Deserialize<Settings.Settings>(jsonString);
+
+		var result = await service.RunAsync(s => s.SimulateWithSettings(jsonString));
+
+		simulation.simulationResults = result;
+
+		dps = result.dps.ToString();
+		if (_Parent != null)
+		{
+			_Parent.RefreshState();
+		}
+		/*
 		simulation.Simulate();
 		dps = Math.Round(simulation.simulationResults.totalDamage / simulation.settings.simulationSettings.combatLength).ToString();
 		if (_Parent != null)
 		{
 			_Parent.RefreshState();
 		}
+		*/
 	}
 }
