@@ -188,13 +188,11 @@
 		simulation.settings.gemSettings.SetGemForItemId(itemId, gemId, slotId);
 		localStorage.SetItem("Settings", simulation.settings);
 		InvokeAsync(() =>
-                {
+				{
 
-                    StateHasChanged();
-                });
+					StateHasChanged();
+				});
 	}
-
-	private Item[]? items;
 
 	public void RowClicked(int id, ItemSlot slot)
 	{
@@ -206,19 +204,15 @@
 	{
 		int id = ((Entities.Gem)value).id;
 		simulation.settings.gemSettings.SetGemForItemId(itemId, id, index);
-		Console.WriteLine("Called GemClicked: " + id);
 	}
 
 	public void EnchantSelected(object value, ItemSlot slot)
 	{
-		Console.WriteLine("Called enchantSelected: " + slot.ToString() + ":" + Int32.Parse(value.ToString()));
+		if (value == null) {
+			return;
+		}
 		simulation.settings.enchantSettings.SetEnchant(slot, Int32.Parse(value.ToString()));
 		localStorage.SetItem("Settings", simulation.settings);
-	}
-
-	protected override async Task OnInitializedAsync()
-	{
-		//simulation = localStorage.GetItem<Simulation>("Simulation");
 	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)

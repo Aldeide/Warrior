@@ -3,10 +3,10 @@ using Warrior.Databases;
 
 namespace Warrior.Settings
 {
+    [Serializable]
     public class EquipmentSettings
     {
         public Dictionary<ItemSlot, Item> items { get; set; }
-        public Dictionary<ItemSlot, Enchant> enchants { get; set; }
         public EquipmentSettings()
         {
             items = new Dictionary<ItemSlot, Item>();

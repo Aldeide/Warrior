@@ -1,5 +1,9 @@
-﻿@using Warrior.Stats
+﻿@using BlazorWorker.Core
+@using Warrior.Stats
+@using BlazorWorker.BackgroundServiceFactory
+
 @inject Simulation simulation;
+@inject IWorkerFactory workerFactory
 
 <p style="text-align: center">
 	<a href="https://github.com/aldeide/Warrior">Under development</a>
@@ -212,14 +216,11 @@ Debug
 	public EditContext? editContext { get; set; }
 
 	[CascadingParameter]
-	public Warrior.Pages.Results _Parent { get; set; }
+	public Warrior.Pages.Results? _Parent { get; set; }
 
-	public string dps { get; set; }
+	public string dps { get; set; } = "";
 
-	protected override void OnInitialized()
-	{
-		base.OnInitialized();
-	}
+	protected override void OnInitialized() => base.OnInitialized();
 
 	private async Task Simulate() {
 		simulation.Simulate();

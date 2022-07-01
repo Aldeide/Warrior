@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 namespace Warrior
 {
+    [Serializable]
     public enum ItemSlot
     {
         [Description("Main Hand")]
@@ -38,6 +39,7 @@ namespace Warrior
         [Description("Ranged")]
         Ranged
     }
+    [Serializable]
     public enum WeaponType
     {
         OneHand,
@@ -52,6 +54,7 @@ namespace Warrior
         OneHandedAxe,
         TwoHandedAxe
     }
+    [Serializable]
     public enum WeaponHandedness
     {
         OneHand,
@@ -59,6 +62,7 @@ namespace Warrior
         MainHand,
         TwoHand
     }
+    [Serializable]
     public enum ItemType
     {
         ClothArmor,
@@ -78,7 +82,7 @@ namespace Warrior
         public int ilvl { get; set; }
 
         public bool isHeroic { get; set; }
-        public string name { get; set; }
+        public string name { get; set; } = "";
         public ItemSlot itemSlot { get; set; }
         public ItemType itemType { get; set; }
         public WeaponType weaponType { get; set; }
@@ -105,7 +109,7 @@ namespace Warrior
         public int hasteRating { get; set; }
         public int armorPenetrationRating { get; set; }
         public int expertiseRating { get; set; }
-        public string source { get; set; }
+        public string source { get; set; } = "";
         public float speed { get; set; }
         public int minDamage { get; set; }
         public int maxDamage { get; set; }

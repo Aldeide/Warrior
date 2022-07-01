@@ -3,6 +3,7 @@
     public class Iteration
     {
         public Settings.Settings settings { get; set; }
+        public int index { get; set; } = 0;
         public ComputedConstants computedConstants { get; set; }
         public IterationResults iterationResults  {get; set;}
 
@@ -23,7 +24,7 @@
 
 
         // Main simulation methods.
-        public Iteration(Settings.Settings settings, ComputedConstants computedConstants)
+        public Iteration(Settings.Settings settings, ComputedConstants computedConstants, int index)
         {
             this.computedConstants = computedConstants;
             this.settings = settings;
@@ -32,6 +33,8 @@
             this.statsManager = new StatsManager(this);
             this.stanceManager = new StanceManager(this);
             this.iterationResults = new IterationResults();
+            this.index = index;
+            this.nextStep = new NextStep();
             Setup();
         }
 
@@ -46,7 +49,7 @@
 
             // TODO: add variability of combat length.
             int numSteps = settings.simulationSettings.combatLength * Constants.kStepsPerSecond;
-            int executeStep = (int)(numSteps * (1 - settings.simulationSettings.executePercent));
+            int executeStep = (int)(numSteps * (1 - settings.simulationSettings.executePercent / 100.0f));
 
             Console.WriteLine("Execute step: " + executeStep);
 
@@ -70,7 +73,7 @@
                 // Main hand and off hand attacks.
                 Attacks();
 
-                if (currentStep > executeStep)
+                if (currentStep > executeStep && settings.simulationSettings.useExecute)
                 {
                     // Execution Abilities.
                     Console.WriteLine("Execute abilities");
@@ -194,8 +197,13 @@
             nextStep = new NextStep();
             auraManager.Reset();
             abilityManager.Reset();
-            mainHand = new Weapon(this, ItemSlot.MainHand, settings.equipmentSettings.GetItemBySlot(ItemSlot.MainHand));
-            offHand = new Weapon(this, ItemSlot.OffHand, settings.equipmentSettings.GetItemBySlot(ItemSlot.OffHand));
+
+                mainHand = new Weapon(this, ItemSlot.MainHand, settings.equipmentSettings.GetItemBySlot(ItemSlot.MainHand));
+
+
+                offHand = new Weapon(this, ItemSlot.OffHand, settings.equipmentSettings.GetItemBySlot(ItemSlot.OffHand));
+
+            
             rage = settings.simulationSettings.initialRage;
             globalCooldown = 0;
         }
@@ -276,7 +284,7 @@
                 ((abilityManager.whirlwind != null && abilityManager.whirlwind.currentCooldown >= 3.0f * Constants.kStepsPerSecond) || !settings.simulationSettings.useWhirlwind)
                 && abilityManager.rend.CanUse()
                 && (auraManager.bloodsurge == null || !auraManager.bloodsurge.active)
-                && (auraManager.rend.currentDuration <= 1.0f * Constants.kStepsPerSecond || !auraManager.rend.active))
+                && ((auraManager.rend != null && auraManager.rend.currentDuration <= 1.0f * Constants.kStepsPerSecond) || !auraManager.rend.active))
             {
                 if (!stanceManager.IsInBattleStance() && stanceManager.CanChangeStance())
                 {
@@ -366,7 +374,7 @@
 
             // Depending on gear, slam on bloodthirst may be better than execute. 
             if (settings.simulationSettings.prioritizeSlamOnBloodsurge
-                && auraManager.bloodsurge.active)
+                && (auraManager.bloodsurge!= null && auraManager.bloodsurge.active))
             {
                 Console.WriteLine("Execute Slam");
                 abilityManager.slam.Use();

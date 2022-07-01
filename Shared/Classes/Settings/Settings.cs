@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace Warrior.Settings
 {
+    [Serializable]
     public class Settings
     {
         public string version { get; set; } = "1.0.0";
@@ -21,10 +22,6 @@ namespace Warrior.Settings
         public Settings()
         {
         }
-        public Race race { get; set; }
-
-        public int initialRage { get; set; }
-        public int targetLevel { get; set; }
 
 
 

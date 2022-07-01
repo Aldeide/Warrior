@@ -1,11 +1,12 @@
 ﻿namespace Warrior.Entities
 {
+    [Serializable]
     public enum EffectType
     {
         Additive,
         Multiplicative
     }
-
+    [Serializable]
     public class Effect
     {
         public EffectType type { get; set; }

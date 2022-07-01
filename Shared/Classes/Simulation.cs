@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using System.Runtime.Serialization;
 
 namespace Warrior
 {
@@ -31,11 +32,15 @@ namespace Warrior
         public int maxCritDamage { get; set; }
     }
 
+    [KnownType(typeof(Settings.Settings))]
     public class Simulation : IDisposable
     {
         public Settings.Settings settings { get; set; }
         public ComputedConstants computedConstants {get;set;}
         public SimulationResults simulationResults { get; set; } = new SimulationResults();
+
+        public float damage { get; set; } = 0;
+        public int numResults { get; set; } = 0;
 
         public Simulation()
         {
@@ -43,31 +48,72 @@ namespace Warrior
             this.simulationResults = new SimulationResults();
             this.computedConstants = new ComputedConstants();
         }
+        
         public void Simulate()
         {
             Setup();
             simulationResults = new SimulationResults();
             
-            ConcurrentBag<IterationResults> iterationsResults = new ConcurrentBag<IterationResults>();
+            List<IterationResults> iterationsResults = new List<IterationResults>();
 
-            Parallel.For(0, settings.simulationSettings.numIterations, index =>
-			{
-                Iteration iteration = new Iteration(settings, computedConstants);
+            for (int i = 0; i < settings.simulationSettings.numIterations; i++)
+            {
+                Iteration iteration = new Iteration(settings, computedConstants, i);
                 iteration.Setup();
-                iterationsResults.Add(iteration.Iterate());
-            });
+                IterationResults results = iteration.Iterate();
+                if (i % 10 == 0)
+                {
+                    damage += results.Damage();
+                    numResults++;
+                }
+                iterationsResults.Add(results);
+            }
             simulationResults.Populate(iterationsResults.ToList());
             simulationResults.combatDuration = settings.simulationSettings.combatLength;
             simulationResults.numIterations = settings.simulationSettings.numIterations;
             simulationResults.dps = simulationResults.totalDamage / simulationResults.combatDuration;
             return;
         }
+        /*
+        public SimulationResults Simulate()
+        {
+            Setup();
+            simulationResults = new SimulationResults();
+
+            List<IterationResults> iterationsResults = new List<IterationResults>();
+
+            for (int i = 0; i < settings.simulationSettings.numIterations; i++)
+            {
+                Iteration iteration = new Iteration(settings, computedConstants, i);
+                iteration.Setup();
+                IterationResults results = iteration.Iterate();
+                if (i % 10 == 0)
+                {
+                    damage += results.Damage();
+                    numResults++;
+                }
+                iterationsResults.Add(results);
+            }
+            simulationResults.Populate(iterationsResults.ToList());
+            simulationResults.combatDuration = settings.simulationSettings.combatLength;
+            simulationResults.numIterations = settings.simulationSettings.numIterations;
+            simulationResults.dps = simulationResults.totalDamage / simulationResults.combatDuration;
+            return simulationResults;
+        }
+        */
+        public float GetDPSUpdate()
+        {
+            return damage / (numResults * settings.simulationSettings.combatLength);
+        }
+
         public void Dispose()
         {
-            Console.WriteLine("DataService disposed!");
+            Console.WriteLine("Disposed!");
         }
         public void Setup()
         {
+
+
             // Computing what can be computed to avoid doing it for each iteration.
             // Damage.
             

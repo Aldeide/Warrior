@@ -67,6 +67,10 @@ a, .btn-link {
 
 .page {
     width: 100%;
+    background-image: url('../data/aldeide.png');
+    background-repeat: no-repeat;
+    background-position-x: 275px;
+    background-position-y: 35px;
 }
 
 .main {

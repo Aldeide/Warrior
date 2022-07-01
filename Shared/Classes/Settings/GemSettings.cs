@@ -3,6 +3,7 @@ using Warrior.Databases;
 
 namespace Warrior.Settings
 {
+	[Serializable]
 	public class GemSettings
 	{
 		public Dictionary<string, List<Gem>> itemGemsPair { get; set; } = new Dictionary<string, List<Gem>>();

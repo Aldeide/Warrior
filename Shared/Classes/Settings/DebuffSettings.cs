@@ -2,6 +2,7 @@
 
 namespace Warrior.Settings
 {
+    [Serializable]
     public enum DebuffGroup
     {
         None,
@@ -11,7 +12,7 @@ namespace Warrior.Settings
         CriticalStrike,
         PhysicalVulnerability
     }
-
+    [Serializable]
     public class Debuff
     {
         public string name { get; set; }
@@ -28,7 +29,7 @@ namespace Warrior.Settings
             this.effects = effects;
         }
     }
-
+    [Serializable]
     public class DebuffSettings
     {
         public List<Debuff> debuffs { get; set; }

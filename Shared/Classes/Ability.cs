@@ -212,7 +212,7 @@
             cooldown = 0;
         }
 
-        public bool CanUse()
+        public new bool CanUse()
         {
             return iteration.rage >= rageCost;
         }
@@ -286,7 +286,7 @@
         {
             if (!CanUse() && !isCasting) return;
             
-            if (!iteration.auraManager.bloodsurge.active && !isCasting && CanUse())
+            if ((iteration.auraManager.bloodsurge == null || !iteration.auraManager.bloodsurge.active) && !isCasting && CanUse())
             {
                 endCast = iteration.currentStep + castTime;
                 isCasting = true;
@@ -299,14 +299,14 @@
                 return;
             }
 
-            if (iteration.auraManager.bloodsurge.active || (isCasting && endCast == iteration.currentStep))
+            if ((iteration.auraManager.bloodsurge != null && iteration.auraManager.bloodsurge.active) || (isCasting && endCast == iteration.currentStep))
             {
-                if (iteration.auraManager.bloodsurge.active)
+                if (iteration.auraManager.bloodsurge != null && iteration.auraManager.bloodsurge.active)
                 {
                     Console.WriteLine("[" + iteration.currentStep + "] Slam Instant");
                 }
                 Console.WriteLine("[" + iteration.currentStep + "] Slam Hit");
-                iteration.auraManager.bloodsurge.Fade();
+                iteration.auraManager.bloodsurge?.Fade();
                 endCast = Int32.MaxValue;
                 isCasting = false;
                 AttackResult result = AttackTableUtils.GetYellowHitResult(iteration);

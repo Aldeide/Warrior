@@ -351,7 +351,7 @@
 						</table>
 
 						} else {
-							<p>No Results to display.</p>
+							<p>No results to display.</p>
 						}
 
 
@@ -364,7 +364,7 @@
 </EditForm>
 
 @code {
-	public EditContext editContext;
+	public EditContext? editContext;
 	protected override void OnInitialized()
 	{
 		editContext = new EditContext(simulation);

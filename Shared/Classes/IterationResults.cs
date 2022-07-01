@@ -1,5 +1,6 @@
 ﻿namespace Warrior
 {
+    [Serializable]
     public class IterationResults
     {
         public int numSteps { get; set; } = 0;
@@ -13,6 +14,18 @@
         public StanceResults battleStanceResults { get; set; } = new StanceResults();
         public StanceResults berserkerStanceResults { get; set; } = new StanceResults();
         public StanceResults defensiveStanceResults { get; set; } = new StanceResults();
+
+        public int Damage()
+        {
+            float damage = 0;
+            damage += mainHand.totalDamage;
+            damage += offHand.totalDamage;
+
+
+
+            return (int)damage;
+
+        }
 
     }
 }

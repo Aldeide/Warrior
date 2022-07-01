@@ -1,5 +1,6 @@
 ﻿namespace Warrior
 {
+    [Serializable]
     public class DamageResults : ICloneable
     {
         public string name { get; set; } = "";
@@ -34,6 +35,8 @@
         }
 
     }
+
+    [Serializable]
     public class AuraResults : ICloneable
     {
         public string name { get; set; } = "";
@@ -68,6 +71,8 @@
             ticks = 0;
         }
     }
+
+    [Serializable]
     public class RageResults
     {
         public int wastedRage { get; set; } = 0;
@@ -77,6 +82,8 @@
         public Dictionary<string, int> generated { get;set; } = new Dictionary<string, int>();
         public Dictionary<string, int> ticks { get; set; } = new Dictionary<string, int>();
     }
+
+    [Serializable]
     public class DotDamageResults : ICloneable
     {
         public string name { get; set; } = "";
@@ -109,6 +116,8 @@
             ticks = 0;
         }
     }
+
+    [Serializable]
     public class StanceResults : ICloneable
     {
         public string name { get; set; } = "";

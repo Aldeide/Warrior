@@ -2,6 +2,7 @@
 
 namespace Warrior.Databases
 {
+    [Serializable]
     public static class EnchantDatabase
     {
         public static List<Enchant> enchants { get; set; } = new List<Enchant>()

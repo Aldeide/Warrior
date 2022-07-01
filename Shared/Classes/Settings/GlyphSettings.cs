@@ -2,7 +2,7 @@
 
 namespace Warrior.Settings
 {
-
+    [Serializable]
     public class GlyphSettings
     {
         public List<Glyph> glyphs { get; set; }

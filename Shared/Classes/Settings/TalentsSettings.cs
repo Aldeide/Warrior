@@ -1,5 +1,6 @@
 ﻿namespace Warrior.Settings
 {
+    [Serializable]
     public class TalentsSettings
     {
         #region Arms

@@ -2,6 +2,7 @@
 
 namespace Warrior.Databases
 {
+	[Serializable]
 	public static class GemDatabase
 	{
 		public static List<Gem> gems = new List<Gem>()

@@ -1,5 +1,8 @@
-﻿namespace Warrior.Results
+﻿using System.Runtime.Serialization;
+
+namespace Warrior.Results
 {
+    [Serializable]
     public class SimulationResults
     {
         public float dps { get; set; } = 0;

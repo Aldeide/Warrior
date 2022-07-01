@@ -114,13 +114,11 @@
   width: auto;
   opacity: 0;
   z-index: 99;
-  background-color: #fff;
-  filter: alpha(opacity=0); }
+  background-color: #fff; }
 
 .select2-hidden-accessible {
   border: 0 !important;
   clip: rect(0 0 0 0) !important;
-  -webkit-clip-path: inset(50%) !important;
   clip-path: inset(50%) !important;
   height: 1px !important;
   overflow: hidden !important;

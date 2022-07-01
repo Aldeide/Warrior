@@ -2,13 +2,17 @@
 
 namespace Warrior.Databases
 {
+    [Serializable]
     public static class ItemDatabase
     {
         public static List<Gem> GetGemSockets(int itemId)
         {
             List<Gem> gemSockets = new List<Gem>();
-            Item item = items.Where(i => i.id == itemId).FirstOrDefault();
+            if (items == null) return gemSockets;
+            Item? item = items.Where(i => i.id == itemId).FirstOrDefault();
              
+            if (item == null) return gemSockets;
+
             for (int i = 0; i < item.metaSockets; i++)
             {
                 gemSockets.Add(new Gem() { color = Color.Meta });

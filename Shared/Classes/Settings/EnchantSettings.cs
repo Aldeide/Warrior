@@ -2,6 +2,7 @@
 
 namespace Warrior.Settings
 {
+	[Serializable]
 	public class EnchantSettings
 	{
 		public Dictionary<ItemSlot, Enchant> enchants { get; set; }

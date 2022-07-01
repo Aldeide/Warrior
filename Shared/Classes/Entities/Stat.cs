@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 namespace Warrior.Entities
 {
+    [Serializable]
     public enum Stat
     {
         [Description("All Stats")]

@@ -1,5 +1,6 @@
 ﻿namespace Warrior.Entities
 {
+	[Serializable]
 	public enum Color
 	{
 		None,
@@ -12,10 +13,11 @@
 		Meta,
 		Prismatic
 	}
+	[Serializable]
 	public class Gem
 	{
 		public int id { get; set; }
-		public string name { get; set; }
+		public string name { get; set; } = "";
 		public Color color { get; set; }
 		public List<Effect> effects { get; set; } = new List<Effect>();
 

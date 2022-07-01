@@ -2,6 +2,7 @@
 
 namespace Warrior.Settings
 {
+    [Serializable]
     public enum BuffGroup
     {
         None,
@@ -23,6 +24,7 @@ namespace Warrior.Settings
         DevotionAura,
         Stoneskin
     }
+    [Serializable]
     public class Buff
     {
         public string name { get; set; }
@@ -38,7 +40,7 @@ namespace Warrior.Settings
             this.effects = effects;
         }
     }
-
+    [Serializable]
     public class BuffSettings
     {
         public List<Buff> buffs { get; set; }

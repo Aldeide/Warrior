@@ -2,7 +2,8 @@
 
 namespace Warrior.Settings
 {
-	public class StanceSettings
+    [Serializable]
+    public class StanceSettings
 	{
         public Stance currentStance = new Stance() { name = "Berserker Stance", id = 2458, isActive = true };
 

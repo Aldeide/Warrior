@@ -45,7 +45,7 @@
 							</div><div style="clear:both"></div>
 							<div class="settings-item">
 								<label>Initial Rage</label>
-								<InputNumber @bind-Value="simulation.settings.initialRage"></InputNumber>
+								<InputNumber @bind-Value="simulation.settings.simulationSettings.initialRage"></InputNumber>
 							</div><div style="clear:both"></div>
 							<div class="settings-item">
 								<label>Target Level</label>
@@ -1375,11 +1375,6 @@
 			localStorage.SetItem("Settings", simulation.settings);
 		};
 		base.OnInitialized();
-	}
-
-	protected override async Task OnInitializedAsync()
-	{
-
 	}
 
 	protected void UpdateLocalStorage()

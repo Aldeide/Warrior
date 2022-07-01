@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Warrior;
 using Blazored.LocalStorage;
+using BlazorWorker.Core;
 using System.Net.Http.Json;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -16,7 +17,7 @@ var http = new HttpClient()
 };
 
 builder.Services.AddScoped(sp => http);
-
+builder.Services.AddWorkerFactory();
 /*
 Item[]? items;
 System.Text.Json.JsonSerializerOptions options = new System.Text.Json.JsonSerializerOptions

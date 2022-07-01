@@ -1,10 +1,12 @@
 ﻿namespace Warrior.Entities
 {
+    [Serializable]
     public enum GlyphType
     {
         Major,
         Minor
     }
+    [Serializable]
     public class Glyph
     {
         public GlyphType glyphType { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 namespace Warrior.Settings
 {
+    [Serializable]
     public enum Race
     {
         [Description("Undead")]
@@ -24,6 +25,7 @@ namespace Warrior.Settings
         [Description("Tauren")]
         Tauren
     }
+    [Serializable]
     public class CharacterSettings
     {
         public Race race { get; set; } = Race.Undead;

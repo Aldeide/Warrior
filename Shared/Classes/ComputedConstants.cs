@@ -1,5 +1,6 @@
 ﻿namespace Warrior
 {
+    [Serializable]
     public class ComputedConstants
     {
         public float bleedDamageMultiplier { get; set; } = 1;

@@ -1,8 +1,9 @@
 ﻿namespace Warrior.Entities
 {
+    [Serializable]
     public class Stance
     {
-        public string name { get; set; }
+        public string name { get; set; } = "";
         public int id { get; set; }
         public bool isActive { get; set; }
 

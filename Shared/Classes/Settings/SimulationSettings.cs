@@ -1,5 +1,6 @@
 ﻿namespace Warrior.Settings
 {
+    [Serializable]
     public class SimulationSettings
     {
         public int numIterations { get; set; } = 10;
@@ -42,9 +43,5 @@
         public bool prioritizeSlamOnBloodsurge { get; set; } = true;
         public bool useExecuteHeroicStrike { get; set; } = true;
         public int executeHeroicStrikeRagethreshold { get; set; } = 30;
-        public SimulationSettings()
-        {
-
-        }
     }
 }

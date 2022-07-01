@@ -6,5 +6,12 @@
         {
             return itemid.ToString() + ":" + slot.ToString();
         }
+        public static void Log(Iteration iteration, string message)
+        {
+            if (iteration.index == 0)
+            {
+                Console.WriteLine("[ " + Math.Round((double)(iteration.currentStep / Constants.kStepsPerSecond), 2) + " ] " + message);
+            }
+        }
     }
 }
