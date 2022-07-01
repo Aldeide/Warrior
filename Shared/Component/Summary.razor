@@ -1,6 +1,7 @@
 ﻿@using BlazorWorker.Core
 @using Warrior.Stats
 @using BlazorWorker.BackgroundServiceFactory
+@using BlazorWorker.WorkerBackgroundService 
 @using System.Text.Json;
 @using System.Text.Json.Serialization;
 
@@ -221,20 +222,47 @@ Debug
 	public Warrior.Pages.Results? _Parent { get; set; }
 
 	public string dps { get; set; } = "";
+	private int numWorkers = 20;
+	List<IWorker> workers = new List<IWorker>();
+	List<IWorkerBackgroundService<Simulation>> backgroundServices =
+				new List<IWorkerBackgroundService<Simulation>>();
 
-	protected override void OnInitialized() => base.OnInitialized();
+	protected override async void OnInitialized() {
+		// Initializing the workers.
+		// TODO: initialize once on application start.
 
+		try
+		{
+			while (workers.Count() < numWorkers)
+			{
+				Console.WriteLine("Initializing a worker");
+				var worker = await workerFactory.CreateAsync();
+				workers.Add(await workerFactory.CreateAsync());
+				var service = await worker.CreateBackgroundServiceAsync<Simulation>(options => options
+							.AddAssemblies("Warrior.dll")
+							.AddAssemblies("System.Text.Json.dll")
+							.AddAssemblies("System.Text.Encodings.Web.dll"));
+				backgroundServices.Add(service);
+			}
+		}
+		catch (Exception e)
+		{
+			dps = $"Error = {e}";
+		}
+
+		base.OnInitialized();
+	}
 	private async Task Simulate() {
-
+		int iterationsPerWorker = (int)Math.Floor((float)simulation.settings.simulationSettings.numIterations / numWorkers);
 		// Create worker.
 		var worker = await workerFactory.CreateAsync();
 
 		// Create service reference. For most scenarios, it's safe (and best) to keep this 
 		// reference around somewhere to avoid the startup cost.
 		var service = await worker.CreateBackgroundServiceAsync<Simulation>( options => options
-					.AddAssemblies("Warrior.dll")
-					.AddAssemblies("System.Text.Json.dll")
-					.AddAssemblies("System.Text.Encodings.Web.dll")
+																					.AddAssemblies("Warrior.dll")
+																					.AddAssemblies("System.Text.Json.dll")
+																					.AddAssemblies("System.Text.Encodings.Web.dll")
 		); 
 
 		// Reference that live outside of the current scope should not be passed into the expression.
@@ -242,19 +270,40 @@ Debug
 		Settings.Settings settings = this.simulation.settings;
 
 		string jsonString = JsonSerializer.Serialize(settings);
-		Console.WriteLine(jsonString);
 
-		Settings.Settings settings2 = JsonSerializer.Deserialize<Settings.Settings>(jsonString);
+		var allTasks = new List<Task<Warrior.Results.SimulationResults>>();
+		var servicesStarted = 0;
 
-		var result = await service.RunAsync(s => s.SimulateWithSettings(jsonString));
+		foreach(var backgroundService in backgroundServices.Take(numWorkers))
+		{
+			var task = backgroundService.RunAsync(s => s.SimulateWithSettings(jsonString, iterationsPerWorker));
+			allTasks.Add(task);
+			servicesStarted++;
+		}
 
-		simulation.simulationResults = result;
+		var result  = await Task.WhenAll(allTasks.ToArray()).ContinueWith(t =>
+																	{
+																		return t.Result;
+																	});
+		float dpsResults = 0;
+		foreach(var r in result)
+		{
+			dpsResults += r.dps;
+		}
+		dpsResults /= numWorkers;
 
-		dps = result.dps.ToString();
+		// TODO: average results.
+		simulation.simulationResults = result[0];
+		dps = dpsResults.ToString();
+
 		if (_Parent != null)
 		{
 			_Parent.RefreshState();
 		}
+
+
+
+
 		/*
 		simulation.Simulate();
 		dps = Math.Round(simulation.simulationResults.totalDamage / simulation.settings.simulationSettings.combatLength).ToString();

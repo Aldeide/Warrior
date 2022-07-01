@@ -75,15 +75,15 @@ namespace Warrior
             return;
         }
         
-        public SimulationResults SimulateWithSettings(string k)
+        public SimulationResults SimulateWithSettings(string config, int iterations)
         {
-            settings = JsonSerializer.Deserialize<Settings.Settings>(k);
+            settings = JsonSerializer.Deserialize<Settings.Settings>(config);
             Setup();
             simulationResults = new SimulationResults();
 
             List<IterationResults> iterationsResults = new List<IterationResults>();
 
-            for (int i = 0; i < settings.simulationSettings.numIterations; i++)
+            for (int i = 0; i < iterations; i++)
             {
                 Iteration iteration = new Iteration(settings, computedConstants, i);
                 iteration.Setup();
