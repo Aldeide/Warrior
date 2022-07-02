@@ -206,9 +206,13 @@ Debug
 <br /><br />
 
 <div style="text-align:center;">
+
 <EditForm EditContext="@buttonEditContext" OnValidSubmit="@Simulate">
-	<button type="submit" class="btn btn-primary" value="Save">Simulate</button>
+	<button type="submit" class="btn btn-primary" disabled=@buttonInactive value="Save">Simulate</button>
 </EditForm>
+@if (buttonInactive) {
+	<p>Initializing workers</p>
+}
 <br />
 <span class="highlight">@dps</span>
 </div>
@@ -227,13 +231,24 @@ Debug
 	List<IWorker> workers = new List<IWorker>();
 	List<IWorkerBackgroundService<Simulation>> backgroundServices =
 				new List<IWorkerBackgroundService<Simulation>>();
+	List<ProgressRef> piProgress = new List<ProgressRef>();
+
+	bool buttonInactive = true;
 
 	protected override async void OnInitialized() {
-
+		buttonInactive = !manager.ready;
 		buttonEditContext = new EditContext(manager);
-
+		manager.Ready += ManagerIsReady;
 		base.OnInitialized();
 	}
+
+	private void ManagerIsReady(object sender, EventArgs e) {
+		Console.WriteLine("Manager ready");
+		buttonInactive = false;
+		StateHasChanged();
+		return;
+	}
+
 	private async Task Simulate() {
 
 		var settings = simulation.settings;

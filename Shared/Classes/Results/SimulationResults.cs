@@ -59,9 +59,6 @@ namespace Warrior.Results
             offHand.totalDamage = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.totalDamage), 3);
             totalDamage += (float)Math.Round(offHand.totalDamage, 3);
 
-
-
-
             foreach (IterationResults a in results)
             {
                 numSteps += a.numSteps;
@@ -83,6 +80,7 @@ namespace Warrior.Results
                     }
                 }
 
+
                 foreach (DotDamageResults summary in a.dotDamageSummaries)
                 {
                     if (dotSummaries.Find(s => s.name == summary.name) is var s && s != null)
@@ -100,15 +98,7 @@ namespace Warrior.Results
                     }
                 }
 
-                foreach (DotDamageResults summary in a.dotDamageSummaries)
-                {
-                    summary.totalDamage /= numIterations;
-                    summary.ticks /= numIterations;
-                    summary.applications /= numIterations;
-                    summary.refreshes /= numIterations;
-                    summary.uptime /= numIterations;
-                    totalDamage += summary.totalDamage;
-                }
+                
 
                 foreach (DamageResults abilitySummary in a.abilitySummaries)
                 {
@@ -135,21 +125,36 @@ namespace Warrior.Results
                     }
                 }
 
-                foreach (DamageResults abilitySummary in a.abilitySummaries)
-                {
-                    abilitySummary.numCasts /= numIterations;
-                    abilitySummary.numHit /= numIterations;
-                    abilitySummary.numCrit /= numIterations;
-                    abilitySummary.numMiss /= numIterations;
-                    abilitySummary.numDodge /= numIterations;
-                    abilitySummary.totalDamage /= numIterations;
-                    abilitySummary.hitDamage /= numIterations;
-                    abilitySummary.critDamage /= numIterations;
-                    totalDamage += abilitySummary.totalDamage;
-                }
+                
 
             }
 
+            foreach (AuraResults auraSummary in auraSummaries)
+            {
+                auraSummary.uptime /= numIterations;
+                auraSummary.totalDamage /= numIterations;
+            }
+            foreach (DotDamageResults summary in dotSummaries)
+            {
+                summary.totalDamage /= numIterations;
+                summary.ticks /= numIterations;
+                summary.applications /= numIterations;
+                summary.refreshes /= numIterations;
+                summary.uptime /= numIterations;
+                totalDamage += summary.totalDamage;
+            }
+            foreach (DamageResults abilitySummary in abilitySummaries)
+            {
+                abilitySummary.numCasts /= numIterations;
+                abilitySummary.numHit /= numIterations;
+                abilitySummary.numCrit /= numIterations;
+                abilitySummary.numMiss /= numIterations;
+                abilitySummary.numDodge /= numIterations;
+                abilitySummary.totalDamage /= numIterations;
+                abilitySummary.hitDamage /= numIterations;
+                abilitySummary.critDamage /= numIterations;
+                totalDamage += abilitySummary.totalDamage;
+            }
             battleStanceResults.name = results.First().battleStanceResults.name;
             berserkerStanceResults.name = results.First().berserkerStanceResults.name;
             defensiveStanceResults.name = results.First().defensiveStanceResults.name;

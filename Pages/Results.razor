@@ -63,9 +63,9 @@
 									Melee (Main Hand)
 								</td>
 								<td>
-									@(simulation.simulationResults.mainHand.totalDamage / (float)simulation.settings.simulationSettings.combatLength)
+									@(Math.Round(simulation.simulationResults.mainHand.totalDamage / (float)simulation.settings.simulationSettings.combatLength,2))
 								</td>
-								<td>@(simulation.simulationResults.mainHand.totalDamage)</td>
+								<td>@(Math.Round(simulation.simulationResults.mainHand.totalDamage))</td>
 								<td>
 									@(simulation.simulationResults.mainHand.numCasts)
 								</td>
@@ -95,9 +95,9 @@
 									Melee (Off Hand)
 								</td>
 								<td>
-									@(simulation.simulationResults.offHand.totalDamage / (float)simulation.settings.simulationSettings.combatLength)
+									@(Math.Round(simulation.simulationResults.offHand.totalDamage / (float)simulation.settings.simulationSettings.combatLength, 2))
 								</td>
-								<td>@(simulation.simulationResults.offHand.totalDamage)</td>
+								<td>@(Math.Round(simulation.simulationResults.offHand.totalDamage))</td>
 								<td>
 									@(simulation.simulationResults.offHand.numCasts)
 								</td>
@@ -162,25 +162,25 @@
 										@abilitySummary.name
 									</td>
 									<td>
-										@(Math.Round(abilitySummary.totalDamage / (float)simulation.settings.simulationSettings.numIterations / (float)simulation.settings.simulationSettings.combatLength, 2) )
+										@(Math.Round(abilitySummary.totalDamage / (float)simulation.settings.simulationSettings.combatLength, 2) )
 									</td>
 									<td>
-										@(abilitySummary.totalDamage / (float)simulation.settings.simulationSettings.numIterations )
+										@(abilitySummary.totalDamage )
 									</td>
 									<td>
-										@(abilitySummary.numCasts / (float)simulation.settings.simulationSettings.numIterations )
+										@(abilitySummary.numCasts )
 									</td>
 									<td>
-										@(abilitySummary.numHit / (float)simulation.settings.simulationSettings.numIterations )
+										@(abilitySummary.numHit  )
 									</td>
 									<td>
-										@(abilitySummary.numCrit / (float)simulation.settings.simulationSettings.numIterations )
+										@(abilitySummary.numCrit)
 									</td>
 									<td>
-										@(abilitySummary.numMiss / (float)simulation.settings.simulationSettings.numIterations )
+										@(abilitySummary.numMiss)
 									</td>
 									<td>
-										@(abilitySummary.numDodge / (float)simulation.settings.simulationSettings.numIterations )
+										@(abilitySummary.numDodge)
 									</td>
 								</tr>
 							}
@@ -210,7 +210,7 @@
 										@auraSummary.name
 									</td>
 									<td>
-										@(Math.Round(auraSummary.uptime / (double)simulation.settings.simulationSettings.numIterations / (double)Constants.kStepsPerSecond, 2)) (@(Math.Round(auraSummary.uptime / (double)simulation.settings.simulationSettings.numIterations / (double)Constants.kStepsPerSecond / (double)simulation.settings.simulationSettings.combatLength * 100, 2)) %)
+										@(Math.Round(auraSummary.uptime / (double)Constants.kStepsPerSecond, 2)) (@(Math.Round(auraSummary.uptime / (double)Constants.kStepsPerSecond / (double)simulation.settings.simulationSettings.combatLength * 100, 2)) %)
 									</td>
 									<td>
 										@(auraSummary.procs  )
@@ -258,25 +258,25 @@
 										@summary.name
 									</td>
 									<td>
-										@(Math.Round((double)(summary.totalDamage / (float)simulation.settings.simulationSettings.numIterations / (double)simulation.settings.simulationSettings.combatLength), 2))
+										@(Math.Round((double)(summary.totalDamage / (double)simulation.settings.simulationSettings.combatLength), 2))
 									</td>
 									<td>
-										@(Math.Round(summary.totalDamage / (float)simulation.settings.simulationSettings.numIterations, 2))
+										@(Math.Round((float)summary.totalDamage, 2))
 									</td>
 									<td>
-										@(Math.Round(summary.uptime / (float)simulation.settings.simulationSettings.numIterations / Constants.kStepsPerSecond, 2))  (@(Math.Round((double)(summary.uptime / (float)simulation.settings.simulationSettings.numIterations / Constants.kStepsPerSecond / (double)simulation.settings.simulationSettings.combatLength * 100), 2)) %)
+										@(Math.Round((float)summary.uptime / Constants.kStepsPerSecond, 2))  (@(Math.Round((double)(summary.uptime / Constants.kStepsPerSecond / (double)simulation.settings.simulationSettings.combatLength * 100), 2)) %)
 									</td>
 									<td>
-										@(summary.ticks / (float)simulation.settings.simulationSettings.numIterations)
+										@(summary.ticks)
 									</td>
 									<td>
-										@(Math.Round((double)(summary.totalDamage / (float)simulation.settings.simulationSettings.numIterations / ((summary.ticks / (float)simulation.settings.simulationSettings.numIterations))), 2))
+										@(Math.Round((double)(summary.totalDamage / ((summary.ticks / (float)simulation.settings.simulationSettings.numIterations))), 2))
 									</td>
 									<td>
-										@(summary.applications / (float)simulation.settings.simulationSettings.numIterations)
+										@(summary.applications)
 									</td>
 									<td>
-										@(summary.refreshes / (float)simulation.settings.simulationSettings.numIterations)
+										@(summary.refreshes)
 									</td>
 								</tr>
 							}

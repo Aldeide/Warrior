@@ -21,12 +21,15 @@
 
 @code {
     protected override async Task OnAfterRenderAsync(bool firstRender)
-{
-    if (firstRender)
     {
-        Console.WriteLine("App load.");
-        await manager.Initialize(workerFactory);
-        manager.ready = true;
+        if (firstRender)
+        {
+            Console.WriteLine("App load.");
+            await manager.Initialize(workerFactory);
+            manager.ready = true;
+
+            Console.WriteLine("App StateHasChanged");
+            StateHasChanged();
+        }
     }
-}
 }

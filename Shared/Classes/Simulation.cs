@@ -17,10 +17,9 @@ namespace Warrior
         public int progress { get; set; }
     }
 
-    [KnownType(typeof(Settings.Settings))]
     public class Simulation : IDisposable
     {
-        public EventHandler <SimulationProgress> Progress;
+        public event EventHandler<SimulationProgress> Progress;
         public Settings.Settings settings { get; set; }
         public ComputedConstants computedConstants {get;set;}
         public SimulationResults simulationResults { get; set; } = new SimulationResults();
