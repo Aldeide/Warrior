@@ -18,7 +18,7 @@
 						<h3>Results</h3>
 
 						
-						@if (simulation.simulationResults.combatDuration > 0)
+						@if (simulation.simulationResults.combatDuration > 0 && simulation.simulationResults.numIterations > 0)
 						{
 							<p class="highlight"><span>DPS</span><br />
 								@(Math.Round(simulation.simulationResults.totalDamage / simulation.simulationResults.combatDuration, 2))
@@ -270,8 +270,11 @@
 										@(summary.ticks)
 									</td>
 									<td>
-										@(Math.Round((double)(summary.totalDamage / ((summary.ticks))), 2))
-									</td>
+												@if (summary.ticks > 0)
+												{
+													@(Math.Round((double)(summary.totalDamage / ((summary.ticks))), 2))
+												}
+											</td>
 									<td>
 										@(summary.applications)
 									</td>

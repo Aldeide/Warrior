@@ -211,10 +211,10 @@ Debug
 	<button type="submit" class="btn btn-primary" disabled=@buttonInactive value="Save">Simulate</button>
 </EditForm>
 @if (buttonInactive && !manager.ready) {
-	<p>Initializing workers</p>
+	<p class="btn-info-label">Initializing workers</p>
 }
 @if (buttonInactive && manager.isRunning) {
-	<p>Computing</p>
+	<p class="btn-info-label">Computing</p>
 }
 <br />
 <span class="highlight">@dps</span>
@@ -240,6 +240,10 @@ Debug
 
 	protected override async void OnInitialized() {
 		buttonInactive = !manager.ready;
+		if (manager.isRunning)
+		{
+			buttonInactive = true;
+		}
 		buttonEditContext = new EditContext(manager);
 		manager.Ready += ManagerIsReady;
 		base.OnInitialized();
