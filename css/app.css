@@ -54,8 +54,8 @@ a, .btn-link {
 }
 
     .btn-primary:hover {
-        background-color: #47a0ff;
-        border-color: #47a0ff;
+        background-color: #1e6ec2;
+        border-color: #1e6ec2;
     }
 
 .sidebar {
@@ -412,4 +412,41 @@ input[type=number].inline-number {
         .draw-border:hover::after {
             transition-delay: 0s, 0.25s, 0s;
         }
+
+.loading {
+    text-align: center;
+    vertical-align: middle;
+    width: 50%;
+    height: 200px;
+    margin-top: 30%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.loading > h2 {
+    font-size: 1em;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+.progress {
+    border-radius: 0;
+    width: 250px;
+    height: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 30px;
+}
+
+#progressLabel {
+    margin-top: 30px;
+    text-transform: uppercase;
+}
+
+.btn-primary:disabled {
+    background-color: #222431;
+    border: 1px solid #222431;
+}
+
+
 

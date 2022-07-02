@@ -30,17 +30,81 @@
     <!--<script src="https://wow.zamimg.com/widgets/power.js"></script>-->
 </head>
 
-    <body>
-        <div id="app">Loading...</div>
-
-        <div id="blazor-error-ui">
-            An unhandled error has occurred.
-            <a href="" class="reload">Reload</a>
-            <a class="dismiss">🗙</a>
+<body>
+    <div id="app">
+        <div class="loading">
+            <h2>Loading</h2>
+            <div class="progress mt-2">
+                <div id="progressbar" class="progress-bar progress-bar-animated"
+                     style="width: 10%; background-color: #204066;"></div>
+            </div>
+            <div>
+                <span id="progressLabel" class="text-muted">Preparing DPS pump</span>
+            </div>
         </div>
-        <script src="_framework/blazor.webassembly.js"></script>
-        <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+        
+    </div>
 
-    </body>
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+    <script>
+        function StartBlazor() {
+            let loadedCount = 0;
+            const resourcesToLoad = [];
+            Blazor.start({
+                loadBootResource:
+                    function (type, filename, defaultUri, integrity) {
+                        if (type == "dotnetjs")
+                            return defaultUri;
+
+                        const fetchResources = fetch(defaultUri, {
+                            cache: 'no-cache',
+                            integrity: integrity,
+                            headers: { 'MyCustomHeader': 'My custom value' }
+                        });
+
+                        resourcesToLoad.push(fetchResources);
+
+                        fetchResources.then((r) => {
+                            loadedCount += 1;
+                            if (filename == "blazor.boot.json")
+                                return;
+                            const totalCount = resourcesToLoad.length;
+                            const percentLoaded = 10 + parseInt((loadedCount * 90.0) / totalCount);
+                            const progressbar = document.getElementById('progressbar');
+                            progressbar.style.width = percentLoaded + '%';
+                            const progressLabel = document.getElementById('progressLabel');
+
+                            if (percentLoaded > 20) {
+                                progressLabel.innerText = 'Bulk purchasing Tricks of the Trade';
+                            }
+                            if (percentLoaded > 60) {
+                                progressLabel.innerText = 'Negotiating Hysteria';
+                            }
+                            if (percentLoaded > 80) {
+                                progressLabel.innerText = 'Hiring mathematicians';
+                            }
+                        });
+
+                        return fetchResources;
+                    }
+            });
+        }
+        /*
+        var cache = CacheStorage;
+        caches.keys().then(function (keyList) {
+            return Promise.all(keyList.map(function (key) {
+                return caches.delete(key);
+            }));
+        });
+        */
+        StartBlazor();
+    </script>
+</body>
 
     </html>
