@@ -63,6 +63,12 @@
             damageSummary.numCasts += 1;
             swingTimer = effectiveSpeed;
             AttackResult result = AttackTableUtils.GetWhiteHitResult(iteration, isMainHand);
+
+            if (iteration.abilityManager.heroicStrike.isQueued)
+            {
+                result = AttackTableUtils.GetYellowHitResult(iteration);
+            }
+
             if (result == AttackResult.Miss)
             {
                 damageSummary.numMiss += 1;
