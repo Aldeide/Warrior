@@ -31,5 +31,6 @@ items = await http.GetFromJsonAsync<Item[]>("data/items.json", options);
 */
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped(s => new Simulation());
+builder.Services.AddScoped(s => new SimulationManager());
 
 await builder.Build().RunAsync();

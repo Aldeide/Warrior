@@ -6,6 +6,7 @@
 @using System.Text.Json.Serialization;
 
 @inject Simulation simulation;
+@inject SimulationManager manager;
 @inject IWorkerFactory workerFactory
 
 <p style="text-align: center">
@@ -205,7 +206,7 @@ Debug
 <br /><br />
 
 <div style="text-align:center;">
-<EditForm EditContext="@editContext" OnValidSubmit="@Simulate">
+<EditForm EditContext="@buttonEditContext" OnValidSubmit="@Simulate">
 	<button type="submit" class="btn btn-primary" value="Save">Simulate</button>
 </EditForm>
 <br />
@@ -217,84 +218,56 @@ Debug
 @code {
 	[Parameter]
 	public EditContext? editContext { get; set; }
-
+	public EditContext? buttonEditContext { get; set; }
 	[CascadingParameter]
 	public Warrior.Pages.Results? _Parent { get; set; }
 
 	public string dps { get; set; } = "";
-	private int numWorkers = 20;
+	private int numWorkers = 10;
 	List<IWorker> workers = new List<IWorker>();
 	List<IWorkerBackgroundService<Simulation>> backgroundServices =
 				new List<IWorkerBackgroundService<Simulation>>();
 
 	protected override async void OnInitialized() {
-		// Initializing the workers.
-		// TODO: initialize once on application start.
 
-		try
-		{
-			while (workers.Count() < numWorkers)
-			{
-				Console.WriteLine("Initializing a worker");
-				var worker = await workerFactory.CreateAsync();
-				workers.Add(await workerFactory.CreateAsync());
-				var service = await worker.CreateBackgroundServiceAsync<Simulation>(options => options
-							.AddAssemblies("Warrior.dll")
-							.AddAssemblies("System.Text.Json.dll")
-							.AddAssemblies("System.Text.Encodings.Web.dll"));
-				backgroundServices.Add(service);
-			}
-		}
-		catch (Exception e)
-		{
-			dps = $"Error = {e}";
-		}
+		buttonEditContext = new EditContext(manager);
 
 		base.OnInitialized();
 	}
 	private async Task Simulate() {
-		int iterationsPerWorker = (int)Math.Floor((float)simulation.settings.simulationSettings.numIterations / numWorkers);
-		// Create worker.
-		var worker = await workerFactory.CreateAsync();
 
-		// Create service reference. For most scenarios, it's safe (and best) to keep this 
-		// reference around somewhere to avoid the startup cost.
-		var service = await worker.CreateBackgroundServiceAsync<Simulation>( options => options
-																					.AddAssemblies("Warrior.dll")
-																					.AddAssemblies("System.Text.Json.dll")
-																					.AddAssemblies("System.Text.Encodings.Web.dll")
-		); 
+		var settings = simulation.settings;
+		string config = JsonSerializer.Serialize(settings);
 
-		// Reference that live outside of the current scope should not be passed into the expression.
-		// To circumvent this, create a scope-local variable like this, and pass the local variable.
-		Settings.Settings settings = this.simulation.settings;
+		if (manager.ready && !manager.isRunning) {
+			manager.isRunning = true;
+			int iterationsPerWorker = (int)Math.Floor((float)simulation.settings.simulationSettings.numIterations / numWorkers);
+			var allTasks = new List<Task<Warrior.Results.SimulationResults>>();
+			var servicesStarted = 0;
 
-		string jsonString = JsonSerializer.Serialize(settings);
+			foreach (var backgroundService in manager.backgroundServices.Take(manager.numWorkers))
+			{
+				var task = backgroundService.RunAsync(s => s.SimulateWithSettings(config, iterationsPerWorker));
+				allTasks.Add(task);
+				servicesStarted++;
+			}
 
-		var allTasks = new List<Task<Warrior.Results.SimulationResults>>();
-		var servicesStarted = 0;
+			var result = await Task.WhenAll(allTasks.ToArray()).ContinueWith(t =>
+			{
+				return t.Result;
+			});
 
-		foreach(var backgroundService in backgroundServices.Take(numWorkers))
-		{
-			var task = backgroundService.RunAsync(s => s.SimulateWithSettings(jsonString, iterationsPerWorker));
-			allTasks.Add(task);
-			servicesStarted++;
+			float dpsResults = 0;
+			foreach (var r in result)
+			{
+				dpsResults += r.dps;
+			}
+			dpsResults /= numWorkers;
+			simulation.simulationResults = result[0];
+			manager.isRunning = false;
 		}
-
-		var result  = await Task.WhenAll(allTasks.ToArray()).ContinueWith(t =>
-																	{
-																		return t.Result;
-																	});
-		float dpsResults = 0;
-		foreach(var r in result)
-		{
-			dpsResults += r.dps;
-		}
-		dpsResults /= numWorkers;
-
 		// TODO: average results.
-		simulation.simulationResults = result[0];
-		dps = dpsResults.ToString();
+		//simulation.simulationResults = result[0];
 
 		if (_Parent != null)
 		{
@@ -308,9 +281,17 @@ Debug
 		simulation.Simulate();
 		dps = Math.Round(simulation.simulationResults.totalDamage / simulation.settings.simulationSettings.combatLength).ToString();
 		if (_Parent != null)
-		{
+			{
 			_Parent.RefreshState();
 		}
 		*/
+	}
+
+	private bool ButtonDisableState() {
+		if (manager.isRunning || !manager.ready)
+		{
+			return true;
+		}
+		return false;
 	}
 }

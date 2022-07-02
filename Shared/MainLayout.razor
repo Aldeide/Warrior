@@ -1,6 +1,14 @@
 ﻿@inherits LayoutComponentBase
+
+@using BlazorWorker.Core
+@using BlazorWorker.BackgroundServiceFactory
+@using BlazorWorker.WorkerBackgroundService 
+
 @inject Simulation simulation
 @inject HttpClient Http
+@inject IJSRuntime jsRuntime
+@inject SimulationManager manager
+@inject IWorkerFactory workerFactory
 
 <div class="page">
     <div class="sidebar" style="width: 80px">
@@ -11,25 +19,13 @@
 
 
 @code {
-    /*
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+    if (firstRender)
     {
-        simulation = new Simulation();
-
-        System.Text.Json.JsonSerializerOptions options = new System.Text.Json.JsonSerializerOptions
-            {
-                Converters =
-            {
-                new System.Text.Json.Serialization.JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.CamelCase)
-            }
-            };
-        items = await Http.GetFromJsonAsync<Item[]>("data/items.json", options);
-        simulation.itemDatabase.items = items.ToList<Item>();
-        editContext = new EditContext(simulation);
-        // Look at authentication step.
-        isInitComplete = true;
+        await manager.Initialize(workerFactory);
+        manager.ready = true;
     }
-    */
-
+}
 }
 
