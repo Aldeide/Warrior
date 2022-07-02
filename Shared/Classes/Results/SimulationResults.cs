@@ -24,62 +24,59 @@ namespace Warrior.Results
         public void Populate(List<IterationResults> results)
 		{
             numIterations = results.Count;
+            totalDamage = 0;
+            combatDuration = results[0].combatLength;
+            battleStanceResults.name = results.First().battleStanceResults.name;
+            berserkerStanceResults.name = results.First().berserkerStanceResults.name;
+            defensiveStanceResults.name = results.First().defensiveStanceResults.name;
 
-            foreach(var a in results)
+            foreach (var a in results)
             {
-                foreach(var b in a.rageSummary.generated)
+                //numIterations += a.numIterations;
+
+                battleStanceResults.uptime += a.battleStanceResults.uptime;
+                berserkerStanceResults.uptime += a.berserkerStanceResults.uptime;
+                defensiveStanceResults.uptime += a.defensiveStanceResults.uptime;
+
+                foreach (var b in a.rageSummary.generated)
                 {
                     rageSummary.generated[b.Key] = b.Value;
                 }
-            }
-            foreach (var a in results)
-            {
                 foreach (var b in a.rageSummary.ticks)
                 {
                     rageSummary.ticks[b.Key] = b.Value;
                 }
-            }
+                mainHand.numCasts += a.mainHand.numCasts;
+                mainHand.numHit += a.mainHand.numHit;
+                mainHand.numCrit += a.mainHand.numCrit;
+                mainHand.numMiss += a.mainHand.numMiss;
+                mainHand.numGlancing += a.mainHand.numGlancing;
+                mainHand.numDodge += a.mainHand.numDodge;
+                mainHand.totalDamage += a.mainHand.totalDamage;
+                totalDamage += a.mainHand.totalDamage;
 
-            mainHand.numCasts = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numCasts), 3);
-            mainHand.numHit = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numHit), 3);
-            mainHand.numCrit = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numCrit), 3);
-            mainHand.numMiss = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numMiss), 3);
-            mainHand.numGlancing = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numGlancing), 3);
-            mainHand.numDodge = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.numDodge), 3);
-            mainHand.totalDamage = (float)Math.Round(results.Select(r => r.mainHand).Average(x => x.totalDamage), 3);
-            totalDamage = (float)Math.Round(mainHand.totalDamage, 3);
-
-            offHand.numCasts = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numCasts), 3);
-            offHand.numHit = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numHit), 3);
-            offHand.numCrit = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numCrit), 3);
-            offHand.numMiss = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numMiss), 3);
-            offHand.numGlancing = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numGlancing), 3);
-            offHand.numDodge = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.numDodge), 3);
-
-            offHand.totalDamage = (float)Math.Round(results.Select(r => r.offHand).Average(x => x.totalDamage), 3);
-            totalDamage += (float)Math.Round(offHand.totalDamage, 3);
-
-            foreach (IterationResults a in results)
-            {
-                numSteps += a.numSteps;
+                offHand.numCasts += a.offHand.numCasts;
+                offHand.numHit += a.offHand.numHit;
+                offHand.numCrit += a.offHand.numCrit;
+                offHand.numMiss += a.offHand.numMiss;
+                offHand.numGlancing += a.offHand.numGlancing;
+                offHand.numDodge += a.offHand.numDodge;
+                offHand.totalDamage += a.offHand.totalDamage;
+                totalDamage += a.offHand.totalDamage;
 
                 foreach (AuraResults auraSummary in a.auraSummaries)
                 {
-
                     if (auraSummaries.Find(a => a.name == auraSummary.name) is var summary && summary != null)
                     {
                         summary.uptime += auraSummary.uptime;
                         summary.totalDamage += auraSummary.totalDamage;
-                        totalDamage += auraSummary.totalDamage;
                     }
                     else
                     {
                         var s = (AuraResults)auraSummary.Clone();
                         auraSummaries.Add(s);
-                        totalDamage += s.totalDamage;
                     }
                 }
-
 
                 foreach (DotDamageResults summary in a.dotDamageSummaries)
                 {
@@ -97,8 +94,6 @@ namespace Warrior.Results
                         dotSummaries.Add(d);
                     }
                 }
-
-                
 
                 foreach (DamageResults abilitySummary in a.abilitySummaries)
                 {
@@ -125,14 +120,30 @@ namespace Warrior.Results
                     }
                 }
 
-                
-
             }
+
+            mainHand.numCasts = (float)Math.Round(mainHand.numCasts / numIterations, 2);
+            mainHand.numHit = (float)Math.Round(mainHand.numHit / numIterations, 2);
+            mainHand.numCrit = (float)Math.Round(mainHand.numCrit / numIterations, 2);
+            mainHand.numMiss = (float)Math.Round(mainHand.numMiss / numIterations, 2);
+            mainHand.numGlancing = (float)Math.Round(mainHand.numGlancing / numIterations, 2);
+            mainHand.numDodge = (float)Math.Round(mainHand.numDodge / numIterations, 2);
+            mainHand.totalDamage = (float)Math.Round(mainHand.totalDamage / numIterations, 2);
+            totalDamage = (float)Math.Round(totalDamage / numIterations, 2);
+
+            offHand.numCasts = (float)Math.Round(offHand.numCasts / numIterations, 2);
+            offHand.numHit = (float)Math.Round(offHand.numHit / numIterations, 2);
+            offHand.numCrit = (float)Math.Round(offHand.numCrit / numIterations, 2);
+            offHand.numMiss = (float)Math.Round(offHand.numMiss / numIterations, 2);
+            offHand.numGlancing = (float)Math.Round(offHand.numGlancing / numIterations, 2);
+            offHand.numDodge = (float)Math.Round(offHand.numDodge / numIterations, 2);
+            offHand.totalDamage = (float)Math.Round(offHand.totalDamage / numIterations, 2);
 
             foreach (AuraResults auraSummary in auraSummaries)
             {
-                auraSummary.uptime /= numIterations;
-                auraSummary.totalDamage /= numIterations;
+                auraSummary.uptime = (int)Math.Round((float)auraSummary.uptime / numIterations, 2);
+                auraSummary.totalDamage = (int)Math.Round((float)auraSummary.totalDamage / numIterations, 2);
+                totalDamage += auraSummary.totalDamage;
             }
             foreach (DotDamageResults summary in dotSummaries)
             {
@@ -145,23 +156,171 @@ namespace Warrior.Results
             }
             foreach (DamageResults abilitySummary in abilitySummaries)
             {
-                abilitySummary.numCasts /= numIterations;
-                abilitySummary.numHit /= numIterations;
-                abilitySummary.numCrit /= numIterations;
-                abilitySummary.numMiss /= numIterations;
-                abilitySummary.numDodge /= numIterations;
-                abilitySummary.totalDamage /= numIterations;
-                abilitySummary.hitDamage /= numIterations;
-                abilitySummary.critDamage /= numIterations;
+                abilitySummary.numCasts = (float)Math.Round(abilitySummary.numCasts / numIterations, 2);
+                abilitySummary.numHit = (float)Math.Round(abilitySummary.numHit / numIterations, 2);
+                abilitySummary.numCrit = (float)Math.Round(abilitySummary.numCrit / numIterations, 2);
+                abilitySummary.numMiss = (float)Math.Round(abilitySummary.numMiss / numIterations, 2);
+                abilitySummary.numDodge = (float)Math.Round(abilitySummary.numDodge / numIterations, 2);
+                abilitySummary.totalDamage = (float)Math.Round(abilitySummary.totalDamage / numIterations, 2);
+                abilitySummary.hitDamage = (float)Math.Round(abilitySummary.hitDamage / numIterations, 2);
+                abilitySummary.critDamage = (float)Math.Round(abilitySummary.critDamage / numIterations, 2);
                 totalDamage += abilitySummary.totalDamage;
             }
+            battleStanceResults.uptime /= numIterations;
+            berserkerStanceResults.uptime /= numIterations;
+            defensiveStanceResults.uptime /= numIterations;
+        }
+
+        public void Populate(List<SimulationResults> results)
+        {
+            numIterations = results.Count;
+            totalDamage = 0;
+            combatDuration = results[0].combatDuration;
             battleStanceResults.name = results.First().battleStanceResults.name;
             berserkerStanceResults.name = results.First().berserkerStanceResults.name;
             defensiveStanceResults.name = results.First().defensiveStanceResults.name;
 
-            battleStanceResults.uptime = (int)Math.Round(results.Select(r => r.battleStanceResults).Average(x => x.uptime), 3);
-            berserkerStanceResults.uptime = (int)Math.Round(results.Select(r => r.berserkerStanceResults).Average(x => x.uptime), 3);
-            defensiveStanceResults.uptime = (int)Math.Round(results.Select(r => r.defensiveStanceResults).Average(x => x.uptime), 3);
+            foreach (var a in results)
+            {
+                //numIterations += a.numIterations;
+
+                battleStanceResults.uptime += a.battleStanceResults.uptime;
+                berserkerStanceResults.uptime += a.berserkerStanceResults.uptime;
+                defensiveStanceResults.uptime += a.defensiveStanceResults.uptime;
+
+                foreach (var b in a.rageSummary.generated)
+                {
+                    rageSummary.generated[b.Key] = b.Value;
+                }
+                foreach (var b in a.rageSummary.ticks)
+                {
+                    rageSummary.ticks[b.Key] = b.Value;
+                }
+                mainHand.numCasts += a.mainHand.numCasts;
+                mainHand.numHit += a.mainHand.numHit;
+                mainHand.numCrit += a.mainHand.numCrit;
+                mainHand.numMiss += a.mainHand.numMiss;
+                mainHand.numGlancing += a.mainHand.numGlancing;
+                mainHand.numDodge += a.mainHand.numDodge;
+                mainHand.totalDamage += a.mainHand.totalDamage;
+                totalDamage += a.mainHand.totalDamage;
+
+                offHand.numCasts += a.offHand.numCasts;
+                offHand.numHit += a.offHand.numHit;
+                offHand.numCrit += a.offHand.numCrit;
+                offHand.numMiss += a.offHand.numMiss;
+                offHand.numGlancing += a.offHand.numGlancing;
+                offHand.numDodge += a.offHand.numDodge;
+                offHand.totalDamage += a.offHand.totalDamage;
+                totalDamage += a.offHand.totalDamage;
+
+                foreach (AuraResults auraSummary in a.auraSummaries)
+                {
+                    if (auraSummaries.Find(a => a.name == auraSummary.name) is var summary && summary != null)
+                    {
+                        summary.uptime += auraSummary.uptime;
+                        summary.totalDamage += auraSummary.totalDamage;
+                    }
+                    else
+                    {
+                        var s = (AuraResults)auraSummary.Clone();
+                        auraSummaries.Add(s);
+                    }
+                }
+
+                foreach (DotDamageResults summary in a.dotSummaries)
+                {
+                    if (dotSummaries.Find(s => s.name == summary.name) is var s && s != null)
+                    {
+                        s.uptime += summary.uptime;
+                        s.ticks += summary.ticks;
+                        s.applications += summary.applications;
+                        s.refreshes += summary.refreshes;
+                        s.totalDamage += summary.totalDamage;
+                    }
+                    else
+                    {
+                        var d = (DotDamageResults)summary.Clone();
+                        dotSummaries.Add(d);
+                    }
+                }
+
+                foreach (DamageResults abilitySummary in a.abilitySummaries)
+                {
+                    // Temporary fix.
+                    if (abilitySummary.name == "")
+                    {
+                        continue;
+                    }
+                    if (abilitySummaries.Find(a => a.name == abilitySummary.name) is var summary && summary != null)
+                    {
+                        summary.numCasts += abilitySummary.numCasts;
+                        summary.numHit += abilitySummary.numHit;
+                        summary.numCrit += abilitySummary.numCrit;
+                        summary.numMiss += abilitySummary.numMiss;
+                        summary.numDodge += abilitySummary.numDodge;
+                        summary.totalDamage += abilitySummary.totalDamage;
+                        summary.hitDamage += abilitySummary.hitDamage;
+                        summary.critDamage += abilitySummary.critDamage;
+                    }
+                    else
+                    {
+                        var c = (DamageResults)abilitySummary.Clone();
+                        abilitySummaries.Add(c);
+                    }
+                }
+
+            }
+
+            mainHand.numCasts = (float)Math.Round(mainHand.numCasts / numIterations, 2);
+            mainHand.numHit = (float)Math.Round(mainHand.numHit / numIterations, 2);
+            mainHand.numCrit = (float)Math.Round(mainHand.numCrit / numIterations, 2);
+            mainHand.numMiss = (float)Math.Round(mainHand.numMiss / numIterations, 2);
+            mainHand.numGlancing = (float)Math.Round(mainHand.numGlancing / numIterations, 2);
+            mainHand.numDodge = (float)Math.Round(mainHand.numDodge / numIterations, 2);
+            mainHand.totalDamage = (float)Math.Round(mainHand.totalDamage / numIterations, 2);
+            totalDamage = (float)Math.Round(totalDamage / numIterations, 2);
+
+            offHand.numCasts = (float)Math.Round(offHand.numCasts / numIterations, 2);
+            offHand.numHit = (float)Math.Round(offHand.numHit / numIterations, 2);
+            offHand.numCrit = (float)Math.Round(offHand.numCrit / numIterations, 2);
+            offHand.numMiss = (float)Math.Round(offHand.numMiss / numIterations, 2);
+            offHand.numGlancing = (float)Math.Round(offHand.numGlancing / numIterations, 2);
+            offHand.numDodge = (float)Math.Round(offHand.numDodge / numIterations, 2);
+            offHand.totalDamage = (float)Math.Round(offHand.totalDamage / numIterations, 2);
+
+            foreach (AuraResults auraSummary in auraSummaries)
+            {
+                auraSummary.uptime = (int)Math.Round((float)auraSummary.uptime / numIterations, 2);
+                auraSummary.totalDamage = (int)Math.Round((float)auraSummary.totalDamage / numIterations, 2);
+                totalDamage += auraSummary.totalDamage;
+            }
+            foreach (DotDamageResults summary in dotSummaries)
+            {
+                summary.totalDamage /= numIterations;
+                summary.ticks /= numIterations;
+                summary.applications /= numIterations;
+                summary.refreshes /= numIterations;
+                summary.uptime /= numIterations;
+                totalDamage += summary.totalDamage;
+            }
+            foreach (DamageResults abilitySummary in abilitySummaries)
+            {
+                abilitySummary.numCasts = (float)Math.Round(abilitySummary.numCasts / numIterations, 2);
+                abilitySummary.numHit = (float)Math.Round(abilitySummary.numHit / numIterations, 2);
+                abilitySummary.numCrit = (float)Math.Round(abilitySummary.numCrit / numIterations, 2);
+                abilitySummary.numMiss = (float)Math.Round(abilitySummary.numMiss / numIterations, 2);
+                abilitySummary.numDodge = (float)Math.Round(abilitySummary.numDodge / numIterations, 2);
+                abilitySummary.totalDamage = (float)Math.Round(abilitySummary.totalDamage / numIterations, 2);
+                abilitySummary.hitDamage = (float)Math.Round(abilitySummary.hitDamage / numIterations, 2);
+                abilitySummary.critDamage = (float)Math.Round(abilitySummary.critDamage / numIterations, 2);
+                totalDamage += abilitySummary.totalDamage;
+            }
+            battleStanceResults.uptime /= numIterations;
+            berserkerStanceResults.uptime /= numIterations;
+            defensiveStanceResults.uptime /= numIterations;
+
         }
+
     }
 }

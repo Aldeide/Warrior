@@ -82,12 +82,33 @@ namespace Warrior
                 iterationsResults.Add(results);
             }
             simulationResults.Populate(iterationsResults.ToList());
-            simulationResults.combatDuration = settings.simulationSettings.combatLength;
-            simulationResults.numIterations = settings.simulationSettings.numIterations;
-            simulationResults.dps = simulationResults.totalDamage / simulationResults.combatDuration;
             return simulationResults;
         }
-        
+
+        public List<IterationResults> Simulate(string config, int iterations)
+        {
+            settings = JsonSerializer.Deserialize<Settings.Settings>(config);
+            Setup();
+            simulationResults = new SimulationResults();
+
+            List<IterationResults> iterationsResults = new List<IterationResults>();
+
+            for (int i = 0; i < iterations; i++)
+            {
+                Iteration iteration = new Iteration(settings, computedConstants, i);
+                iteration.Setup();
+                IterationResults results = iteration.Iterate();
+                if (i % 10 == 0)
+                {
+                    damage += results.Damage();
+                    numResults++;
+                    Progress?.Invoke(this, new SimulationProgress() { dps = damage / numResults / settings.simulationSettings.combatLength, progress = 10 * (numResults - 1) / iterations * 100 });
+                }
+                iterationsResults.Add(results);
+            }
+            return iterationsResults;
+        }
+
         public float GetDPSUpdate()
         {
             return damage / (numResults * settings.simulationSettings.combatLength);

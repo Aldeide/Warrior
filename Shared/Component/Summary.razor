@@ -210,8 +210,11 @@ Debug
 <EditForm EditContext="@buttonEditContext" OnValidSubmit="@Simulate">
 	<button type="submit" class="btn btn-primary" disabled=@buttonInactive value="Save">Simulate</button>
 </EditForm>
-@if (buttonInactive) {
+@if (buttonInactive && !manager.ready) {
 	<p>Initializing workers</p>
+}
+@if (buttonInactive && manager.isRunning) {
+	<p>Computing</p>
 }
 <br />
 <span class="highlight">@dps</span>
@@ -251,11 +254,12 @@ Debug
 
 	private async Task Simulate() {
 
-		var settings = simulation.settings;
-		string config = JsonSerializer.Serialize(settings);
-
 		if (manager.ready && !manager.isRunning) {
 			manager.isRunning = true;
+			buttonInactive = true;
+			StateHasChanged();
+			var settings = simulation.settings;
+			string config = JsonSerializer.Serialize(settings);
 			int iterationsPerWorker = (int)Math.Floor((float)simulation.settings.simulationSettings.numIterations / numWorkers);
 			var allTasks = new List<Task<Warrior.Results.SimulationResults>>();
 			var servicesStarted = 0;
@@ -273,13 +277,13 @@ Debug
 			});
 
 			float dpsResults = 0;
-			foreach (var r in result)
-			{
-				dpsResults += r.dps;
-			}
 			dpsResults /= numWorkers;
-			simulation.simulationResults = result[0];
+			Warrior.Results.SimulationResults simulationResults = new Warrior.Results.SimulationResults();
+			simulationResults.Populate(result.ToList());
+
+			simulation.simulationResults = simulationResults;
 			manager.isRunning = false;
+			buttonInactive = false;
 		}
 		// TODO: average results.
 		//simulation.simulationResults = result[0];
@@ -288,9 +292,6 @@ Debug
 		{
 			_Parent.RefreshState();
 		}
-
-
-
 
 		/*
 		simulation.Simulate();
