@@ -1,14 +1,7 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using AutoMapper;
-using Warrior.Entities;
+﻿using Warrior.Entities;
 using Warrior.Results;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.Runtime.Serialization;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+
 namespace Warrior
 {
     public class SimulationProgress
@@ -83,30 +76,6 @@ namespace Warrior
             }
             simulationResults.Populate(iterationsResults.ToList());
             return simulationResults;
-        }
-
-        public List<IterationResults> Simulate(string config, int iterations)
-        {
-            settings = JsonSerializer.Deserialize<Settings.Settings>(config);
-            Setup();
-            simulationResults = new SimulationResults();
-
-            List<IterationResults> iterationsResults = new List<IterationResults>();
-
-            for (int i = 0; i < iterations; i++)
-            {
-                Iteration iteration = new Iteration(settings, computedConstants, i);
-                iteration.Setup();
-                IterationResults results = iteration.Iterate();
-                if (i % 10 == 0)
-                {
-                    damage += results.Damage();
-                    numResults++;
-                    Progress?.Invoke(this, new SimulationProgress() { dps = damage / numResults / settings.simulationSettings.combatLength, progress = 10 * (numResults - 1) / iterations * 100 });
-                }
-                iterationsResults.Add(results);
-            }
-            return iterationsResults;
         }
 
         public float GetDPSUpdate()

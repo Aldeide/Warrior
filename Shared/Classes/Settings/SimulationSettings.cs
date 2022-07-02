@@ -46,6 +46,8 @@ namespace Warrior.Settings
         [DataMember]
         public bool useShatteringThrow { get; set; } = true;
         [DataMember]
+        public float targetOverSeventyFiveThreshold { get; set; } = 25;
+        [DataMember]
         public int shatteringThrowOnLastSeconds { get; set; } = 33;
         [DataMember]
         public bool useBloodRage { get; set; } = true;

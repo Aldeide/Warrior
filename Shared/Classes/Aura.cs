@@ -539,8 +539,6 @@ namespace Warrior
             name = "Rend";
             auraSummary.name = name;
             dotSummary.name = name;
-            trigger.Add(AuraTrigger.MainHandCritical);
-            trigger.Add(AuraTrigger.OffHandCritical);
             tickInterval = 3 * Constants.kStepsPerSecond;
             duration = 15 * Constants.kStepsPerSecond;
         }
@@ -598,10 +596,13 @@ namespace Warrior
         }
         public float RendDamage()
         {
-            // TODO: extra damage when target over 75% health.
             int damage = (int)(DamageUtils.AverageWeaponDamage(manager.iteration.mainHand, manager.iteration, 0) + 380
                 * manager.iteration.computedConstants.rendDamageMultiplier
                 * manager.iteration.statsManager.GetEffectiveDamageMultiplier());
+            if (manager.iteration.currentStep > manager.iteration.settings.simulationSettings.targetOverSeventyFiveThreshold / 100 * manager.iteration.currentStep)
+            {
+                damage = (int)(damage * 1.35f);
+            }
             return damage;
         }
         public override int GetNext()
