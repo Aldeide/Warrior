@@ -78,7 +78,7 @@ namespace Warrior
                 {
                     damage += results.Damage();
                     numResults++;
-                    Progress.Invoke(this, new SimulationProgress() { dps = damage / numResults / settings.simulationSettings.combatLength, progress = 10 * (numResults - 1) / iterations * 100 });
+                    Progress?.Invoke(this, new SimulationProgress() { dps = damage / numResults / settings.simulationSettings.combatLength, progress = 10 * (numResults - 1) / iterations * 100 });
                 }
                 iterationsResults.Add(results);
             }
