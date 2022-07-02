@@ -30,17 +30,17 @@ namespace Warrior.Settings
 
         public bool HasGlyphOfMortalStrike()
         {
-            return majorOne == 43421 || majorTwo == 43421 || majorThree == 43421;
+            return majorOne == 57160 || majorTwo == 57160 || majorThree == 57160;
         }
 
         public bool HasGlyphOfExecution()
         {
-            return majorOne == 43421 || majorTwo == 43421 || majorThree == 43421;
+            return majorOne == 58405 || majorTwo == 58405 || majorThree == 58405;
         }
 
         public bool HasGlyphOfRending()
         {
-            return majorOne == 43423 || majorTwo == 43423 || majorThree == 43423;
+            return majorOne == 57163 || majorTwo == 57163 || majorThree == 57163;
         }
     }
 
@@ -54,10 +54,10 @@ namespace Warrior.Settings
             { new Glyph(58407, "Glyph of Cleaving", GlyphType.Major) },
             { new Glyph(58405, "Glyph of Execution", GlyphType.Major) },
 
-            { new Glyph(45790, "Glyph of Bladestorm", GlyphType.Major) },
-            { new Glyph(45792, "Glyph of Shockwave", GlyphType.Major) },
-            { new Glyph(43421, "Glyph of Mortal Strike", GlyphType.Major) },
-            { new Glyph(43423, "Glyph of Rending", GlyphType.Major) }
+            { new Glyph(64295, "Glyph of Bladestorm", GlyphType.Major) },
+            { new Glyph(64296, "Glyph of Shockwave", GlyphType.Major) },
+            { new Glyph(57160, "Glyph of Mortal Strike", GlyphType.Major) },
+            { new Glyph(57163, "Glyph of Rending", GlyphType.Major) }
         };
     }
 }

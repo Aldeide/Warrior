@@ -107,6 +107,10 @@ namespace Warrior
             computedConstants.hasBloodthirst = settings.talentSettings.Bloodthirst.rank > 0;
             computedConstants.hasMortalStrike = settings.talentSettings.MortalStrike.rank > 0;
             computedConstants.improvedMortalStrikeMultiplier = TalentUtils.GetImprovedMortalStrikeMultiplier(settings.talentSettings);
+            if (settings.glyphSettings.HasGlyphOfMortalStrike())
+            {
+                computedConstants.improvedMortalStrikeMultiplier *= 1.10f;
+            }
             computedConstants.bloodsurgeChance = TalentUtils.GetBloodSurgeChance(settings.talentSettings);
             computedConstants.focusedRageRageReduction = settings.talentSettings.FocusedRage.rank;
             computedConstants.slamDamageMultiplier = computedConstants.titansGripDamageMultiplier * computedConstants.meleeDamageMultiplier * computedConstants.unendingFuryDamageMultiplier;

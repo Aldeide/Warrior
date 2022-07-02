@@ -481,7 +481,8 @@
         {
             return (int)(
                 DamageUtils.WeaponDamage(result, iteration.mainHand, iteration, 380)
-                * iteration.computedConstants.improvedMortalStrikeMultiplier);
+                * iteration.computedConstants.improvedMortalStrikeMultiplier
+                * DamageUtils.EffectiveDamageCoefficient(iteration));
         }
     }
 
