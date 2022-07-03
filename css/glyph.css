@@ -1,6 +1,15 @@
-﻿#glyphs select {
-    height: 40px;
-}
-#glyphs option {
-    height: 40px;
-}
+﻿
+
+    #glyphs select {
+        width: 250px;
+        height: 38px;
+        outline: none;
+        padding-left: 10px;
+        border: 3px solid #20222e;
+        background-color: #222431;
+        color: #fff;
+    }
+
+        #glyphs select > option {
+            height: 38px;
+        }

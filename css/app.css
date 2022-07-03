@@ -12,6 +12,7 @@ header {
 
 form {
     width: 100%;
+    display: contents;
 }
 
 select {
@@ -60,7 +61,6 @@ a, .btn-link {
 .sidebar {
     background-color: #fff;
     width: 350px;
-    height: 100vh;
     position: fixed;
 }
 
@@ -74,11 +74,21 @@ a, .btn-link {
 
 .main {
     padding-top: 30px;
-    padding-left: 400px;
+    padding-left: 40px;
 }
 
 .content {
     padding-top: 1.1rem;
+}
+
+#simulation {
+    min-width: 450px;
+    max-width: 450px;
+}
+
+#rotation {
+    min-width: 1200px;
+    max-width: 1200px;
 }
 
 #items {
@@ -107,7 +117,8 @@ a, .btn-link {
         }
 
     #items .main {
-        padding-left: 338px;
+        padding-left: 0;
+        margin-left: -0.75rem;
         padding-top: 0;
     }
 
@@ -240,6 +251,10 @@ button.nav-link, button.nav-link.active {
 
 .summary {
     padding: 30px;
+    min-width: 360px;
+    display: inline-flex;
+    flex-direction: column;
+    position: sticky;
 }
 
 .align-left {
@@ -301,8 +316,14 @@ select option {
     padding: 0 0 0 1rem;
     top: 7px;
 }
-
-#rotation input.checkbox {
+input.sub-option {
+    float: left;
+    top: 14px;
+    position: relative;
+    margin-right: 10px;
+    left: -50px;
+}
+input.cb-option {
     float: left;
     top: 14px;
     position: relative;
@@ -318,7 +339,17 @@ select option {
 
 .rotation-option {
     padding: 0 0 0 6rem;
+    font-size: 10px;
 }
+
+p.rotation-option > label {
+    padding: 0;
+    position: relative;
+    left: -50px;
+    top: 12px;
+}
+
+
 
 .inline-number {
     width: 40px;
