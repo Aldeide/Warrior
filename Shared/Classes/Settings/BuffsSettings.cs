@@ -22,7 +22,8 @@ namespace Warrior.Settings
         Potion,
         HeroicPresence,
         DevotionAura,
-        Stoneskin
+        Stoneskin,
+        ICC
     }
     [Serializable]
     public class Buff
@@ -83,6 +84,7 @@ namespace Warrior.Settings
             // TODO: check armor value rounding.
             buffs.Add(new Buff(20140, "Improved Devotion Aura", BuffGroup.DevotionAura, new List<Effect> { new Effect(EffectType.Additive, Stat.Armor, 1807) }));
             buffs.Add(new Buff(58753, "Stoneskin Totem", BuffGroup.Stoneskin, new List<Effect> { new Effect(EffectType.Additive, Stat.Armor, 1150) }));
+            buffs.Add(new Buff(73822, "Hellscream's Warsong", BuffGroup.ICC, new List<Effect> { new Effect(EffectType.Multiplicative, Stat.Damage, 1.30f) }));
         }
         public void ProcessClick(long button, int id, BuffGroup buffGroup)
         {

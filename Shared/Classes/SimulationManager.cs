@@ -11,7 +11,7 @@ namespace Warrior
 
 	public class SimulationManager
 	{
-		public int numWorkers { get; set; } = 25;
+		public int numWorkers { get; set; } = 15;
 		string dps = "";
         List<IWorker> workers = new List<IWorker>();
         public List<IWorkerBackgroundService<Simulation>> backgroundServices { get; set; } = new List<IWorkerBackgroundService<Simulation>>();

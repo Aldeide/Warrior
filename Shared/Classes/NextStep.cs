@@ -19,7 +19,6 @@
             if (passiveTicks < nextStep)
             {
                 nextStep = passiveTicks;
-                
             }
             if (auras < nextStep)
             {

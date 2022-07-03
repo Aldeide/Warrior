@@ -228,7 +228,7 @@ Debug
             </div>
 		} else
 		{
-			<span class="highlight">@dps</span>
+			<span class="highlight dps">@dps</span>
 		}
 
 	
@@ -300,7 +300,7 @@ Debug
 			StateHasChanged();
 			var settings = simulation.settings;
 			string config = JsonSerializer.Serialize(settings);
-			int iterationsPerWorker = (int)Math.Floor((float)simulation.settings.simulationSettings.numIterations / numWorkers);
+			int iterationsPerWorker = (int)Math.Floor((float)simulation.settings.simulationSettings.numIterations / manager.numWorkers);
 			var allTasks = new List<Task<Warrior.Results.SimulationResults>>();
 			var servicesStarted = 0;
 

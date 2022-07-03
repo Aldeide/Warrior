@@ -83,7 +83,7 @@
                     // Abilities.
                     Abilities();
                 }
-                
+                abilityManager.GetNext();
 
                 // Heroic Strike.
                 if (settings.simulationSettings.useHeroicStrike && stanceManager.IsInDefaultStance())

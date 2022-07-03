@@ -55,7 +55,6 @@
                 {
                     iteration.abilityManager.heroicStrike.Use();
                     swingTimer = effectiveSpeed;
-                    iteration.nextStep.mainHand = iteration.currentStep + swingTimer;
                     return;
                 } else
                 {
@@ -75,11 +74,13 @@
             if (result == AttackResult.Miss)
             {
                 damageSummary.numMiss += 1;
+                Utils.MiscUtils.Log(iteration, "Melee Attack Miss " + (isMainHand ? "(MH)" : "OH"));
                 return;
             }
             if (result == AttackResult.Dodge)
             {
                 damageSummary.numDodge += 1;
+                Utils.MiscUtils.Log(iteration, "Melee Attack Dodge " + (isMainHand ? "(MH)" : "OH"));
                 return;
             }
             int damage = DamageUtils.WeaponDamage(result, this, iteration, /* bonus = */ 0);
@@ -88,6 +89,7 @@
             damageSummary.totalDamage += damage;
             if (result == AttackResult.Glancing)  
             {
+                Utils.MiscUtils.Log(iteration, "Melee Attack Glancing " + (isMainHand ? "(MH)" : "OH"));
                 damageSummary.numGlancing += 1;
                 damageSummary.glancingDamage += damage;
                 if (isMainHand)
@@ -102,6 +104,7 @@
             }
             if (result == AttackResult.Critical)
             {
+                Utils.MiscUtils.Log(iteration, "Melee Attack Critical " + (isMainHand ? "(MH)" : "OH"));
                 damageSummary.numCrit += 1;
                 damageSummary.critDamage += damage;
                 if (isMainHand)
@@ -113,6 +116,7 @@
                 }
                 return;
             }
+            Utils.MiscUtils.Log(iteration, "Melee Attack Hit " + (isMainHand ? "(MH)" : "OH"));
             damageSummary.numHit += 1;
             damageSummary.hitDamage += damage;
             if (isMainHand)

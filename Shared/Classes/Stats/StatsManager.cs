@@ -101,7 +101,8 @@ namespace Warrior
 
             multiplicativeCharacterStats.damageMultiplier = 1.0f
                 * TalentUtils.GetTitansDamageReductionMultiplier(iteration.settings.talentSettings, iteration.settings.equipmentSettings)
-                * iteration.settings.buffSettings.GetMultiplicativeStat(Stat.Damage);
+                * iteration.settings.buffSettings.GetMultiplicativeStat(Stat.Damage)
+                * iteration.settings.debuffSettings.GetMultiplicativeStat(Stat.MeleeDamage);
         }
         public int GetEffectiveStrength()
         {
@@ -180,8 +181,8 @@ namespace Warrior
         public float GetEffectiveDamageMultiplier()
         {
             return multiplicativeCharacterStats.damageMultiplier
-                * tempMultiplicativeCharacterStats.damageMultiplier
-                * iteration.settings.debuffSettings.GetMultiplicativeStat(Stat.MeleeDamage);
+                * tempMultiplicativeCharacterStats.damageMultiplier;
+                
         }
         public float GetEffectiveCritChanceBeforeSuppression()
         {

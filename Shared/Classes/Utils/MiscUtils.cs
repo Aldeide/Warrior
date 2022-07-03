@@ -10,7 +10,7 @@
         {
             if (iteration.index == 0)
             {
-                Console.WriteLine("[ " + Math.Round((double)(iteration.currentStep / Constants.kStepsPerSecond), 2) + " ] " + message);
+                Console.WriteLine("[ " + Math.Round((double)((float)iteration.currentStep / Constants.kStepsPerSecond), 3) + " ] " + message);
             }
         }
     }
