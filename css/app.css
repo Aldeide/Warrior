@@ -483,6 +483,18 @@ input[type=number].inline-number {
     transform: translateY(-50%);
 }
 
+.smallprogress {
+    width: 150px;
+    height: 8px;
+    position: relative;
+    top: 30px;
+}
+
+.dps {
+    position: relative;
+    top: 20px;
+}
+
 #progressLabel {
     margin-top: 30px;
     text-transform: uppercase;
