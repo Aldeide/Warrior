@@ -11,7 +11,6 @@ header {
 }
 
 form {
-
     width: 100%;
 }
 
@@ -24,9 +23,9 @@ section {
     margin-bottom: 80px;
 }
 
-section h1 {
-    margin-bottom: 30px;
-}
+    section h1 {
+        margin-bottom: 30px;
+    }
 
 input {
     border: 0;
@@ -88,40 +87,40 @@ a, .btn-link {
     margin-bottom: 0px;
 }
 
-#items h2 {
-    color: #fff;
-    margin-bottom: 20px;
-}
-
-#items table {
-    width: 100%;
-    color: #fff;
-}
-
-    #items table > thead > tr > td {
-        height: 40px;
-        font-size: 14px;
+    #items h2 {
         color: #fff;
-        margin: 10px;
-        border-bottom: 2px solid #fff;
-        border-top: 2px solid #fff;
+        margin-bottom: 20px;
     }
+
+    #items table {
+        width: 100%;
+        color: #fff;
+    }
+
+        #items table > thead > tr > td {
+            height: 40px;
+            font-size: 14px;
+            color: #fff;
+            margin: 10px;
+            border-bottom: 2px solid #fff;
+            border-top: 2px solid #fff;
+        }
+
     #items .main {
         padding-left: 338px;
         padding-top: 0;
     }
 
-    #items .main .content {
-        padding-top: 0;
-        padding-right: 0;
-    }
+        #items .main .content {
+            padding-top: 0;
+            padding-right: 0;
+        }
 
-    #items .main .content .container-fluid {
-        padding-right: 0;
-    }
+            #items .main .content .container-fluid {
+                padding-right: 0;
+            }
 
-#results thead tr td:first-child,
-#results tr td:first-child {
+#results thead tr td:first-child, #results tr td:first-child {
     width: 20em;
     min-width: 20em;
     max-width: 20em;
@@ -139,32 +138,35 @@ a, .btn-link {
         text-decoration: none;
     }
 
-    #items table > tr:hover {
-        background-color: #fff;
-        color: #000;
-    }
+#items table > tr:hover {
+    background-color: #fff;
+    color: #000;
+}
 
     #items table > tr:hover > td > a {
         background-color: #fff;
         color: #000;
     }
 
-    #items table > tr {
-        border-bottom: 1px solid #fff;
+#items table > tr {
+    border-bottom: 1px solid #fff;
+}
+
+    #items table > tr.equipped {
+        background-color: #fff;
+        color: #000;
     }
-        #items table > tr.equipped {
-            background-color: #fff;
-            color: #000;
-        }
+
         #items table > tr.equipped > td > a {
             color: #000;
         }
+
 .rowlink::before {
-    
     display: block;
     position: relative;
     width: 100%;
-    height: 25px; /* don't forget to set the height! */
+    height: 25px;
+    /* don't forget to set the height! */
 }
 
 .nav {
@@ -181,10 +183,12 @@ a, .btn-link {
     height: 100vh;
     background: #222431;
 }
+
 .tab-content {
     width: 100%;
     padding: 30px;
 }
+
 button.nav-link, button.nav-link.active {
     width: 120px;
     height: 40px;
@@ -195,10 +199,6 @@ button.nav-link, button.nav-link.active {
 .nav-pills > button.nav-link.active {
     background-color: #222431;
     color: #fff;
-}
-
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
 }
 
 .invalid {
@@ -243,14 +243,17 @@ button.nav-link, button.nav-link.active {
 }
 
 .align-left {
-    float:left;
+    float: left;
 }
+
 .align-right {
-    float:right;
+    float: right;
 }
+
 .settings-item > label {
     float: left;
 }
+
 .settings-item > select {
     float: right;
     width: 120px;
@@ -267,13 +270,13 @@ select option {
     color: #fff;
 }
 
-select option:hover  {
-    float: right;
-    width: 120px;
-    text-align: right;
-    background-color: #fff;
-    color: #fff;
-}
+    select option:hover {
+        float: right;
+        width: 120px;
+        text-align: right;
+        background-color: #fff;
+        color: #fff;
+    }
 
 .settings-item > input {
     float: right;
@@ -300,7 +303,7 @@ select option:hover  {
 }
 
 #rotation input.checkbox {
-    float:left;
+    float: left;
     top: 14px;
     position: relative;
     margin-right: 10px;
@@ -326,8 +329,7 @@ select option:hover  {
     background-color: transparent;
 }
 
-input.inline-number::-webkit-outer-spin-button,
-input.inline-number::-webkit-inner-spin-button {
+input.inline-number::-webkit-outer-spin-button, input.inline-number::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
@@ -417,19 +419,26 @@ input[type=number].inline-number {
     text-align: center;
     vertical-align: middle;
     width: 50%;
-    height: 200px;
+    height: 100vh;
     margin-left: auto;
     margin-right: auto;
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+    background: url(../data/loading.png);
+    background-repeat: no-repeat;
+    background-size: 600px;
+    background-position: 50% 25%;
 }
 
-.loading > h2 {
-    font-size: 1em;
-    text-transform: uppercase;
-    margin-bottom: 25px;
-}
+    .loading > h2 {
+        font-size: 1em;
+        text-transform: uppercase;
+        margin-bottom: 25px;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
 
 .progress {
     border-radius: 0;
@@ -438,11 +447,17 @@ input[type=number].inline-number {
     margin-right: auto;
     margin-left: auto;
     margin-bottom: 30px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 #progressLabel {
     margin-top: 30px;
     text-transform: uppercase;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .btn-primary:disabled {
@@ -461,3 +476,39 @@ input[type=number].inline-number {
 }
 
 
+
+.input-group-text.red-gem::before {
+    content: '';
+    border: 3px solid #dc3545;
+    position: relative;
+    right: 15px;
+}
+
+.input-group-text.blue-gem::before {
+    content: '';
+    border: 3px solid #0d6efd;
+    position: relative;
+    right: 15px;
+}
+
+.input-group-text.yellow-gem::before {
+    content: '';
+    border: 3px solid #ffc107;
+    position: relative;
+    right: 15px;
+}
+
+
+.input-group-text.meta-gem::before {
+    content: '';
+    border: 3px solid #adb5bd;
+    position: relative;
+    right: 15px;
+}
+
+.input-group-text.prismatic-gem::before {
+    content: '';
+    border: 3px solid #fff;
+    position: relative;
+    right: 15px;
+}
