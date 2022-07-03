@@ -9,7 +9,7 @@
 @inject Simulation simulation;
 
 <EditForm EditContext="@editContext">
-	<div class="sidebar summary" style="min-width: 300px; background-color: #20222e; background-image: none;">
+	<div class="sidebar summary" style="background-color: #20222e; background-image: none;">
 		<Warrior.Shared.Component.Summary editContext=@editContext />
 	</div>
 	<div class="main" style="width: 100%;">
@@ -75,7 +75,7 @@
 							{
 							
 
-							<InputCheckbox name="useBT" @bind-Value="simulation.settings.simulationSettings.useBloodthirst" class="checkbox" />
+							<InputCheckbox name="useBT" @bind-Value="simulation.settings.simulationSettings.useBloodthirst" class="checkbox cb-option" />
 							<img src="data/icons/rotations/bloodthirst.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useBloodthirst)" />
 							<label for="useBT" class="rotation-label">Use Bloodthirst</label>
 							
@@ -84,7 +84,7 @@
 							<br />
 							}
 							<label for="useWW" class="rotation-label">Use Whirlwind</label>
-							<InputCheckbox name="useBT" @bind-Value="simulation.settings.simulationSettings.useWhirlwind" class="checkbox" />
+							<InputCheckbox name="useBT" @bind-Value="simulation.settings.simulationSettings.useWhirlwind" class="checkbox cb-option" />
 							<img src="data/icons/rotations/whirlwind.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useWhirlwind)" />
 
 							<div style="clear:both"></div>
@@ -92,7 +92,7 @@
 							@if(simulation.settings.talentSettings.MortalStrike.rank == 1)
 							{
 							<label for="useBT" class="rotation-label">Use Mortal Strike</label>
-							<InputCheckbox name="useBT" @bind-Value="simulation.settings.simulationSettings.useMortalStrike" class="checkbox" />
+							<InputCheckbox name="useBT" @bind-Value="simulation.settings.simulationSettings.useMortalStrike" class="checkbox cb-option" />
 							<img src="data/icons/rotations/mortalstrike.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useMortalStrike)" />
 
 							<div style="clear:both"></div>
@@ -101,7 +101,7 @@
 							
 
 							<label for="useHS" class="rotation-label">Use Heroic Strike</label>
-							<InputCheckbox name="useHS" @bind-Value="simulation.settings.simulationSettings.useHeroicStrike" class="checkbox" />
+							<InputCheckbox name="useHS" @bind-Value="simulation.settings.simulationSettings.useHeroicStrike" class="checkbox cb-option" />
 							<img src="data/icons/rotations/heroicstrike.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useHeroicStrike)" />
 							
 							<div style="clear:both"></div>
@@ -112,21 +112,21 @@
 							<br />
 
 							<label for="useHS" class="rotation-label">Use Slam</label>
-							<InputCheckbox name="useHS" @bind-Value="simulation.settings.simulationSettings.useSlam" class="checkbox" />
+							<InputCheckbox name="useHS" @bind-Value="simulation.settings.simulationSettings.useSlam" class="checkbox cb-option" />
 							<img src="data/icons/rotations/slam.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useSlam)" />
 							
 							<div style="clear:both"></div>
 							@if(simulation.settings.simulationSettings.useSlam && simulation.settings.talentSettings.Bloodsurge.rank > 0)
 							{
 								<p class="rotation-option"><label for="useHS" class="rotation-label">Only on Bloodsurge</label>
-								<InputCheckbox name="useHS" @bind-Value="simulation.settings.simulationSettings.slamOnlyOnBloodsurge" class="checkbox" /></p>
+								<InputCheckbox name="useHS" @bind-Value="simulation.settings.simulationSettings.slamOnlyOnBloodsurge" class="checkbox sub-option" /></p>
 							}
 							<br />
 
 							
 
-							<label for="useSunder" class="rotation-label">Use free GCDs for Sunder Armor</label>
-							<InputCheckbox name="useSunder" @bind-Value="simulation.settings.simulationSettings.useSunderArmor" class="checkbox" />
+							<label for="useSunder" class="rotation-label">Use Sunder Armor</label>
+							<InputCheckbox name="useSunder" @bind-Value="simulation.settings.simulationSettings.useSunderArmor" class="checkbox cb-option" />
 							<img src="data/icons/rotations/sunderarmor.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useSunderArmor)" />
 
 							
@@ -139,26 +139,26 @@
 
 							<div class="col-sm-3">
 								<label for="useRend" class="rotation-label">Use Rend</label>
-							<InputCheckbox name="useSunder" @bind-Value="simulation.settings.simulationSettings.useRend" class="checkbox" />
+							<InputCheckbox name="useSunder" @bind-Value="simulation.settings.simulationSettings.useRend" class="checkbox cb-option" />
 							<img src="data/icons/rotations/rend.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useRend)" />
 
 							<div style="clear:both"></div>
 							<br />
 								<label for="useExecute" class="rotation-label">Use Execute</label>
-							<InputCheckbox name="useDW" @bind-Value="simulation.settings.simulationSettings.useExecute" class="checkbox" />
+							<InputCheckbox name="useDW" @bind-Value="simulation.settings.simulationSettings.useExecute" class="checkbox cb-option" />
 							<img src="data/icons/rotations/execute.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useExecute)" />
 							
 							<div style="clear:both"></div>
 							@if(simulation.settings.simulationSettings.useExecute)
 							{
 								<p class="rotation-option"><label for="execBT" class="rotation-label">Prioritise BT / MS</label>
-								<InputCheckbox name="execBT" @bind-Value="simulation.settings.simulationSettings.prioritizeBloodthirst" class="checkbox" /></p>
+								<InputCheckbox name="execBT" @bind-Value="simulation.settings.simulationSettings.prioritizeBloodthirst" class="checkbox sub-option" /></p>
 
 								<p class="rotation-option"><label for="execBT" class="rotation-label">Prioritise Slam on Bloodsurge</label>
-								<InputCheckbox name="execBT" @bind-Value="simulation.settings.simulationSettings.prioritizeSlamOnBloodsurge" class="checkbox" /></p>
+								<InputCheckbox name="execBT" @bind-Value="simulation.settings.simulationSettings.prioritizeSlamOnBloodsurge" class="checkbox sub-option" /></p>
 
 								<p class="rotation-option"><label for="execHS" class="rotation-label">Heroic Strike above <InputNumber @bind-Value="simulation.settings.simulationSettings.executeHeroicStrikeRagethreshold" class="inline-number"></InputNumber> rage</label>
-								<InputCheckbox name="execBT" @bind-Value="simulation.settings.simulationSettings.useExecuteHeroicStrike" class="checkbox" /></p>
+								<InputCheckbox name="execBT" @bind-Value="simulation.settings.simulationSettings.useExecuteHeroicStrike" class="checkbox sub-option" /></p>
 
 							}
 							<br />
@@ -166,7 +166,7 @@
 
 							<div class="col-sm-3">
 							<label for="useDW" class="rotation-label">Use Death Wish</label>
-							<InputCheckbox name="useDW" @bind-Value="simulation.settings.simulationSettings.useDeathWish" class="checkbox" />
+							<InputCheckbox name="useDW" @bind-Value="simulation.settings.simulationSettings.useDeathWish" class="checkbox cb-option" />
 							<img src="data/icons/rotations/deathwish.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useDeathWish)" />
 							
 							<div style="clear:both"></div>
@@ -175,8 +175,8 @@
 								<p class="rotation-option">In last <InputNumber @bind-Value="simulation.settings.simulationSettings.deathWishOnLastSeconds" class="inline-number"></InputNumber> seconds</p>
 							}
 							<br />
-							<label for="useBloodRage" class="rotation-label">Use Bloodrage on cooldown</label>
-							<InputCheckbox name="useBloodRage" @bind-Value="simulation.settings.simulationSettings.useBloodRage" class="checkbox" />
+							<label for="useBloodRage" class="rotation-label">Use Bloodrage</label>
+							<InputCheckbox name="useBloodRage" @bind-Value="simulation.settings.simulationSettings.useBloodRage" class="checkbox cb-option" />
 							<img src="data/icons/rotations/bloodrage.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useBloodRage)" />
 							
 							<div style="clear:both"></div>
@@ -186,7 +186,7 @@
 							}
 							<br />
 							<label for="useST" class="rotation-label">Use Shattering Throw</label>
-							<InputCheckbox name="useDW" @bind-Value="simulation.settings.simulationSettings.useShatteringThrow" class="checkbox" />
+							<InputCheckbox name="useDW" @bind-Value="simulation.settings.simulationSettings.useShatteringThrow" class="checkbox cb-option" />
 							<img src="data/icons/rotations/shatteringthrow.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useShatteringThrow)" />
 							
 							<div style="clear:both"></div>
@@ -199,7 +199,7 @@
 
 							<div class="col-sm-3">
 								<label for="useHeroism" class="rotation-label">Heroism / Bloodlust</label>
-								<InputCheckbox name="useHeroism" @bind-Value="simulation.settings.simulationSettings.useHeroism" class="checkbox" />
+								<InputCheckbox name="useHeroism" @bind-Value="simulation.settings.simulationSettings.useHeroism" class="checkbox cb-option" />
 								<img src="data/icons/rotations/heroism.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useHeroism)" />
 							
 								<div style="clear:both"></div>
@@ -211,7 +211,7 @@
 								@if(simulation.settings.characterSettings.race == Race.Orc)
 								{
 									<label for="useBloodFury" class="rotation-label">Use Blood Fury</label>
-									<InputCheckbox name="useHeroism" @bind-Value="simulation.settings.simulationSettings.useBloodFury" class="checkbox" />
+									<InputCheckbox name="useHeroism" @bind-Value="simulation.settings.simulationSettings.useBloodFury" class="checkbox cb-option" />
 									<img src="data/icons/rotations/bloodfury.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useBloodFury)" />
 							
 									<div style="clear:both"></div>
@@ -225,7 +225,7 @@
 								@if(simulation.settings.characterSettings.race == Race.Troll)
 								{
 									<label for="useBerserking" class="rotation-label">Use Berserking</label>
-									<InputCheckbox name="useHeroism" @bind-Value="simulation.settings.simulationSettings.useBerserking" class="checkbox" />
+									<InputCheckbox name="useHeroism" @bind-Value="simulation.settings.simulationSettings.useBerserking" class="checkbox cb-option" />
 									<img src="data/icons/rotations/berserking.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useBerserking)" />
 							
 									<div style="clear:both"></div>
@@ -1316,9 +1316,12 @@
 						</section>
 					</div>
 					<div class="col-sm-6">
-						<section id="glyphs">
+
+					</div>
+				</div>
+										<section id="glyphs">
 							<h1>Glyphs</h1>
-							<h2>Major</h2>
+
 							<a rel="spell=@simulation.settings.glyphSettings.majorOne">
 								<InputSelect @bind-Value="simulation.settings.glyphSettings.majorOne">
 									@foreach (Glyph glyph in GlyphDatabase.glyphs)
@@ -1352,12 +1355,8 @@
 										}
 									}
 								</InputSelect>
-							</a><br /><br />
-							<h2>Minor</h2>
+							</a>
 						</section>
-					</div>
-				</div>
-
 
 
 				<!-- #endregion -->
