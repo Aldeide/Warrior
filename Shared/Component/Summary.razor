@@ -210,14 +210,36 @@ Debug
 <EditForm EditContext="@buttonEditContext" OnValidSubmit="@Simulate">
 	<button type="submit" class="btn btn-primary" disabled=@buttonInactive value="Save">Simulate</button>
 </EditForm>
+
+<br />
+	@if(simulation.simulationResults.combatDuration > 0)
+	{
+		dps = (Math.Round(simulation.simulationResults.totalDamage / simulation.simulationResults.combatDuration, 2)).ToString();
+	} else
+	{
+		dps = "";
+	}
+
+	@if (manager.isRunning)
+		{
+			<span class="highlight dps">@Math.Round((float)manager.simulationProgress.Select(a => a.dps).Average(), 2)</span>
+			<div class="progress smallprogress mt-2">
+                <div id="progressbar" class="progress-bar progress-bar-animated" style="width: @Math.Round((float)manager.simulationProgress.Select(a => a.progress).Average())%; background-color: #204066;"></div>
+            </div>
+		} else
+		{
+			<span class="highlight">@dps</span>
+		}
+
+	
 @if (buttonInactive && !manager.ready) {
 	<p class="btn-info-label">Initializing workers</p>
 }
 @if (buttonInactive && manager.isRunning) {
 	<p class="btn-info-label">Computing</p>
 }
-<br />
-<span class="highlight">@dps</span>
+	
+
 </div>
 
 
@@ -247,6 +269,7 @@ Debug
 		buttonEditContext = new EditContext(manager);
 		manager.Ready += ManagerIsReady;
 		manager.Completed += SimulationCompleted;
+		manager.Updated += SimulationUpdated;
 		base.OnInitialized();
 	}
 
@@ -263,11 +286,17 @@ Debug
 		StateHasChanged();
 	}
 
+	private void SimulationUpdated(object sender, EventArgs e)
+	{
+		StateHasChanged();
+	}
+
 	private async Task Simulate() {
 
 		if (manager.ready && !manager.isRunning) {
 			manager.isRunning = true;
 			buttonInactive = true;
+			manager.ResetProgress();
 			StateHasChanged();
 			var settings = simulation.settings;
 			string config = JsonSerializer.Serialize(settings);

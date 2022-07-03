@@ -21,6 +21,15 @@
             damage += mainHand.totalDamage;
             damage += offHand.totalDamage;
 
+            foreach(var a in abilitySummaries)
+            {
+                damage += a.totalDamage;
+            }
+
+            foreach (var a in dotDamageSummaries)
+            {
+                damage += a.totalDamage;
+            }
 
 
             return (int)damage;

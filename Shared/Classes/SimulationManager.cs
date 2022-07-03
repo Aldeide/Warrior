@@ -4,11 +4,14 @@ using BlazorWorker.WorkerBackgroundService;
 
 namespace Warrior
 {
-	public class ProgressRef { public int Progress { get; set; } }
+	public class ProgressRef {
+		public float progress { get; set; }
+		public float dps { get; set; }
+	}
 
 	public class SimulationManager
 	{
-		public int numWorkers { get; set; } = 15;
+		public int numWorkers { get; set; } = 25;
 		string dps = "";
         List<IWorker> workers = new List<IWorker>();
         public List<IWorkerBackgroundService<Simulation>> backgroundServices { get; set; } = new List<IWorkerBackgroundService<Simulation>>();
@@ -17,6 +20,8 @@ namespace Warrior
 		public bool isRunning { get; set; }
 
 		public event EventHandler Ready;
+
+		public event EventHandler Updated;
 
 		public event EventHandler Completed;
 
@@ -43,7 +48,9 @@ namespace Warrior
 					await service.RegisterEventListenerAsync(nameof(Simulation.Progress),
 						(object s, SimulationProgress eventInfo) =>
 						{
-							progressRef.Progress = (int)Math.Floor((100 * ((decimal)eventInfo.progress)));
+							progressRef.dps = (float)Math.Round(((float)eventInfo.dps), 2);
+							progressRef.progress = (float)Math.Round(((float)eventInfo.progress), 2);
+							Updated?.Invoke(this, EventArgs.Empty);
 						});
 				}
 				Ready?.Invoke(this, null);
@@ -89,7 +96,16 @@ namespace Warrior
 
 		public void NotifyCompletion()
         {
-			Completed?.Invoke(this, null);
+			Completed?.Invoke(this, EventArgs.Empty);
+        }
+
+		public void ResetProgress()
+        {
+			foreach (var a in simulationProgress)
+            {
+				a.dps = 0;
+				a.progress = 0;
+            }
         }
     }
 
