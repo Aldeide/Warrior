@@ -8,7 +8,7 @@ namespace Warrior
 
 	public class SimulationManager
 	{
-		public int numWorkers { get; set; } = 10;
+		public int numWorkers { get; set; } = 15;
 		string dps = "";
         List<IWorker> workers = new List<IWorker>();
         public List<IWorkerBackgroundService<Simulation>> backgroundServices { get; set; } = new List<IWorkerBackgroundService<Simulation>>();
@@ -16,7 +16,9 @@ namespace Warrior
 		public bool ready { get; set; }
 		public bool isRunning { get; set; }
 
-		public event EventHandler Ready; 
+		public event EventHandler Ready;
+
+		public event EventHandler Completed;
 
         public SimulationManager()
         {
@@ -84,6 +86,11 @@ namespace Warrior
 			dps = dpsResults.ToString();
 			isRunning = false;
 		}
+
+		public void NotifyCompletion()
+        {
+			Completed?.Invoke(this, null);
+        }
     }
 
 

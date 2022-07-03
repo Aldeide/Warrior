@@ -57,6 +57,9 @@
                     swingTimer = effectiveSpeed;
                     iteration.nextStep.mainHand = iteration.currentStep + swingTimer;
                     return;
+                } else
+                {
+                    iteration.abilityManager.heroicStrike.isQueued = false;
                 }
             }
 
@@ -64,7 +67,7 @@
             swingTimer = effectiveSpeed;
             AttackResult result = AttackTableUtils.GetWhiteHitResult(iteration, isMainHand);
 
-            if (iteration.abilityManager.heroicStrike.isQueued)
+            if (iteration.abilityManager.heroicStrike.isQueued && !isMainHand)
             {
                 result = AttackTableUtils.GetYellowHitResult(iteration);
             }

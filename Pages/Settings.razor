@@ -73,9 +73,12 @@
 							<div class="col-sm-3">
 							@if(simulation.settings.talentSettings.Bloodthirst.rank == 1)
 							{
-							<label for="useBT" class="rotation-label">Use Bloodthirst</label>
+							
+
 							<InputCheckbox name="useBT" @bind-Value="simulation.settings.simulationSettings.useBloodthirst" class="checkbox" />
 							<img src="data/icons/rotations/bloodthirst.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useBloodthirst)" />
+							<label for="useBT" class="rotation-label">Use Bloodthirst</label>
+							
 
 							<div style="clear:both"></div>
 							<br />
@@ -129,16 +132,18 @@
 							
 							<div style="clear:both"></div>
 							<br />
-							<label for="useRend" class="rotation-label">Use Rend</label>
-							<InputCheckbox name="useSunder" @bind-Value="simulation.settings.simulationSettings.useRend" class="checkbox" />
-							<img src="data/icons/rotations/rend.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useRend)" />
-
-							<div style="clear:both"></div>
+							
 
 							
 							</div>
 
 							<div class="col-sm-3">
+								<label for="useRend" class="rotation-label">Use Rend</label>
+							<InputCheckbox name="useSunder" @bind-Value="simulation.settings.simulationSettings.useRend" class="checkbox" />
+							<img src="data/icons/rotations/rend.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useRend)" />
+
+							<div style="clear:both"></div>
+							<br />
 								<label for="useExecute" class="rotation-label">Use Execute</label>
 							<InputCheckbox name="useDW" @bind-Value="simulation.settings.simulationSettings.useExecute" class="checkbox" />
 							<img src="data/icons/rotations/execute.jpg" class="rotation-img @BuffGrayscaleIcon(simulation.settings.simulationSettings.useExecute)" />

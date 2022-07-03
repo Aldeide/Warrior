@@ -1,5 +1,5 @@
 ﻿@inject Simulation simulation;
-
+@inject SimulationManager manager;
 @page "/results"
 <EditForm EditContext="@editContext">
 <div class="sidebar summary" style="min-width: 300px; background-color: #20222e; background-image: none;">
@@ -375,11 +375,17 @@
 		{
 			Console.WriteLine("OnFieldChanged for FieldName = " + eventArgs.FieldIdentifier.FieldName + " " + sender.ToString());
 		};
+		manager.Completed += SimulationCompleted;
 		base.OnInitialized();
 	}
 
 	public void RefreshState()
 	{
 		this.StateHasChanged();
+	}
+
+	public void SimulationCompleted(object sender, EventArgs e)
+	{
+		RefreshState();
 	}
 }

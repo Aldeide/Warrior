@@ -246,6 +246,7 @@ Debug
 		}
 		buttonEditContext = new EditContext(manager);
 		manager.Ready += ManagerIsReady;
+		manager.Completed += SimulationCompleted;
 		base.OnInitialized();
 	}
 
@@ -254,6 +255,12 @@ Debug
 		buttonInactive = false;
 		StateHasChanged();
 		return;
+	}
+
+	private void SimulationCompleted(object sender, EventArgs e)
+	{
+		dps = (Math.Round(simulation.simulationResults.totalDamage / simulation.simulationResults.combatDuration, 2)).ToString();
+		StateHasChanged();
 	}
 
 	private async Task Simulate() {
@@ -288,6 +295,7 @@ Debug
 			simulation.simulationResults = simulationResults;
 			manager.isRunning = false;
 			buttonInactive = false;
+			manager.NotifyCompletion();
 		}
 		// TODO: average results.
 		//simulation.simulationResults = result[0];

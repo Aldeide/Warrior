@@ -66,12 +66,6 @@ namespace Warrior
                 Iteration iteration = new Iteration(settings, computedConstants, i);
                 iteration.Setup();
                 IterationResults results = iteration.Iterate();
-                if (i % 10 == 0)
-                {
-                    damage += results.Damage();
-                    numResults++;
-                    Progress?.Invoke(this, new SimulationProgress() { dps = damage / numResults / settings.simulationSettings.combatLength, progress = 10 * (numResults - 1) / iterations * 100 });
-                }
                 iterationsResults.Add(results);
             }
             simulationResults.Populate(iterationsResults.ToList());

@@ -33,9 +33,9 @@
             this.iteration = iteration;
             if (TalentUtils.HasFlurry(iteration.settings.talentSettings)) flurry = new Flurry(this);
             if (TalentUtils.HasDeepWounds(iteration.settings.talentSettings)) deepWounds = new DeepWounds(this);
-            rend = new RendAura(this);
+            if (iteration.settings.simulationSettings.useRend) rend = new RendAura(this);
             if (iteration.computedConstants.hasBloodsurge) bloodsurge = new Bloodsurge(this);
-            bloodRage = new BloodRage(this);
+            if (iteration.settings.simulationSettings.useBloodRage) bloodRage = new BloodRage(this);
 
             // Enchants.
             if (iteration.computedConstants.hasMHBerserking) mainHandBerserking = new MainHandBerserking(this);

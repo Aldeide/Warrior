@@ -57,7 +57,7 @@
 										int itemid = simulation.settings.equipmentSettings.GetItemBySlot(slot).id;
 										selectedGems.Add(new List<Entities.Gem>() { simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id.ToString() + ":" + slot.ToString())[i] });
 										<div class="input-group mb-3">
-										<span class="input-group-text" id="basic-addon1">@g.color.ToString()</span>
+										<span class="input-group-text @GemColorClass(g.color.ToString())" id="basic-addon1">@g.color.ToString()</span>
 										<select class="gem-slot select2" data-item="@itemid" data-slot="@i" data-item-slot="@slot" data-value="@simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id.ToString() + ":" + slot.ToString())[i].id">
 												@if(g.color == Entities.Color.Meta)
 												{
@@ -82,7 +82,7 @@
 									{
 										int itemid = simulation.settings.equipmentSettings.GetItemBySlot(slot).id;
 										<div class="input-group mb-3">
-										<span class="input-group-text" id="basic-addon1">Prismatic</span>
+										<span class="input-group-text @GemColorClass("Prismatic")" id="basic-addon1">Prismatic</span>
 										<select class="gem-slot select2" data-item="@itemid" data-slot="@i" data-item-slot="@slot" data-value="@simulation.settings.gemSettings.GetGemsByItemId(simulation.settings.equipmentSettings.GetItemBySlot(slot).id.ToString() + ":" + slot.ToString(), 1)[i].id">
 
 													@foreach(Entities.Gem gem in Databases.GemDatabase.gems.Where(g => g.color != Entities.Color.Meta)) {
@@ -233,6 +233,26 @@
 		if (isActive)
 		{
 			return "socket-active";
+		}
+		return "";
+	}
+
+	private string GemColorClass(string color)
+	{
+		if (color == "Red") {
+			return "red-gem";
+		}
+		if (color == "Blue") {
+			return "blue-gem";
+		}
+		if (color == "Yellow") {
+			return "yellow-gem";
+		}
+		if (color == "Meta") {
+			return "meta-gem";
+		}
+		if (color == "Prismatic") {
+			return "prismatic-gem";
 		}
 		return "";
 	}
