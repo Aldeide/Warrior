@@ -13,6 +13,7 @@ This simulation tool in its current state is mostly functional. What remains to 
 * Implement engineering enchantments.
 * Handle Arms cycle better.
 * Complete gems lists.
+* Add gem / items filtering based on phase and / or source.
 * Implement item sets.
 * Add items to the list of available equipment. Blizzard has mentioned some potential changes to itemization, so I'd like to know more before investing time.
 * Add the possibility to simulate all items for a given slot.
