@@ -342,7 +342,16 @@
 
         public void ExecuteAbilities()
         {
-            if (!GCDAvailable()) return;
+            if (!GCDAvailable() && !abilityManager.slam.isCasting && !abilityManager.shatteringThrow.isCasting) return;
+
+            if (abilityManager.slam.isCasting)
+			{
+                abilityManager.slam.Use();
+			}
+            if (abilityManager.shatteringThrow.isCasting)
+            {
+                abilityManager.shatteringThrow.Use();
+            }
 
             // Whirlwind hits more than execute.
             if (settings.simulationSettings.useWhirlwind && abilityManager.whirlwind.CanUse())
@@ -373,12 +382,15 @@
             // TODO: check what the story is with Mortal Strike.
 
             // Depending on gear, slam on bloodthirst may be better than execute. 
-            if (settings.simulationSettings.prioritizeSlamOnBloodsurge
-                && (auraManager.bloodsurge!= null && auraManager.bloodsurge.active))
-            {
-                Utils.MiscUtils.Log(this, "Execute Slam");
-                abilityManager.slam.Use();
+            if (auraManager.bloodsurge != null)
+			{
+                if (settings.simulationSettings.prioritizeSlamOnBloodsurge && auraManager.bloodsurge.active)
+                {
+                    Utils.MiscUtils.Log(this, "Execute Slam");
+                    abilityManager.slam.Use();
+                }
             }
+            
 
             // Execute.
             // TODO: look into delaying execute if rage is too low.

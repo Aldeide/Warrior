@@ -19,32 +19,41 @@
             if (passiveTicks < nextStep)
             {
                 nextStep = passiveTicks;
+                //Console.WriteLine("NextStep (passive ticks): " + nextStep);
             }
             if (auras < nextStep)
             {
                 nextStep = auras;
+                //Console.WriteLine("NextStep (auras): " + nextStep);
             }
             if (mainHand < nextStep)
             {
                 nextStep = mainHand;
+                //Console.WriteLine("NextStep (MH): " + nextStep);
             }
             if (offHand < nextStep)
             {
                 nextStep = offHand;
+                //Console.WriteLine("NextStep (OH): " + nextStep);
             }
             if (globalCooldown < nextStep)
             {
                 nextStep = globalCooldown;
+                // Console.WriteLine("NextStep (GCD): " + nextStep);
             }
             if (abilities < nextStep)
             {
                 nextStep = abilities;
+                //Console.WriteLine("NextStep (abilities): " + nextStep);
             }
             if (stance < nextStep)
             {
                 nextStep = stance;
+                //Console.WriteLine("NextStep (stance): " + nextStep);
             }
+            //Console.WriteLine("Selected NextStep: " + nextStep);
             return nextStep;
+
         }
 
     }

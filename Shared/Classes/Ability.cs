@@ -288,6 +288,7 @@
             
             if ((iteration.auraManager.bloodsurge == null || !iteration.auraManager.bloodsurge.active) && !isCasting && CanUse())
             {
+                Utils.MiscUtils.Log(iteration, "Casting Slam");
                 endCast = iteration.currentStep + castTime;
                 isCasting = true;
                 base.Use();

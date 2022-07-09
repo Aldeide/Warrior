@@ -68,7 +68,7 @@ namespace Warrior
                 IterationResults results = iteration.Iterate();
                 damage += results.Damage();
                 numResults++;
-                if (i % 100 == 0)
+                if (i % 10 == 0)
                 {
                     Progress?.Invoke(this, new SimulationProgress()
                     {
