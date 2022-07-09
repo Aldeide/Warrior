@@ -24,6 +24,7 @@ namespace Warrior.Results
         public void Populate(List<IterationResults> results)
 		{
             numIterations = results.Count;
+            if (numIterations == 0) return;
             totalDamage = 0;
             combatDuration = results[0].combatLength;
             battleStanceResults.name = results.First().battleStanceResults.name;

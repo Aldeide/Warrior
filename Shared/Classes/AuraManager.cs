@@ -28,6 +28,10 @@
         public WreckingCrew? wreckingCrew;
 
         public SunderArmorAura? sunderArmor;
+
+        // Trinkets.
+        public PiercingTwilightHeroicAura? piercingTwilightHeroic;
+
         public AuraManager(Iteration iteration)
         {
             this.iteration = iteration;
@@ -67,6 +71,8 @@
             {
                 sunderArmor = new SunderArmorAura(this);
             }
+
+            // Trinkets
         }
         public void Reset()
         {

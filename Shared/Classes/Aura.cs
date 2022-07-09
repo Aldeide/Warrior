@@ -23,6 +23,7 @@ namespace Warrior
         public int fade { get; set; } = 0;
         public int damage { get; set; } = 0;
         public float ppm { get; set; } = 0;
+        public int icd { get; set; } = 0;
         public int tickInterval { get; set; } = 0;
         public int tickSize = 0;
         public int next { get; set; } = int.MaxValue;
@@ -809,6 +810,43 @@ namespace Warrior
             active = false;
             stacks = 0;
             next = Int32.MaxValue;
+        }
+    }
+
+    // Trinkets
+
+
+    public class PiercingTwilightHeroicAura : Aura
+    {
+        public PiercingTwilightHeroicAura(AuraManager arg) : base(arg)
+        {
+            name = "Piercing Twilight (Heroic)";
+            auraSummary.name = name;
+            duration = 15 * Constants.kStepsPerSecond;
+            icd = 45 * Constants.kStepsPerSecond;
+            effects.Add(
+                new Effect(
+                    EffectType.Additive,
+                    Stat.AttackPower,
+                    1472));
+        }
+        public override void Trigger(AuraTrigger trigger)
+        {
+            if (icd > 0) return;
+            start = manager.iteration.currentStep;
+            active = true;
+            next = start + duration;
+            manager.iteration.statsManager.UpdateTemporaryAdditiveAttackPower();
+            auraSummary.procs += 1;
+        }
+
+        public override void Update()
+        {
+            if (manager.iteration.currentStep != next) return;
+            active = false;
+            auraSummary.uptime += next - start;
+            manager.iteration.statsManager.UpdateTemporaryAdditiveAttackPower();
+            base.Update();
         }
     }
 }

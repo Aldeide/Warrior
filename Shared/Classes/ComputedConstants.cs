@@ -26,13 +26,9 @@
         public bool HasAngerManagement { get; set; } = false;
 
         public int focusedRageRageReduction { get; set; } = 0;
-
-
         public bool hasMHBerserking { get; set; } = false;
         public bool hasOHBerserking { get; set; } = false;
-
         public bool hasEndlessRage { get; set; } = false;
-
         public float bloodFrenzySpeedMultiplier { get; set; } = 1;
 
     }
