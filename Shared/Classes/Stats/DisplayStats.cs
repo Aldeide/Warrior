@@ -237,6 +237,10 @@ namespace Warrior.Stats
             {
                 return new Tuple<Stat, int>(Stat.CriticalRating, item.gemBonusCriticalStrikeRating);
             }
+            if (item.gemBonusStamina > 0)
+            {
+                return new Tuple<Stat, int>(Stat.Stamina, item.gemBonusStamina);
+            }
             return null;
         }
         public static bool SocketBonusIsActive(Settings.Settings settings, ItemSlot slot)

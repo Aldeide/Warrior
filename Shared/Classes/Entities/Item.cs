@@ -75,6 +75,19 @@ namespace Warrior
         OneHandedAxe
     }
 
+    public enum ItemSource
+	{
+        Unknown,
+        WorldDrop,
+        Quest,
+        Crafting,
+        Reputation,
+        Dungeon,
+        HeroicDungeon,
+        Naxxramas10,
+        Naxxramas25
+	}
+
     [Serializable]
     public class Item
     {
@@ -85,6 +98,7 @@ namespace Warrior
         public string name { get; set; } = "";
         public ItemSlot itemSlot { get; set; }
         public ItemType itemType { get; set; }
+        public ItemSource itemSource { get; set; }
         public WeaponType weaponType { get; set; }
         public WeaponHandedness weaponHandedness { get; set; }
         public int armor { get; set; }
@@ -102,7 +116,7 @@ namespace Warrior
         public int gemBonusStrength { get; set; }
         public int gemBonusAgility { get; set; }
         public int gemBonusCriticalStrikeRating { get; set; }
-
+        public int gemBonusStamina { get; set; }
         public int attackPower { get; set; }
         public int criticalStrikeRating { get; set; }
         public int hitRating { get; set; }
